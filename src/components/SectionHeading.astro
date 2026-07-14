@@ -1,0 +1,304 @@
+---
+// SectionHeading.astro — Encabezado de sección. CONTRATO CANÓNICO mosquitero.mx.
+// ============================================================================
+// ⚠️ REGLA DURA DEL SITIO: **TODO encabezado de sección va en DOS COLUMNAS.**
+//
+//   ──────────────────────────────────────────────────────  ← regla (hairline)
+//   ┌────────────────────────┬─┬─────────────────────────┐
+//   │ COLUMNA 1  ·  5fr      │ │ COLUMNA 2  ·  7fr       │
+//   │                        │ │  párrafo 1 (qué resuelve)
+//   │  ▬▬ EYEBROW            │ │                         │
+//   │  H2 display  ←centrado→│ │  párrafo 2 (beneficio)  │
+//   │  (title + accent)      │ │                         │
+//   └────────────────────────┴─┴─────────────────────────┘
+//                             ↑ filete vertical
+//
+// ANATOMÍA (por qué cada pieza):
+//   • Regla superior — hairline que cruza el bloque. Ancla ambas columnas al
+//     mismo borde y da el ritmo editorial: toda sección del sitio abre igual.
+//   • Eyebrow DENTRO de la columna 1 — es la etiqueta del TÍTULO, no del bloque:
+//     va pegado a él y los dos se centran como una sola unidad. Sacarlo a una
+//     fila propia que cruce las columnas lo deja clavado arriba mientras el
+//     título se centra, abriendo un hueco muerto entre ambos.
+//   • Retícula 5/7 asimétrica — el H2 es display: pesa por tamaño, no por ancho,
+//     y respira en la columna corta. Los párrafos necesitan medida de lectura
+//     (máx. 62ch), así que se llevan la columna larga.
+//   • Filete vertical — refuerza que son DOS columnas, no un párrafo suelto.
+//   • Centrado vertical entre columnas (`align-items: center`). La fila mide lo
+//     que mida la columna más alta (normalmente la de texto) y el título se
+//     centra contra ella: el peso del display queda a media altura del párrafo.
+//     No depende de métricas de fuente — ver <style> para las alternativas
+//     descartadas (`start`, `baseline`, padding calculado) y por qué.
+//
+// El título NUNCA va solo: siempre lo acompañan EXACTAMENTE DOS párrafos en la
+// columna derecha. Es el mismo patrón del <Hero> (`descRight[]`), extendido a
+// todas las secciones para que el sitio tenga un ritmo visual único: cada bloque
+// se abre igual — a la izquierda QUÉ es, a la derecha POR QUÉ te importa.
+//
+// POR QUÉ DOS PÁRRAFOS (no uno, no tres):
+//   • Uno solo deja la columna derecha corta y descuadra la retícula.
+//   • Tres o más convierten el encabezado en cuerpo de texto y le roban peso al H2.
+//   • Dos permiten la estructura de venta canónica:
+//       párrafo 1 → QUÉ es / qué resuelve (entra la keyword de la sección, natural).
+//       párrafo 2 → CÓMO se traduce en beneficio o siguiente paso para el cliente.
+//
+// CÓMO ESCRIBIRLOS (tono profesional, no folleto):
+//   • Habla de la persona, no de la empresa. Hechos, no adjetivos.
+//   • Cada párrafo ~180–320 caracteres (2–4 líneas en escritorio).
+//   • Sin promesas que el negocio no pueda sostener (regla: cero contenido
+//     fabricado — nada de plazos, cifras ni garantías sin dato verificado).
+//   • La keyword de la sección entra UNA vez, natural. No la apiles.
+//
+// USO CANÓNICO:
+//   <SectionHeading
+//     eyebrow="Catálogo"
+//     title="Tipos de mosquitero"
+//     body={[
+//       "Párrafo 1 — qué es / qué resuelve.",
+//       "Párrafo 2 — beneficio o siguiente paso.",
+//     ]}
+//   />
+//
+// EL COMPONENTE OBLIGA EL CONTRATO: si `body` no trae exactamente 2 párrafos, el
+// build FALLA con un mensaje claro (mismo criterio que Zod `.strict()` en las
+// Content Collections: el error se ve en build, no en producción).
+//
+// ESCAPE HATCH (`layout="simple"`): 1 columna con `desc`. Es la EXCEPCIÓN, no el
+// default. Úsalo solo donde no hay dos columnas que llenar de verdad (p. ej. un
+// bloque angosto o un CTA). Si te descubres poniéndolo por no querer escribir el
+// segundo párrafo: escribe el segundo párrafo.
+//
+// ESPECIFICACIÓN COMPLETA: docs/CONTRATO-ENCABEZADOS.md — incluye el checklist
+// para páginas nuevas, la verificación registrada y las alternativas YA
+// DESCARTADAS (léelas antes de "mejorar" la alineación: varias ya se probaron
+// y se cayeron por razones que no son de gusto).
+//
+// ORIGEN: PROYECTORED/src/components/ui/SectionHeader.astro + SectionHeaderDuo.astro,
+// vía ORIGENLAB-TEMPLATE. El layout `duo` YA venía en el template; lo de esta
+// sesión es volverlo obligatorio + el rediseño. Ver docs/PROCEDENCIA.md.
+// Componente atómico de UI — sin dependencias de config. Estilos scoped con tokens.
+// ============================================================================
+
+/** Los dos párrafos de la columna derecha. Tupla: ni uno más, ni uno menos. */
+export type SectionBody = readonly [string, string]
+
+interface Props {
+  id?: string
+  eyebrow?: string
+  /** Primera línea del título (obligatoria). Columna izquierda. */
+  title: string
+  /** Segunda línea del título, resaltada con color de acento. */
+  titleAccent?: string
+  /**
+   * CANÓNICO (`duo`): los DOS párrafos de la columna derecha.
+   * Obligatorio en layout 'duo'. Debe traer exactamente 2 elementos.
+   */
+  body?: SectionBody | string[]
+  /** 'duo' (CANÓNICO, 2 columnas) | 'simple' (excepción, 1 columna con `desc`). */
+  layout?: 'duo' | 'simple'
+  /** Sólo para 'simple': descripción de una columna. */
+  desc?: string
+  /** Sólo para 'simple': alineación. */
+  align?: 'center' | 'left'
+  /** true → texto claro sobre fondo oscuro. */
+  dark?: boolean
+  /** Etiqueta semántica del encabezado de bloque. */
+  as?: 'h2' | 'h3'
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  titleAccent,
+  body = [],
+  layout = 'duo', // CANÓNICO: dos columnas por defecto.
+  desc,
+  align = 'center',
+  dark = false,
+  as = 'h2',
+} = Astro.props
+const Tag = as
+
+// ── Guardas del contrato (fallan en BUILD, no en producción) ────────────────
+if (layout === 'duo' && body.length !== 2) {
+  throw new Error(
+    `[SectionHeading] Contrato roto en la sección "${title}": layout 'duo' exige EXACTAMENTE 2 párrafos en \`body\`, llegaron ${body.length}.\n` +
+      `  → Todo encabezado del sitio va en 2 columnas: izquierda el título, derecha 2 párrafos (qué resuelve / qué gana el cliente).\n` +
+      `  → Escribe el párrafo faltante, o usa layout="simple" con \`desc\` si esta sección es una excepción real.\n` +
+      `  Ver el contrato completo en src/components/SectionHeading.astro.`,
+  )
+}
+if (layout === 'duo' && desc) {
+  throw new Error(
+    `[SectionHeading] Contrato roto en la sección "${title}": en layout 'duo' no se usa \`desc\`.\n` +
+      `  → Mueve ese texto a \`body\` como uno de los 2 párrafos de la columna derecha.`,
+  )
+}
+if (layout === 'simple' && body.length > 0) {
+  throw new Error(
+    `[SectionHeading] Contrato roto en la sección "${title}": layout 'simple' no usa \`body\`.\n` +
+      `  → Usa \`desc\` para la descripción de una columna, o cambia a layout 'duo' (canónico) con 2 párrafos.`,
+  )
+}
+---
+
+<header class:list={['sech', `sech--${layout}`, layout === 'simple' && `sech--${align}`, { 'sech--dark': dark }]}>
+  {/* Columna 1 — eyebrow + H2. VAN JUNTOS, en el mismo bloque: el eyebrow es la
+      etiqueta del título, no del bloque. Si se saca a una fila propia que cruce
+      las dos columnas, el centrado vertical separa el título del eyebrow y deja
+      un hueco muerto entre ellos. */}
+  <div class="sech__head">
+    {eyebrow && <p class="sech__eyebrow"><span class="sech__eyebrow-bar" aria-hidden="true"></span>{eyebrow}</p>}
+    <Tag class="sech__title" id={id}>
+      {title}{titleAccent && <><br /><span class="sech__accent">{titleAccent}</span></>}
+    </Tag>
+    {layout === 'simple' && desc && <p class="sech__desc">{desc}</p>}
+  </div>
+
+  {/* Columna 2 — los 2 párrafos (canónico) */}
+  {layout === 'duo' && (
+    <div class="sech__body">
+      {body.map((p: string) => <p class="sech__body-p">{p}</p>)}
+    </div>
+  )}
+</header>
+
+<style>
+  /* ==========================================================================
+     SectionHeading — escala tipográfica propia del encabezado.
+     Estas 2 medidas gobiernan TODO el bloque (incluida la alineación vertical),
+     por eso son variables y no números sueltos: al tocarlas, la alineación se
+     recalcula sola. Se pueden sobreescribir por instancia desde la página.
+     ========================================================================== */
+  .sech {
+    --sech-title-size: clamp(2rem, 1.15rem + 2.9vw, 3.25rem);  /* display del H2 */
+    --sech-title-lh: 1.05;                                      /* display = leading corto */
+    --sech-body-size: 1.0625rem;                                /* párrafos col. 2 */
+    --sech-body-lh: 1.7;                                        /* lectura cómoda */
+    --sech-lead-scale: 1.06;                                    /* el párrafo 1 pesa un poco más */
+    --sech-rule: var(--c-border, #e5e7eb);
+    margin-bottom: var(--sp-8, 2rem);
+  }
+
+  /* ── Eyebrow (kicker) ─────────────────────────────────────────────────── */
+  .sech__eyebrow {
+    display: inline-flex; align-items: center; gap: var(--sp-3, .75rem);
+    font-family: var(--font-heading, inherit);
+    font-size: var(--text-xs, .75rem); font-weight: var(--weight-bold, 700);
+    text-transform: uppercase; letter-spacing: .14em; /* tracking amplio: es una etiqueta, no texto */
+    color: var(--color-red, var(--c-primary, #C41E24));
+    /* Pegado al título: el eyebrow lo etiqueta, así que se lee como una unidad. */
+    margin: 0 0 var(--sp-3, .75rem);
+  }
+  .sech__eyebrow-bar { width: 28px; height: 3px; background: currentColor; border-radius: 3px; }
+
+  /* ── Título (H2 display) ──────────────────────────────────────────────── */
+  .sech__title {
+    font-family: var(--font-heading, inherit);
+    font-size: var(--sech-title-size);
+    font-weight: var(--weight-black, 800);
+    line-height: var(--sech-title-lh);
+    letter-spacing: -.03em;        /* display grande → tracking negativo */
+    color: var(--c-ink, #111827);
+    margin: 0;
+    text-wrap: balance;            /* reparte las líneas, evita la viuda suelta */
+    hanging-punctuation: first;
+  }
+  .sech__accent { color: var(--color-red, var(--c-primary, #C41E24)); }
+  .sech__desc { font-size: var(--text-lg, 1.125rem); color: var(--text-muted, var(--c-muted, #6b7280)); line-height: var(--leading-relaxed, 1.7); margin: var(--sp-4, 1rem) 0 0; max-width: 60ch; }
+
+  /* ======================================================================
+     duo (CANÓNICO) — 2 columnas: título izquierda, 2 párrafos derecha.
+     ----------------------------------------------------------------------
+     RETÍCULA: asimétrica 5/7. El título es display (pesa por tamaño, no por
+     ancho) y respira mejor en la columna corta; los párrafos necesitan medida
+     de lectura, así que se llevan la columna larga.
+
+     LÍNEA SUPERIOR: hairline que cruza el bloque completo. Ancla las dos
+     columnas a un mismo borde y da el ritmo editorial: cada sección del sitio
+     abre con la misma regla.
+     ====================================================================== */
+  /* ── ALINEACIÓN VERTICAL (el corazón del bloque) ───────────────────────
+     `align-items: center`: las dos columnas se centran verticalmente entre sí.
+     La fila mide lo que mida la columna más alta (casi siempre la de texto:
+     2 párrafos pesan más alto que un H2 de 1–2 líneas), y el título se centra
+     contra ese bloque. El resultado es un encabezado equilibrado, con el peso
+     del display a media altura del texto que lo acompaña.
+
+     ALTERNATIVAS DESCARTADAS (y por qué):
+       • `start` — alinea las CAJAS, no el texto. La primera línea del párrafo
+         flota muy por encima de la del título y el bloque se lee torcido.
+       • `baseline` — alinea la primera línea del H2 con la del párrafo 1.
+         Es tipográficamente fino, pero deja el título colgado del techo con
+         todo el hueco muerto debajo cuando el texto es más alto.
+       • `padding-top` calculado con métricas (medio-interlineado + ascendente)
+         — NO usar. Necesita la ratio de ascendente de la fuente REAL, que
+         cambia con cada familia y cada `font-size`: número mágico que se rompe
+         en silencio. Además el sitio hoy declara Outfit/Inter pero renderiza en
+         system-ui (nadie carga las fuentes), así que quedaría calibrado contra
+         la fuente equivocada.
+
+     `center` no depende de métricas de fuente: sobrevive a cambios de
+     tipografía, tamaño e interlineado sin tocar nada.
+     ─────────────────────────────────────────────────────────────────────── */
+  .sech--duo {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    column-gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;                     /* ← las 2 columnas, centradas entre sí */
+    border-top: 1px solid var(--sech-rule);  /* la regla editorial */
+    padding-top: var(--sp-5, 1.5rem);
+  }
+  /* El eyebrow vive DENTRO de la columna 1, pegado a su título: los dos se
+     centran como un solo bloque. Ver la nota en el markup. */
+
+  .sech--duo .sech__body {
+    /* Filete vertical: refuerza que son DOS columnas, no un párrafo suelto. */
+    border-left: 1px solid var(--sech-rule);
+    padding-left: clamp(1.25rem, 2.5vw, 2.25rem);
+  }
+
+  .sech__body { display: flex; flex-direction: column; gap: var(--sp-4, 1rem); }
+  .sech__body-p {
+    font-size: var(--sech-body-size);
+    line-height: var(--sech-body-lh);
+    color: var(--text-muted, var(--c-muted, #6b7280));
+    margin: 0;
+    max-width: 62ch;               /* medida de lectura: nunca líneas kilométricas */
+    text-wrap: pretty;
+  }
+  /* Jerarquía interna: p1 dice QUÉ resuelve (pesa más), p2 acompaña.
+     Este es además el párrafo cuya línea base se alinea con la del H2. */
+  .sech__body-p:first-child {
+    color: var(--c-ink-2, #374151);
+    font-size: calc(var(--sech-body-size) * var(--sech-lead-scale));
+  }
+
+  /* ── simple (excepción): 1 columna ── */
+  .sech--center { text-align: center; }
+  .sech--center .sech__eyebrow { justify-content: center; }
+  .sech--center .sech__desc { margin-inline: auto; }
+  .sech--left { text-align: left; }
+
+  /* ── dark ── */
+  .sech--dark { --sech-rule: rgba(255,255,255,.18); }
+  .sech--dark .sech__title { color: #fff; }
+  .sech--dark .sech__desc, .sech--dark .sech__body-p { color: rgba(255,255,255,.72); }
+  .sech--dark .sech__body-p:first-child { color: rgba(255,255,255,.92); }
+
+  /* ── Móvil: las columnas se apilan → ya no hay nada que alinear ──
+     Con una sola columna el texto simplemente sigue al título: se vuelve a
+     `align-items: start` (baseline no aplica entre filas) y se quita el filete. */
+  @media (max-width: 768px) {
+    .sech--duo {
+      grid-template-columns: 1fr;
+      row-gap: var(--sp-5, 1.25rem);
+      align-items: start;
+    }
+    .sech--duo .sech__body { padding-left: 0; border-left: 0; }
+  }
+
+  /* Sin animaciones: el bloque no se mueve. Nada que desactivar en
+     prefers-reduced-motion. */
+</style>

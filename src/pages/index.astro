@@ -1,0 +1,276 @@
+---
+// ============================================================================
+// index.astro — HOME de mosquitero.mx (L1).
+// ----------------------------------------------------------------------------
+// ESTADO: scaffold inicial. Es la ÚNICA página del sitio por ahora; el resto de
+// las rutas (/productos, /servicios, /cobertura, /blog, /contacto) están
+// contempladas en NAV (site.ts) pero AÚN NO EXISTEN → sus enlaces dan 404 hasta
+// que se construyan. Ver README.md → "Hoja de ruta".
+//
+// REGLAS:
+//   • Cero datos de negocio hardcodeados: todo sale de src/config/site.ts.
+//   • WhatsApp SIEMPRE vía waUrl() (regla D4), nunca un wa.me a mano.
+//   • Las metas se generan de KEYWORDS con la regla keyword-first (lib/seo.ts).
+//   • ⚠️ Los textos marcados TODO son placeholders: valídalos con el cliente
+//     antes de publicar. Cero contenido fabricado (sin cifras ni promesas
+//     que el negocio no pueda sostener).
+// ============================================================================
+import PageLayout from "@layouts/PageLayout.astro";
+import Hero from "@components/Hero.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import CategoryCard from "@components/CategoryCard.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
+import CTABanner from "@components/CTABanner.astro";
+import { KEYWORDS, NAV, SERVICES, WA_MESSAGES, SHOWCASE, waUrl } from "@config/site";
+
+// ── WhatsApp: SIEMPRE vía waUrl() (regla D4) ──
+const waLink = waUrl();
+
+// ── Menú de secciones (barra bajo el hero) ───────────────────────────────────
+// DATA-DRIVEN desde NAV (site.ts) — la MISMA fuente que alimenta el Header. Se
+// excluye "Contacto" porque su intención la cubre el CTA. El último botón NO sale
+// de NAV: es el CTA de conversión por WhatsApp (regla «el hero presenta, la
+// franja convierte»).
+const menuSub: Record<string, string> = {
+  Mosquiteros: "Tipos y catálogo",
+  Servicios: "Fabricación, instalación y reparación",
+  Cobertura: "Zonas que atendemos",
+  Blog: "Guías y mantenimiento",
+};
+const menuSecciones = NAV.filter((n) => n.label !== "Contacto").map((n) => ({
+  label: n.label,
+  href: n.href,
+  sub: menuSub[n.label] ?? n.items?.slice(0, 3).map((i) => i.label).join(" · ") ?? "Ver sección",
+}));
+const menuCta = {
+  label: "Cotizar por WhatsApp",
+  href: waUrl(WA_MESSAGES.cotizar),
+  sub: "Mándanos tus medidas",
+  external: true,
+};
+
+// ── Cómo se pide un mosquitero (proceso) ─────────────────────────────────────
+// TODO: confirmar el proceso REAL del cliente (¿mide él?, ¿cobra la visita?,
+// ¿cuánto tarda la entrega?). No prometer tiempos sin dato verificado.
+const proceso: { paso: string; titulo: string; detalle: string }[] = [
+  { paso: "1", titulo: "Nos escribes", detalle: "Mándanos por WhatsApp el tipo de ventana o puerta y, si las tienes, las medidas." },
+  { paso: "2", titulo: "Medición", detalle: "Te decimos cómo medir o agendamos una visita para tomar las medidas exactas." },
+  { paso: "3", titulo: "Cotización", detalle: "Recibes el precio por pieza con el tipo de mosquitero y malla recomendados." },
+  { paso: "4", titulo: "Fabricación", detalle: "Armamos cada mosquitero a la medida de tu vano." },
+  { paso: "5", titulo: "Instalación", detalle: "Lo colocamos y verificamos que cierre y corra bien antes de irnos." },
+];
+
+// ── FAQ — preguntas reales de compra ─────────────────────────────────────────
+// TODO: validar cada respuesta con el cliente. Sin garantías ni plazos inventados.
+const faqs: { question: string; answer: string }[] = [
+  {
+    question: "¿Cómo mido mi ventana para un mosquitero?",
+    answer:
+      "Mide el <strong>ancho</strong> y el <strong>alto</strong> del vano por dentro, en tres puntos cada uno (arriba, en medio y abajo), y quédate con la medida menor. Mándanos esos números por WhatsApp y te decimos si el vano requiere algún ajuste.",
+  },
+  {
+    question: "¿Qué tipo de mosquitero me conviene?",
+    answer:
+      "Depende de la ventana y del uso: los <strong>corredizos</strong> van con ventanas corredizas, los <strong>abatibles</strong> con puertas de acceso diario, los <strong>enrollables</strong> cuando quieres que la malla desaparezca, y los <strong>plisados</strong> para vanos amplios. Cuéntanos tu caso y te recomendamos el correcto.",
+  },
+  {
+    question: "¿Hacen mosquiteros a medida?",
+    answer:
+      "Sí. Cada mosquitero se fabrica a la medida exacta de tu ventana o puerta; no trabajamos con medidas estándar de línea.",
+  },
+  {
+    question: "¿Pueden cambiar la malla de un mosquitero que ya tengo?",
+    answer:
+      "Sí. Si el marco está en buen estado, se cambia solo la tela. Si el marco o los herrajes están dañados, te decimos qué conviene más: reparar o reponer la pieza.",
+  },
+  {
+    question: "¿Cuánto cuesta un mosquitero?",
+    answer:
+      "El precio depende de las medidas, el tipo de mosquitero y la malla. Mándanos las medidas por WhatsApp y te pasamos la cotización por pieza.",
+  },
+];
+---
+
+{/* schemaData.faqs → el JSON-LD FAQPage lo emite buildSchema() UNA sola vez
+    (lib/seo.ts). Por eso <FAQAccordion> NO lleva `emitSchema` (anti-patrón B3:
+    doble FAQPage). */}
+<PageLayout keywords={KEYWORDS} pageType="home" schemaData={{ faqs }}>
+  {/* ═══ 1) HERO — H1 único con la propuesta + kw1. TODO: validar copy con el cliente. ═══ */}
+  <Hero
+    title="Mosquiteros a medida para tus ventanas y"
+    accent="puertas"
+    subtitle="Los fabricamos e instalamos a la medida exacta de tu vano. Mándanos tus medidas por WhatsApp y te cotizamos por pieza."
+    descRight={[
+      "Cada ventana es distinta. Por eso no vendemos medidas de línea: tomamos el ancho y el alto de tu vano y armamos el mosquitero para que cierre completo, sin huecos por donde se cuele un mosquito. Trabajamos enrollables, corredizos, abatibles, plisados, magnéticos y fijos — te decimos cuál corresponde a tu tipo de ventana y para qué uso.",
+      "Si ya tienes mosquiteros y solo se rompió la malla, también los reparamos: cambio de tela, marcos y herrajes. Escríbenos con una foto y las medidas, y te decimos qué conviene más en tu caso.",
+    ]}
+  />
+
+  {/* ═══ MENÚ DE SECCIONES — barra full-width bajo el hero (data-driven desde NAV) ═══ */}
+  <SectionMenu items={menuSecciones} cta={menuCta} />
+
+  {/* ═══ 2) TIPOS DE MOSQUITERO — vitrina de categorías (data-driven desde SHOWCASE) ═══ */}
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Catálogo"
+        title="Tipos de mosquitero"
+        body={[
+          "No todos los mosquiteros sirven para todas las ventanas. El tipo correcto lo define el marco que ya tienes y el uso que le das: no es lo mismo una ventana que abres dos veces al día que la puerta por la que entra y sale toda la familia.",
+          "Abajo está cada tipo con el caso que resuelve. Si tu ventana no encaja claro en ninguno, mándanos una foto por WhatsApp: con verla sabemos cuál corresponde y te evitamos comprar la pieza equivocada.",
+        ]}
+      />
+      <div class="showcase">
+        {SHOWCASE.map((cat, i) => (
+          <CategoryCard
+            label={cat.label}
+            href={cat.href}
+            image={cat.image}
+            imageAlt={cat.imageAlt}
+            badge={cat.badge}
+            blurb={cat.blurb}
+            subcategories={cat.subcategories}
+            ctaLabel={cat.ctaLabel}
+            index={i}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 3) SERVICIOS — data-driven desde TAXONOMY.services ═══ */}
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Servicios"
+        title="Qué hacemos"
+        body={[
+          "Cubrimos el mosquitero completo, de la medida a la instalación: lo fabricamos a las dimensiones exactas de tu vano, lo colocamos y verificamos que cierre y corra bien antes de irnos.",
+          "Si ya tienes mosquiteros, no siempre hay que reponerlos. Cuando el marco aguanta, se cambia solo la malla; cuando no, te decimos con franqueza qué conviene más — reparar o reponer la pieza.",
+        ]}
+      />
+      <div class="servicios">
+        {SERVICES.map((s) => (
+          <div class="servicio">
+            <p class="servicio__titulo">{s.label}</p>
+            <p class="servicio__desc">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 4) PROCESO — cómo se pide un mosquitero ═══ */}
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Proceso"
+        title="Cómo pedir tu mosquitero"
+        body={[
+          "Pedir un mosquitero a medida es más simple de lo que parece: empieza con un mensaje y unas medidas. No necesitas saber qué tipo es el tuyo ni cómo se llama la malla — para eso estamos.",
+          "Estos son los cinco pasos, del primer mensaje a la pieza instalada, para que sepas qué sigue en cada momento y qué necesitamos de ti en cada uno.",
+        ]}
+      />
+      <ol class="pasos">
+        {proceso.map((e) => (
+          <li class="paso">
+            <span class="paso__num" aria-hidden="true">{e.paso}</span>
+            <div class="paso__body">
+              <p class="paso__titulo">{e.titulo}</p>
+              <p class="paso__detalle">{e.detalle}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* ═══ 5) FAQ — alimenta el JSON-LD FAQPage vía lib/seo.ts ═══
+       El encabezado lo pone <SectionHeading> (contrato de 2 columnas), NO el
+       `title` de <FAQAccordion> — así el bloque abre igual que el resto del
+       sitio. Por eso el acordeón va con title={undefined}: un solo H2 por
+       sección, sin encabezado duplicado. */}
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        id="faq-heading"
+        eyebrow="Dudas"
+        title="Preguntas frecuentes"
+        body={[
+          "Estas son las preguntas que más nos llegan por WhatsApp antes de cotizar: cómo medir, qué tipo conviene y de qué depende el precio.",
+          "Si la tuya no está aquí, escríbenos. Preferimos resolverla antes de fabricar que después de instalar.",
+        ]}
+      />
+    </div>
+  </section>
+  {/* title="" → el acordeón NO pinta su propio H2 (lo puso SectionHeading arriba).
+      Su aria-labelledby sigue apuntando a #faq-heading, que ahora es ese H2. */}
+  <FAQAccordion items={faqs} title="" />
+
+  {/* ═══ 6) CTA FINAL ═══ */}
+  <CTABanner
+    heading="¿Listo para cotizar tus mosquiteros?"
+    desc="Mándanos las medidas de tus ventanas por WhatsApp y te pasamos el precio por pieza, con el tipo de mosquitero y la malla que te convienen."
+    btns={[
+      { label: "Cotizar por WhatsApp", href: waLink, icon: "wa", primary: true, external: true },
+    ]}
+    variant="dark"
+    centered={true}
+  />
+</PageLayout>
+
+<style>
+  /* CSS vanilla con tokens (tokens.css = fuente única). Mobile-first. */
+  .container {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-px);
+  }
+
+  .section { padding: var(--sp-8) 0; }
+  .section--surface { background: var(--c-surface); }
+
+  /* ── Vitrina de categorías — 4 por fila en escritorio (2 tablet, 1 móvil) ── */
+  .showcase { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
+  @media (min-width: 640px) { .showcase { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .showcase { grid-template-columns: repeat(4, 1fr); } }
+
+  /* ── Servicios ── */
+  .servicios { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+  .servicio {
+    background: var(--c-white); border: 1px solid var(--c-border);
+    border-left: 4px solid var(--c-primary);
+    border-radius: var(--radius-md); padding: var(--sp-4);
+  }
+  .servicio__titulo {
+    margin: 0 0 4px; font-family: var(--font-heading);
+    font-weight: var(--weight-semibold); color: var(--c-ink);
+  }
+  .servicio__desc { margin: 0; font-size: var(--text-sm); color: var(--c-muted); line-height: var(--leading-normal); }
+
+  /* ── Proceso ── */
+  .pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+  .paso {
+    display: flex; align-items: flex-start; gap: var(--sp-4);
+    background: var(--c-white); border: 1px solid var(--c-border);
+    border-radius: var(--radius-md); padding: var(--sp-4);
+  }
+  .paso__num {
+    flex-shrink: 0; display: grid; place-items: center; width: 34px; height: 34px;
+    border-radius: var(--radius-full); background: var(--c-primary); color: #fff;
+    font-family: var(--font-heading); font-weight: var(--weight-bold);
+  }
+  .paso__body { display: grid; gap: 2px; }
+  .paso__titulo { margin: 0; font-weight: var(--weight-semibold); color: var(--c-ink); }
+  .paso__detalle { margin: 0; font-size: var(--text-sm); color: var(--c-muted); line-height: var(--leading-normal); }
+
+  /* ── Desktop ── */
+  @media (min-width: 768px) {
+    .section { padding: var(--sp-10) 0; }
+    .servicios { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .servicios { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
