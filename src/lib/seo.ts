@@ -502,27 +502,38 @@ export type ProductData = {
  */
 export function productSchema(p: ProductData) {
   const url = absUrl(p.path);
-  const offer: Record<string, unknown> = {
-    '@type': 'Offer',
-    url,
-    priceCurrency: 'MXN',
-    availability: `https://schema.org/${p.availability ?? 'InStock'}`,
-    itemCondition: 'https://schema.org/NewCondition',
-    seller: { '@id': BUSINESS_ID },
-    areaServed: 'MX',
-  };
-  if (p.price) {
-    offer.price = p.price;
-    offer.priceValidUntil = `${new Date().getFullYear() + 1}-12-31`;
-  } else {
-    offer.price = '0';
-    offer.priceSpecification = {
-      '@type': 'UnitPriceSpecification',
-      price: '0',
-      priceCurrency: 'MXN',
-      description: 'Precio bajo cotización — contáctanos para tarifa personalizada.',
-    };
-  }
+
+  // ⚠️ BUG CORREGIDO el 2026-07-14 (heredado del template 🔵, afecta a todo sitio
+  // que lo copie). El `else` de aquí abajo hacía esto cuando NO había precio:
+  //
+  //     offer.price = '0';
+  //     offer.priceSpecification = { price: '0', description: 'Precio bajo cotización…' }
+  //
+  // O sea: si omitías el precio —justo lo que hay que hacer cuando el negocio
+  // cotiza por pieza— el JSON-LD le declaraba a Google que el producto cuesta
+  // **$0 MXN** y está **InStock**. La `description` era una hoja de parra: Google
+  // parsea `price: "0"`, no la frase. Resultado posible: "$0.00" en el resultado
+  // enriquecido, o rechazo del rich result por precio inválido. Y es falso.
+  //
+  // LO CORRECTO: sin precio, NO se emite `offers`. Un Product sin Offer es válido
+  // en schema.org — simplemente no opta a rich result de precio, que es exactamente
+  // lo que debe pasar cuando no hay precio. Mejor sin dato que con dato falso.
+  //
+  // Aquí también se iba `availability: InStock`, que en un producto hecho a la
+  // medida tampoco era verdad: no hay stock, se fabrica cuando lo pides.
+  const offer: Record<string, unknown> | undefined = p.price
+    ? {
+        '@type': 'Offer',
+        url,
+        priceCurrency: 'MXN',
+        availability: `https://schema.org/${p.availability ?? 'InStock'}`,
+        itemCondition: 'https://schema.org/NewCondition',
+        seller: { '@id': BUSINESS_ID },
+        areaServed: 'MX',
+        price: p.price,
+        priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
+      }
+    : undefined;
   return {
     '@type': 'Product',
     '@id': `${url}#product`,
@@ -535,7 +546,10 @@ export function productSchema(p: ProductData) {
     brand: { '@type': 'Brand', name: p.brand ?? SITE.name },
     manufacturer: { '@id': ORG_ID },
     url,
-    offers: offer,
+    // Spread condicional, no `offers: offer`: con `undefined` la clave seguiría
+    // en el objeto y JSON.stringify la tiraría, pero dejarlo explícito evita que
+    // alguien la "arregle" luego devolviéndole un precio 0. Sin precio no hay Offer.
+    ...(offer ? { offers: offer } : {}),
     ...emitReviews(p.reviews),
   };
 }

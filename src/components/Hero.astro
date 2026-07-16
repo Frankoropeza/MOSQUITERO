@@ -94,10 +94,10 @@ const WA_PATH = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.
   }
   .hero__badge-dot {
     width: 6px; height: 6px; background: var(--color-red-light, #E8213F); border-radius: 50%; flex-shrink: 0;
-    animation: hero-pulse 2s ease-in-out infinite;
+
   }
-  @keyframes hero-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-  @media (prefers-reduced-motion: reduce) { .hero__badge-dot { animation: none; } }
+  /* Aquí latía el punto del badge (@keyframes hero-pulse). Se fue con el
+     CONTRATO DE MOVIMIENTO: el sitio no anima. El punto sigue ahí, fijo. */
   .hero__title {
     font-size: var(--text-4xl, clamp(2.5rem, 4.5vw, 3.75rem));
     font-weight: var(--weight-black, 800);
@@ -120,7 +120,9 @@ const WA_PATH = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.
     padding: .8125rem 1.625rem;
     font-size: var(--text-sm, .9375rem); font-weight: var(--weight-bold, 700);
     border-radius: var(--radius-md, 6px); text-decoration: none;
-    transition: all .18s ease;
+    /* Excepción del contrato: es un CTA. Solo color/fondo, nunca `all` — que
+       arrastraría transform, box-shadow y hasta el tamaño. */
+    transition: background-color var(--transition-btn), color var(--transition-btn), border-color var(--transition-btn);
   }
   .hero__btn--primary { background: var(--color-red, #C41E24); color: #fff; border: 2px solid var(--color-red, #C41E24); }
   .hero__btn--primary:hover { background: var(--color-red-dark, #A01820); border-color: var(--color-red-dark, #A01820); }

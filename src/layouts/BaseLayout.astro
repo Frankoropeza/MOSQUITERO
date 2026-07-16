@@ -30,6 +30,10 @@ import { buildMeta, buildSchema, buildKeywordTitle, buildKeywordDescription, typ
 // sitio cuelga de BaseLayout, así que basta este import para exponer las
 // variables :root a cada página/componente. NO reimportar tokens.css en otro lado.
 import "../styles/tokens.css";
+// layout.css: `.container` y `.section`. Estaban COPIADOS en 9 páginas — nueve
+// definiciones del ancho del sitio, nueve formas de que una divergiera. Una sola,
+// aquí, y aplica a todo sin que cada página tenga que acordarse. Ver el archivo.
+import "../styles/layout.css";
 
 export interface Props {
   /** Título de la página (sin marca; ≤60). Opcional si pasas `keywords`. */
@@ -141,7 +145,11 @@ const jsonLd = buildSchema(pageType, schemaData);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="var(--color-primary)" />
+    {/* Un var() de CSS NO resuelve dentro de un <meta>: esto decía
+        content="var(--color-primary)" y el navegador lo ignoraba en silencio —
+        la barra del navegador en móvil nunca se pintó de color de marca. El hex
+        sale de SITE.themeColor, que documenta los 3 sitios donde vive. */}
+    <meta name="theme-color" content={SITE.themeColor} />
 
     {/*
       ── Fuentes self-hosted anti-CLS (C3) ──

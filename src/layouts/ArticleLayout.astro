@@ -1,28 +1,47 @@
 ---
-{/* ArticleLayout — artículo de blog (colección .mdx): hero, prose, autor/fechas, relacionados. L? blog | Origen: BOMBERO (BlogMdxLayout) + EVENTECH (Article schema) */}
+{/* ArticleLayout — artículo de blog (colección .mdx): hero, prose, sidebar compartido, FAQ, relacionados. L3 blog | Origen: BOMBERO (BlogMdxLayout) + EVENTECH (Article schema) */}
 
 // ============================================================================
 // ArticleLayout.astro — ARTÍCULO DE BLOG.
 //
-// Renderiza un post de la Content Collection `blog` (.mdx con frontmatter
+// Renderiza un post de la Content Collection `articulos` (.mdx con frontmatter
 // tipado). El blog SIEMPRE vive en colección .mdx, NUNCA como .astro sueltos
 // (anti-patrón D3 confirmado en MESASPICNIC/RENTADEILUMINACION).
 //
 // Extiende PageLayout. Schema: pageType="article" → buildSchema emite Article
 // (con datePublished/dateModified/author/publisher) + BreadcrumbList (una vez).
 // El cuerpo del artículo se inyecta por <slot/> (lo renderiza <Content /> en la
-// página de la ruta dinámica del blog).
+// ruta dinámica /blog/[slug]).
+//
+// LA COLUMNA LATERAL NO VIVE AQUÍ: es <BlogSidebar>, el mismo componente que
+// usan /blog, /blog/categoria/* y /blog/tag/*. Antes este layout traía su propio
+// aside a mano (tags + relacionados + CTA) y el listado no traía ninguno: dos
+// blogs distintos dentro del mismo sitio. El sidebar consulta sus propios datos
+// (recientes, conteos, tags) — ver la nota de contrato en BlogSidebar.astro.
+//
+// TIPOGRAFÍA DEL CUERPO: styles/typography.css. Se importa AQUÍ y no en el
+// <style> de este archivo porque los estilos de un .astro son scoped y NO
+// alcanzan al HTML que entra por el slot desde el .mdx.
 // ============================================================================
 
 import PageLayout from "./PageLayout.astro";
+import BlogSidebar from "@components/BlogSidebar.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
 import CTABanner from "@components/CTABanner.astro";
-import { SITE, waUrl } from "@config/site";
+import { SITE, blogCategoryLabel, waUrl } from "@config/site";
+
+// Hoja tipográfica del cuerpo largo (.prose). Import global a propósito: el HTML
+// del .mdx no lleva clases y hay que alcanzarlo por descendencia desde .prose.
+import "../styles/typography.css";
 
 export interface Props {
   title: string;
   description: string;
+  /** Slug de categoría (enum de content.config.ts). El label lo resuelve el layout. */
   category?: string;
+  /** Slug del propio artículo: lo usa el sidebar para no recomendarse a sí mismo. */
+  slug?: string;
   /** Fecha de publicación (ISO o Date). Alimenta el Article JSON-LD. */
   pubDate: string | Date;
   /** Fecha de última edición; default = pubDate. */
@@ -32,6 +51,8 @@ export interface Props {
   imageAlt?: string;
   canonical?: string;
   tags?: string[];
+  /** FAQs del frontmatter → acordeón visible + FAQPage JSON-LD (lo emite buildSchema). */
+  faqs?: { question: string; answer: string }[];
   /** Artículos / servicios relacionados (interlinking). */
   related?: { label: string; href: string; description?: string }[];
 }
@@ -40,6 +61,7 @@ const {
   title,
   description,
   category,
+  slug,
   pubDate,
   updatedDate,
   author = SITE.brand,
@@ -47,6 +69,7 @@ const {
   imageAlt,
   canonical,
   tags = [],
+  faqs = [],
   related = [],
 } = Astro.props;
 
@@ -55,14 +78,25 @@ const updated = updatedDate ? new Date(updatedDate) : published;
 const fmt = (d: Date) =>
   d.toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" });
 
+// Tiempo de lectura: NO se calcula aquí. Sin acceso al texto renderizado (entra
+// por <slot/>), cualquier cifra sería inventada — y el sitio no publica datos que
+// no pueda sostener. Si se quiere, se calcula en la ruta con post.body y se pasa.
+
+const categoryLabel = category ? blogCategoryLabel(category) : undefined;
+
 const breadcrumbs = [
   { label: "Blog", href: "/blog" },
+  ...(category && categoryLabel
+    ? [{ label: categoryLabel, href: `/blog/categoria/${category}` }]
+    : []),
   { label: title },
 ];
 
-// schemaData → Article. Claves EXACTAS del contrato lib/seo.ts:
-// article { title, description, path, image?, datePublished, dateModified?,
-// author?, section? }. La fecha también va a og:article:* vía BaseLayout/buildMeta.
+// schemaData → Article (+ FAQPage si el artículo trae FAQs). Claves EXACTAS del
+// contrato lib/seo.ts: article { title, description, path, image?, datePublished,
+// dateModified?, author?, section? }. La fecha también va a og:article:* vía
+// BaseLayout/buildMeta. El FAQPage lo emite buildSchema, NO el FAQAccordion
+// (su emitSchema queda en false — anti-duplicación B3).
 const schemaData = {
   article: {
     title,
@@ -72,11 +106,15 @@ const schemaData = {
     datePublished: published.toISOString(),
     dateModified: updated.toISOString(),
     author,
-    ...(category ? { section: category } : {}),
+    ...(categoryLabel ? { section: categoryLabel } : {}),
   },
+  ...(faqs.length > 0 ? { faqs } : {}),
 };
 
-const waLink = waUrl(`Hola, leí "${title}" en su blog y tengo una pregunta.`);
+// WhatsApp SIEMPRE vía waUrl() (regla D4). Mensaje contextual: quien atiende
+// recibe el título del artículo y sabe de qué le están hablando.
+const waMessage = `Hola, leí "${title}" en su blog y tengo una pregunta.`;
+const waLink = waUrl(waMessage);
 ---
 
 <PageLayout
@@ -91,79 +129,222 @@ const waLink = waUrl(`Hola, leí "${title}" en su blog y tengo una pregunta.`);
   <article class="post">
     <header class="post__header">
       <div class="container">
-        {category && <a class="post__cat" href={`/blog/categoria/${category}`}>{category}</a>}
-        <h1 class="post__title">{title}</h1>
-        <p class="post__lede">{description}</p>
-        <p class="post__meta">
-          Por {author} · <time datetime={published.toISOString()}>{fmt(published)}</time>
-          {updated.getTime() !== published.getTime() && (
-            <> · Actualizado <time datetime={updated.toISOString()}>{fmt(updated)}</time></>
+        <div class="post__header-inner">
+          {category && categoryLabel && (
+            <a class="post__cat" href={`/blog/categoria/${category}`}>
+              <span class="post__cat-bar" aria-hidden="true"></span>{categoryLabel}
+            </a>
           )}
-        </p>
+          <h1 class="post__title">{title}</h1>
+          <p class="post__lede">{description}</p>
+          <p class="post__meta">
+            <span>Por {author}</span>
+            <span class="post__dot" aria-hidden="true">·</span>
+            <time datetime={published.toISOString()}>{fmt(published)}</time>
+            {updated.getTime() !== published.getTime() && (
+              <>
+                <span class="post__dot" aria-hidden="true">·</span>
+                <span>Actualizado <time datetime={updated.toISOString()}>{fmt(updated)}</time></span>
+              </>
+            )}
+          </p>
+        </div>
       </div>
     </header>
 
     {image && (
-      <figure class="post__hero">
-        <img src={image} alt={imageAlt ?? title} width="1200" height="630" fetchpriority="high" />
-      </figure>
+      <div class="container">
+        <figure class="post__hero">
+          {/* fetchpriority=high: es la imagen LCP del artículo. width/height
+              declarados → el navegador reserva el hueco y no hay CLS. */}
+          <img src={image} alt={imageAlt ?? title} width="1200" height="630" fetchpriority="high" decoding="async" />
+        </figure>
+      </div>
     )}
 
-    <div class="container post__body">
-      {/* prose: el cuerpo del .mdx entra por el slot */}
-      <div class="prose">
-        <slot />
-      </div>
-
-      <aside class="post__sidebar">
-        {tags.length > 0 && (
-          <div class="post__widget">
-            <h2>Temas</h2>
-            <ul class="post__tags">{tags.map((t) => <li><a href={`/blog/tag/${t}`}>#{t}</a></li>)}</ul>
-          </div>
-        )}
-        {related.length > 0 && (
-          <div class="post__widget">
-            <h2>Sigue leyendo</h2>
-            <RelatedLinks links={related.map((r) => ({ label: r.label, href: r.href, desc: r.description }))} />
-          </div>
-        )}
-        <div class="post__widget post__widget--cta">
-          <h2>¿Te quedó una duda?</h2>
-          <p>Escríbenos y te orientamos sin compromiso.</p>
-          <a class="btn btn--primary btn--block" href={waLink}>Preguntar por WhatsApp</a>
+    <div class="container">
+      <div class="post__body">
+        {/* prose: el cuerpo del .mdx entra por el slot. Estilo en typography.css. */}
+        <div class="prose">
+          <slot />
         </div>
-      </aside>
+
+        <BlogSidebar
+          currentSlug={slug}
+          currentCategory={category}
+          currentTags={tags}
+          ctaHeading="¿Te quedó una duda?"
+          waMessage={waMessage}
+        />
+      </div>
     </div>
+
+    {/* Tags al pie: cierran la lectura y reparten link equity. Duplican los del
+        sidebar a propósito — en móvil el sidebar cae al final de la página y
+        estos quedan pegados al texto, que es donde se buscan. */}
+    {tags.length > 0 && (
+      <div class="container">
+        <nav class="post__tags" aria-label="Temas del artículo">
+          <span class="post__tags-label">Temas:</span>
+          <ul role="list">
+            {tags.map((t) => <li><a href={`/blog/tag/${t}`}>#{t}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+    )}
   </article>
 
+  {/* FAQ del artículo: visible + FAQPage JSON-LD (lo emite buildSchema arriba).
+      Aquí SÍ pinta su propio H2 (a diferencia de la home): dentro de un artículo
+      es un encabezado del flujo de lectura, no un encabezado de sección del
+      sitio — por eso no lleva SectionHeading ni su contrato de 2 columnas. */}
+  {faqs.length > 0 && <FAQAccordion items={faqs} title="Preguntas frecuentes" headingId="faq-articulo" />}
+
+  {related.length > 0 && (
+    <RelatedLinks
+      title="Sigue leyendo"
+      desc="Otros artículos que resuelven la misma duda desde otro ángulo."
+      links={related.map((r) => ({ label: r.label, href: r.href, desc: r.description }))}
+    />
+  )}
+
   <CTABanner
-    heading="¿Listo para dar el siguiente paso?"
-    desc="Cuéntanos qué necesitas y te respondemos hoy mismo."
-    btns={[{ label: "Contáctanos", href: waLink, icon: "wa", primary: true, external: true }]}
+    heading="¿Listo para cotizar tus mosquiteros?"
+    desc="Mándanos las medidas de tus ventanas por WhatsApp y te pasamos el precio por pieza, con el tipo de mosquitero y la malla que te convienen."
+    btns={[{ label: "Cotizar por WhatsApp", href: waLink, icon: "wa", primary: true, external: true }]}
+    variant="dark"
+    centered={true}
   />
 </PageLayout>
 
 <style>
-  /* CSS vanilla con tokens. El estilo tipográfico de .prose vive en
-     src/styles/typography.css (fuente única). */
-  .post__header { padding: var(--space-10) 0 var(--space-6); }
-  .post__cat { color: var(--color-accent); text-transform: uppercase; letter-spacing: .08em; font-size: var(--text-sm); text-decoration: none; }
-  .post__title { font-family: var(--font-heading); font-size: var(--text-fluid-4xl); line-height: 1.1; margin: var(--space-2) 0; }
-  .post__lede { color: var(--color-text-muted); max-width: var(--container-prose); font-size: var(--text-lg); }
-  .post__meta { color: var(--color-text-muted); font-size: var(--text-sm); margin-top: var(--space-3); }
-  .post__hero img { width: 100%; height: auto; border-radius: var(--radius-lg); }
-  .post__body { display: grid; grid-template-columns: 1fr; gap: var(--space-8); padding: var(--space-8) 0; }
+  /* CSS vanilla + tokens (C1/C2). El estilo del CUERPO del artículo NO está
+     aquí: vive en src/styles/typography.css (.prose), importado arriba. Este
+     <style> solo viste el chrome del artículo (cabecera, hero, retícula, tags). */
+
+  /* .container: mismo contrato que index.astro (90% del viewport, centrado).
+     Se repite porque los <style> de un .astro son scoped y el sistema todavía no
+     tiene una clase global de container (deuda: candidata a subir a tokens.css). */
+  .container {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-px);
+  }
+
+  /* ── Cabecera ──
+     El encabezado del artículo NO usa SectionHeading: ése es el contrato de las
+     SECCIONES de una página (2 columnas, título + 2 párrafos). Un artículo abre
+     con H1 + lede + firma, que es un patrón editorial distinto. */
+  .post__header { padding: var(--sp-8) 0 var(--sp-5); }
+  .post__header-inner { max-width: var(--container-prose); }
+
+  .post__cat {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;      /* tracking de etiqueta: el mismo del eyebrow del sitio */
+    color: var(--c-primary);
+    text-decoration: none;
+  }
+  .post__cat-bar { width: 28px; height: 3px; background: currentColor; border-radius: 3px; }
+  .post__cat:hover { color: var(--c-primary-dark); }
+
+  .post__title {
+    margin: var(--sp-3) 0 var(--sp-4);
+    font-family: var(--font-heading);
+    font-size: var(--text-fluid-4xl);
+    font-weight: var(--weight-black);
+    line-height: var(--leading-tight);
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+    text-wrap: balance;
+  }
+
+  .post__lede {
+    margin: 0;
+    font-size: var(--text-xl);
+    line-height: var(--leading-snug);
+    color: var(--c-ink-2);
+    text-wrap: pretty;
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+    margin: var(--sp-5) 0 0;
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--c-border);   /* hairline editorial, como cada sección */
+    font-size: var(--text-sm);
+    color: var(--c-muted);
+  }
+  .post__dot { color: var(--c-border); }
+
+  /* ── Hero ── */
+  .post__hero { margin: 0 0 var(--sp-6); }
+  .post__hero img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+  }
+
+  /* ── Retícula del cuerpo ──
+     Móvil: 1 columna (el sidebar cae bajo el texto).
+     Desktop: texto + 20rem. minmax(0,1fr) y no 1fr: sin ese min 0, un bloque
+     ancho (tabla, <pre>) infla la columna y desborda el grid. */
+  .post__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-8);
+    padding-bottom: var(--sp-8);
+  }
   .prose { max-width: var(--container-prose); }
-  .post__sidebar { display: grid; gap: var(--space-5); align-content: start; }
-  .post__widget { padding: var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-lg); }
-  .post__widget--cta { background: var(--color-surface); }
-  .post__tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .post__tags a { font-size: var(--text-sm); color: var(--color-text-muted); text-decoration: none; }
-  .btn--block { width: 100%; }
+
+  /* ── Tags al pie ── */
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-3);
+    max-width: var(--container-prose);
+    padding: var(--sp-5) 0;
+    border-top: 1px solid var(--c-border);
+  }
+  .post__tags-label { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--c-ink); }
+  .post__tags ul { display: flex; flex-wrap: wrap; gap: var(--sp-2); list-style: none; margin: 0; padding: 0; }
+  .post__tags a {
+    display: inline-block;
+    padding: 5px var(--sp-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    color: var(--c-muted);
+    text-decoration: none;
+  }
+  .post__tags a:hover { border-color: var(--c-primary); color: var(--c-primary); }
+  .post__tags a:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
 
   @media (min-width: 1024px) {
-    .post__body { grid-template-columns: minmax(0, 1fr) 20rem; }
-    .post__sidebar { position: sticky; top: calc(var(--header-height, 72px) + var(--space-4)); }
+    .post__header { padding-top: var(--sp-10); }
+    .post__body { grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--sp-10); }
+    /* El sticky lo pone la PÁGINA (aquí), no BlogSidebar: un componente que se
+       posiciona a sí mismo no se puede reutilizar en otra retícula. El offset
+       descuenta la altura COMPACTA del header (su estado pegado).
+       :global() es obligatorio — .bsb es una clase de OTRO componente y el scope
+       de este <style> no la alcanza. */
+    .post__body > :global(.bsb) {
+      position: sticky;
+      top: calc(var(--header-height) + var(--sp-4));
+    }
   }
 </style>

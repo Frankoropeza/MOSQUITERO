@@ -89,10 +89,15 @@ export const SERVICE_CATEGORIES = [
   'reparacion',
 ] as const;
 
+// ⚠️ ESPEJO EXACTO de TAXONOMY.articleCategories[].slug en site.ts. Este enum
+// gobierna qué ACEPTA el frontmatter (Zod); allá vive cómo se PRESENTA cada slug
+// (label + desc). Agregar una categoría exige tocar los DOS archivos: si solo se
+// toca aquí, el blog la ignora; si solo se toca allá, el build revienta.
 export const ARTICLE_CATEGORIES = [
   'guias',
   'mantenimiento',
   'tipos-de-malla',
+  'la-marca', // cómo trabajamos, criterio de compra, qué exigirle a un proveedor
   'novedades',
   'general',
 ] as const;

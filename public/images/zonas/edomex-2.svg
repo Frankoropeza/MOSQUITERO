@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Puerta de patio con mosquitero puesto">
+  <!-- PLACEHOLDER generado — mosquitero.mx · sección Cobertura (edomex-2).
+       ORIGEN: mismo patrón que showcase/*.svg, proceso/*.svg y servicios/*.svg.
+       ⚠️ NO es un mapa: un mapa dibujado a mano sugeriría un área de cobertura
+       exacta que nadie ha confirmado. Marca el hueco de UNA foto de trabajo REAL
+       hecho en esa zona — que es lo único que puede probar que se atiende ahí.
+       TODO: sustituir por la foto real (AVIF/WebP < 200 KB) manteniendo el 4:3
+       y el alt que declara ZONAS_AFONDO en src/config/site.ts. -->
+  <defs>
+    <pattern id="mzonaedomex-2" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M16 0H0v16" fill="none" stroke="#cbd2dc" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="#eef1f5"/>
+  <rect width="800" height="600" fill="url(#mzonaedomex-2)" opacity="0.55"/>
+  <rect x="20" y="20" width="760" height="560" fill="none" stroke="#cbd2dc" stroke-width="2" stroke-dasharray="10 8" rx="8"/>
+  <g text-anchor="middle" font-family="system-ui, sans-serif">
+    <text x="400" y="268" fill="#5b3df5" font-size="20" font-weight="700" letter-spacing="2">EDOMEX</text>
+    <text x="400" y="322" fill="#5f6b7a" font-size="30" font-weight="600">Puerta de patio</text>
+    <text x="400" y="360" fill="#5f6b7a" font-size="30" font-weight="600">con mosquitero puesto</text>
+    <text x="400" y="410" fill="#8b95a3" font-size="18">Foto pendiente del cliente</text>
+  </g>
+</svg>

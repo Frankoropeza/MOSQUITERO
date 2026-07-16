@@ -1,0 +1,252 @@
+/* typography.css — FUENTE ÚNICA del estilo tipográfico del cuerpo largo (.prose).
+   ============================================================================
+   QUÉ ES: la hoja que viste el HTML que sale del Markdown/MDX. El .mdx del blog
+   entra por <slot/> en ArticleLayout dentro de <div class="prose">; ese HTML no
+   trae clases (es `<p>`, `<h2>`, `<ul>`, `<blockquote>`…), así que el estilo se
+   aplica por SELECTOR DE DESCENDENCIA desde `.prose`.
+
+   POR QUÉ VIVE AQUÍ Y NO EN EL <style> DE ArticleLayout:
+   los estilos de un .astro son SCOPED: Astro les añade un hash y NO alcanzan al
+   HTML inyectado por el slot desde el .mdx. Meterlos ahí obligaría a `:global()`
+   en cada regla — ruido y fuga silenciosa de scope. Una hoja propia importada
+   desde el layout es el patrón limpio. ArticleLayout ya la referenciaba en su
+   comentario como fuente única; este archivo la materializa.
+
+   POR QUÉ NO @tailwindcss/typography: el CSS canónico del sistema es vanilla +
+   tokens :root (regla C1). El plugin fue anti-patrón confirmado (FIREFIGHTERMX).
+
+   REGLAS:
+   • Cero valores crudos: todo sale de tokens.css (--sp-*, --text-*, --c-*).
+     tokens.css NO se importa aquí — lo importa BaseLayout una vez (C2) y sus
+     variables :root ya están disponibles para toda la cascada.
+   • Ámbito estricto: TODA regla cuelga de `.prose`. Nada global.
+   • El ancho de lectura (--container-prose) lo pone el layout, no esta hoja.
+   ============================================================================ */
+
+.prose {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--c-ink-2);
+  /* text-wrap: pretty → evita la palabra viuda al final del párrafo. */
+  text-wrap: pretty;
+}
+
+/* ── Bloques: ritmo vertical ────────────────────────────────────────────────
+   El margen lo pone SIEMPRE el elemento de arriba (margin-top en los títulos,
+   margin-bottom en los párrafos) y se cancela en el primero/último hijo. Así el
+   .prose no abre ni cierra con un hueco que descuadre el grid del artículo. */
+.prose > * + * { margin-top: var(--sp-4); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+
+/* ── Títulos ────────────────────────────────────────────────────────────────
+   El H1 lo pone el layout (post__title): dentro del .mdx la jerarquía ARRANCA
+   en H2. Un segundo H1 en la página rompe el outline del documento.
+   Los espacios superiores son ~2× los inferiores: el título pertenece al texto
+   que le sigue, no al que le precede (ley de proximidad). */
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-heading);
+  color: var(--c-ink);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  /* scroll-margin: con el header pegado, un ancla (#id) aterriza DEBAJO del
+     header. html{scroll-padding-top} ya lo cubre; esto es el cinturón para
+     scrollIntoView() programático, que ignora el scroll-padding del contenedor. */
+  scroll-margin-top: calc(var(--header-height) + var(--sp-4));
+}
+
+.prose h2 {
+  font-size: var(--text-fluid-3xl);
+  font-weight: var(--weight-black);
+  margin-top: var(--sp-8);
+  margin-bottom: var(--sp-3);
+  /* Hairline superior: el mismo recurso editorial que abre cada sección del
+     sitio (ver SectionHeading). Homologa el artículo con el resto de páginas. */
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--c-border);
+}
+.prose > h2:first-child { padding-top: 0; border-top: 0; }
+
+.prose h3 {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  margin-top: var(--sp-6);
+  margin-bottom: var(--sp-2);
+}
+
+.prose h4 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  margin-top: var(--sp-5);
+  margin-bottom: var(--sp-2);
+}
+
+/* ── Párrafos ── */
+.prose p { margin: 0 0 var(--sp-4); }
+
+/* Lede: primer párrafo del artículo, un punto más grande y más oscuro. Es la
+   entrada al texto, no un bloque destacado: sin fondo ni filete. */
+.prose > p:first-child {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  color: var(--c-ink);
+}
+
+/* ── Enlaces ────────────────────────────────────────────────────────────────
+   Subrayado SIEMPRE visible (no solo en hover): el color por sí solo no es un
+   indicador accesible — falla para daltonismo (WCAG 1.4.1 Uso del color).
+   text-underline-offset separa el trazo de las descendentes (g, p, j). */
+.prose a {
+  color: var(--c-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--c-primary) 40%, transparent);
+}
+.prose a:hover {
+  color: var(--c-primary-dark);
+  text-decoration-color: currentColor;
+}
+.prose a:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ── Énfasis ── */
+.prose strong { color: var(--c-ink); font-weight: var(--weight-semibold); }
+.prose em { font-style: italic; }
+.prose mark {
+  background: color-mix(in srgb, var(--c-primary) 14%, transparent);
+  color: var(--c-ink);
+  padding: 0 0.2em;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Listas ─────────────────────────────────────────────────────────────────
+   Marcador propio en <ul> (::marker no acepta tamaño ni posición fiables entre
+   navegadores). Se usa un pseudo-elemento absoluto: control total del punto. */
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--sp-4);
+  padding-left: var(--sp-5);
+}
+.prose li { margin-bottom: var(--sp-2); }
+.prose li::marker { color: var(--c-primary); font-weight: var(--weight-bold); }
+.prose li > ul,
+.prose li > ol { margin-top: var(--sp-2); margin-bottom: 0; }
+
+/* ── Cita ───────────────────────────────────────────────────────────────────
+   Filete de acento a la izquierda, sin comillas decorativas: es una cita, no un
+   cartel. El texto se mantiene en el mismo cuerpo para no romper el ritmo. */
+.prose blockquote {
+  margin: var(--sp-6) 0;
+  padding: var(--sp-1) 0 var(--sp-1) var(--sp-5);
+  border-left: 3px solid var(--c-primary);
+  color: var(--c-ink);
+  font-style: italic;
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose blockquote cite {
+  display: block;
+  margin-top: var(--sp-2);
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--c-muted);
+}
+
+/* ── Imágenes y figuras ─────────────────────────────────────────────────────
+   height:auto es OBLIGATORIO junto a width:100%: sin él, el width/height del
+   <img> (que reserva el espacio y evita el CLS) deforma la imagen. */
+.prose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--c-border);
+}
+.prose figure { margin: var(--sp-6) 0; }
+.prose figcaption {
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--c-muted);
+  text-align: center;
+}
+
+/* ── Tablas ─────────────────────────────────────────────────────────────────
+   El wrapper con overflow-x lo pone el .mdx o el layout; aquí se garantiza que
+   la tabla no reviente el ancho en móvil. */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--sp-6) 0;
+  font-size: var(--text-base);
+}
+.prose thead { background: var(--c-surface); }
+.prose th,
+.prose td {
+  padding: var(--sp-3) var(--sp-4);
+  text-align: left;
+  border-bottom: 1px solid var(--c-border);
+  vertical-align: top;
+}
+.prose th {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  color: var(--c-ink);
+  white-space: nowrap;
+}
+.prose tbody tr:last-child td { border-bottom: 0; }
+
+/* ── Código ── */
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.35em;
+}
+.prose pre {
+  margin: var(--sp-6) 0;
+  padding: var(--sp-4);
+  overflow-x: auto;
+  background: var(--c-ink);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* ── Separador ──
+   Regla partida, no una línea de borde a borde: cierra un bloque de texto sin
+   competir con el hairline de los H2. */
+.prose hr {
+  margin: var(--sp-8) auto;
+  width: 40%;
+  border: 0;
+  border-top: 1px solid var(--c-border);
+}
+
+/* ── Definiciones ── */
+.prose dt { font-weight: var(--weight-semibold); color: var(--c-ink); margin-top: var(--sp-4); }
+.prose dd { margin: var(--sp-1) 0 0; padding-left: var(--sp-4); border-left: 2px solid var(--c-border); }
+
+/* ── Móvil: baja un punto el cuerpo y aprieta el ritmo ── */
+@media (max-width: 640px) {
+  .prose { font-size: var(--text-base); }
+  .prose > p:first-child { font-size: var(--text-lg); }
+  .prose h2 { margin-top: var(--sp-6); }
+  /* Tabla ancha en pantalla estrecha: scroll horizontal en vez de desbordar. */
+  .prose table { display: block; overflow-x: auto; white-space: nowrap; }
+}

@@ -1,0 +1,69 @@
+---
+// ============================================================================
+// blog/[slug].astro — ARTÍCULO INDIVIDUAL (L3). Ruta: /blog/<slug>
+// ----------------------------------------------------------------------------
+// Esta página es un ADAPTADOR, no un diseño: traduce la entry de la colección
+// (astro:content) a las props planas de ArticleLayout y renderiza el cuerpo
+// .mdx con <Content />. Toda la maquetación vive en el layout, así que si
+// mañana el frontmatter cambia, se toca este archivo y nada más.
+//
+// El blog vive en colección .mdx (regla D3): NO se crea un .astro por artículo.
+// El slug sale del nombre del archivo (post.id) — sin campo `slug` en el
+// frontmatter, que sería una segunda fuente de verdad para el mismo dato.
+//
+// RELACIONADOS: solo `relatedPosts`. `relatedProducts`/`relatedServices` existen
+// en el schema pero HOY las colecciones `productos` y `servicios` están vacías:
+// un reference() a una entry inexistente revienta el build. Cuando el catálogo
+// exista, se resuelven aquí igual que los posts (ver el bloque de abajo).
+// ============================================================================
+import type { GetStaticPaths } from "astro";
+import { getCollection, getEntry, render } from "astro:content";
+import ArticleLayout from "@layouts/ArticleLayout.astro";
+
+export const getStaticPaths = (async () => {
+  // Los drafts no generan ruta: no basta con ocultarlos del listado — si la
+  // página existe, se puede llegar por URL directa y Google la puede indexar.
+  const posts = await getCollection("articulos", ({ data }) => data.draft !== true);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// ── Relacionados ─────────────────────────────────────────────────────────────
+// Se resuelve cada reference() a su entry para leer el título real. Un
+// relatedPost que apunte a un draft se descarta: enlazaría a un 404.
+const relacionados = (
+  await Promise.all(
+    (post.data.relatedPosts ?? []).map(async (ref) => {
+      const entry = await getEntry(ref);
+      if (!entry || entry.data.draft === true) return null;
+      return {
+        label: entry.data.title,
+        href: `/blog/${entry.id}`,
+        description: entry.data.description,
+      };
+    }),
+  )
+).filter((r): r is { label: string; href: string; description: string } => r !== null);
+---
+
+<ArticleLayout
+  title={post.data.title}
+  description={post.data.description}
+  category={post.data.category}
+  slug={post.id}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  author={post.data.author}
+  image={post.data.heroImage}
+  imageAlt={post.data.title}
+  tags={post.data.tags}
+  faqs={post.data.faqs}
+  related={relacionados}
+>
+  <Content />
+</ArticleLayout>

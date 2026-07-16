@@ -1,0 +1,575 @@
+---
+// ============================================================================
+// servicios/[servicio].astro — FICHA DE SERVICIO (L4). Ruta: /servicios/<id>
+// ----------------------------------------------------------------------------
+// ✅ HOMOLOGADA contra la plantilla L4 el 2026-07-14.
+//    Canónica:  src/pages/mosquiteros/[categoria].astro
+//    Contrato:  docs/CONTRATO-L4.md
+//    Si cambias la estructura aquí, cámbiala también allí — o deja de estar
+//    homologada y el contrato pasa a mentir.
+//
+// Genera una ficha por cada entrada de SERVICES (site.ts). Si el cliente deja de
+// prestar un servicio, se borra de site.ts y desaparecen su ficha, su entrada
+// del dropdown del Header, del footer, de las zonas y del sidebar de los tipos.
+//
+// ⚠️ EL ALCANCE DE LA VALIDACIÓN — LÉELO ANTES DE AMPLIAR ESTAS PÁGINAS
+// Frank confirmó el 2026-07-14 QUE se prestan los 4 servicios. NO se ha
+// preguntado, y por tanto NINGUNA de estas fichas lo afirma:
+//     · ¿Se cobra la medición a domicilio? ¿Cuánto?
+//     · ¿Cuánto tarda la entrega?
+//     · ¿Hay garantía? ¿De qué y por cuánto?
+// Es la regla dura del portafolio y la que protege al cliente de una promesa que
+// luego paga él. Ver docs/CONTRATO-L4.md §4 y GATE-LANZAMIENTO.md §3.
+// El contenido vive en SERVICIOS_AFONDO (site.ts), marcado 🟠.
+//
+// SCHEMA: pageType="service". El Service sale de `schemaData.service` con su
+// `areaServed` (CDMX + Edomex) — es un negocio de área de servicio, ver
+// SITE.business. SIN `priceRange`: no hay precios validados. El LocalBusiness
+// viene del grafo base; NO se emite aquí (anti-patrón B3).
+// ============================================================================
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Hero from "@components/Hero.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import {
+  SERVICES,
+  SERVICIOS_AFONDO,
+  PRODUCT_CATEGORIES,
+  COVERAGE_STATES,
+  CONTACT,
+  WA_MESSAGES,
+  waUrl,
+  telUrl,
+  servicioHref,
+  zonaHref,
+} from "@config/site";
+import { navIcon } from "@config/nav-icons";
+// TODO el CSS de esta plantilla L4 vive aquí, en UNA definición compartida con
+// la otra L4. Antes estaba copiado en los <style> de las dos: 200 líneas
+// idénticas con un comentario que decía "si cambias una, cambia la otra" — o
+// sea, una promesa que nadie cumple. Ver docs/CONTRATO-L4.md.
+// Ruta relativa y no alias: es la convención del repo para CSS (BaseLayout y
+// ArticleLayout hacen igual), y un alias a medias revienta en build.
+import "../../styles/ficha.css";
+
+// `async`: la guarda de `guias` consulta la colección para comprobar que cada
+// slug genera ruta de verdad.
+export const getStaticPaths = (async () => {
+  // ── Guarda 1: datos completos ─────────────────────────────────────────────
+  const sinAfondo = SERVICES.filter((s) => !SERVICIOS_AFONDO[s.id]);
+  if (sinAfondo.length > 0) {
+    throw new Error(
+      `[servicios/[servicio]] Sin entrada en SERVICIOS_AFONDO: ` +
+        `${sinAfondo.map((s) => s.id).join(", ")}.\n` +
+        `  → Sin ella la ficha sería un título y una frase: thin content.\n` +
+        `  → Escríbela en site.ts o quita el servicio de TAXONOMY.services.\n` +
+        `  → Al escribirla: NADA de plazos, precios ni garantías (CONTRATO-L4 §4).`,
+    );
+  }
+
+  // ── Guarda 2: mínimo de FAQ ───────────────────────────────────────────────
+  // Una ficha con 2 preguntas no responde a nadie y es señal de thin content.
+  // 8 es el suelo del contrato.
+  const MIN_FAQS = 8;
+  const pocas = SERVICES.filter((s) => (SERVICIOS_AFONDO[s.id]?.faqs.length ?? 0) < MIN_FAQS);
+  if (pocas.length > 0) {
+    throw new Error(
+      `[servicios/[servicio]] Fichas con menos de ${MIN_FAQS} preguntas:\n` +
+        pocas.map((s) => `  · ${s.id}: ${SERVICIOS_AFONDO[s.id]?.faqs.length ?? 0}`).join("\n") +
+        `\n  → Escribe más en SERVICIOS_AFONDO[id].faqs (site.ts).\n` +
+        `  → Que sean del SERVICIO ("¿cómo trabajan?"), no de mosquiteros en\n` +
+        `    general: eso ya está en /mosquiteros.`,
+    );
+  }
+
+  // ── Guarda 3: FAQ duplicadas entre fichas ─────────────────────────────────
+  // Normaliza tildes y mayúsculas: la misma pregunta con otra tilde sigue siendo
+  // la misma para Google, y dos FAQPage iguales compiten entre sí.
+  const norm = (s: string) =>
+    s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
+  const vistas = new Map<string, string>();
+  const dups: string[] = [];
+  for (const s of SERVICES) {
+    for (const f of SERVICIOS_AFONDO[s.id]?.faqs ?? []) {
+      const k = norm(f.question);
+      const antes = vistas.get(k);
+      if (antes) dups.push(`  · "${f.question}"\n      en ${antes} y en ${s.id}`);
+      else vistas.set(k, s.id);
+    }
+  }
+  if (dups.length > 0) {
+    throw new Error(
+      `[servicios/[servicio]] Preguntas REPETIDAS entre fichas de servicio:\n` +
+        dups.join("\n") +
+        `\n  → Dos FAQPage con la misma pregunta compiten: Google elige uno y\n` +
+        `    descarta el otro.\n` +
+        `  → OJO: esta guarda solo mira entre SERVICIOS_AFONDO. El cruce con la\n` +
+        `    home, las L2, las fichas de tipo y los artículos es MANUAL.`,
+    );
+  }
+
+  // ── Guarda 4: las guías generan ruta ──────────────────────────────────────
+  // Mismo filtro `draft !== true` que blog/[slug].astro: que el .mdx exista no
+  // basta, un draft no tiene ruta. Estos enlaces salen en el sidebar de las 4.
+  const publicados = new Set(
+    (await getCollection("articulos", ({ data }) => data.draft !== true)).map((p) => p.id),
+  );
+  const guiasRotas: string[] = [];
+  for (const s of SERVICES) {
+    for (const g of SERVICIOS_AFONDO[s.id]?.guias ?? []) {
+      if (!publicados.has(g)) guiasRotas.push(`  · ${s.id} → "${g}"`);
+    }
+  }
+  if (guiasRotas.length > 0) {
+    throw new Error(
+      `[servicios/[servicio]] SERVICIOS_AFONDO.guias apunta a artículos que no\n` +
+        `generan ruta:\n` +
+        guiasRotas.join("\n") +
+        `\n  Publicados: ${[...publicados].sort().join(", ")}\n` +
+        `  → Causa probable: el .mdx se renombró, se borró o tiene draft: true.`,
+    );
+  }
+
+  return SERVICES.map((s) => ({ params: { servicio: s.id }, props: { svc: s } }));
+}) satisfies GetStaticPaths;
+
+const { svc } = Astro.props;
+const afondo = SERVICIOS_AFONDO[svc.id]!;
+
+const title = `${svc.label} de mosquiteros | CDMX y Edomex`;
+const description = `${afondo.blurb.slice(0, 155).trim()}`;
+
+// WA_MESSAGES ya trae `medicion` y `reparacion` por intención. Los que no tienen
+// uno propio caen a `servicios`.
+const waMsg =
+  (WA_MESSAGES as Record<string, string | undefined>)[svc.id] ??
+  WA_MESSAGES.servicios ??
+  WA_MESSAGES.cotizar;
+
+// ── Enlazado contextual (CONTRATO-L4 §3) ────────────────────────────────────
+// Los títulos salen de la COLECCIÓN, no copiados a mano: si alguien reescribe un
+// artículo, el enlace lo refleja solo. El orden lo manda `guias` (relevancia).
+const articulos = await getCollection("articulos", ({ data }) => data.draft !== true);
+const guias = afondo.guias
+  .map((slug) => articulos.find((a) => a.id === slug))
+  .filter((a): a is NonNullable<typeof a> => Boolean(a));
+
+const otros = SERVICES.filter((s) => s.id !== svc.id);
+
+// El hero parte el título para resaltar la última palabra en color de marca:
+//   "Medición a domicilio"        → "Medición a"          + «domicilio»
+//   "Reparación y cambio de malla"→ "Reparación y cambio de" + «malla»
+//
+// ⚠️ EL CASO DE UNA SOLA PALABRA: "Instalación" no tiene última palabra que
+// separar. Dejar el título vacío pintaba el H1 ENTERO en color de acento —
+// incoherente con las otras tres fichas, donde el acento resalta una palabra.
+// Se le añade el complemento que la frase pide igual: "Instalación de
+// «mosquiteros»". Sale mejor que un H1 monocolor y de paso mete la keyword.
+const palabras = svc.label.split(" ");
+const esUnaPalabra = palabras.length === 1;
+const heroTitle = esUnaPalabra ? `${svc.label} de` : palabras.slice(0, -1).join(" ");
+const heroAccent = esUnaPalabra ? "mosquiteros" : palabras[palabras.length - 1];
+
+// Índice del sidebar. Los ids DEBEN existir en el markup — si renombras una
+// sección, renómbralo aquí: un índice a un ancla muerta es peor que no tenerlo.
+const indice = [
+  { id: "como-funciona", label: "Cómo trabajamos" },
+  { id: "cuando", label: "Cuándo pedirlo" },
+  { id: "datos", label: "Datos rápidos" },
+  { id: "pedir", label: "Cómo se pide" },
+  { id: "faq", label: "Preguntas frecuentes" },
+];
+
+const menuSecciones = [
+  { label: "Todos los servicios", href: "/servicios", sub: "Qué hacemos" },
+  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
+  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
+  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
+];
+const menuCta = {
+  label: "Cotizar por WhatsApp",
+  href: waUrl(waMsg),
+  sub: "Cuéntanos tu caso",
+  external: true,
+};
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="service"
+  breadcrumbs={[
+    { label: "Inicio", href: "/" },
+    { label: "Servicios", href: "/servicios" },
+    { label: svc.label },
+  ]}
+  schemaData={{
+    service: {
+      name: svc.label,
+      description,
+      path: servicioHref(svc.id),
+      serviceType: svc.label,
+      image: afondo.gallery.main.src,
+      // areaServed: es un negocio de área de servicio — este campo es el que
+      // decide a quién le apareces. Sale de COVERAGE_STATES, no a mano.
+      areaServed: COVERAGE_STATES.map((z) => z.label),
+      // SIN priceRange: ningún precio está validado. Se cotiza por pieza.
+    },
+    faqs: [...afondo.faqs],
+  }}
+>
+  {/* ═══ HERO — H1 único. SIN ctas: «el hero presenta, la franja convierte». ═══ */}
+  <Hero
+    title={heroTitle}
+    accent={heroAccent}
+    subtitle={afondo.blurb}
+    descRight={[afondo.body[0], afondo.body[1] ?? afondo.body[0]]}
+  />
+
+  {/* ═══ FRANJA — los botones bajo el hero, como el index ═══ */}
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+
+  <section class="section">
+    <div class="container">
+      <div class="ficha">
+        <article class="ficha__main">
+          <figure class="galeria">
+            <img
+              src={afondo.gallery.main.src}
+              alt={afondo.gallery.main.alt}
+              width="800"
+              height="600"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="galeria__main"
+            />
+            <div class="galeria__thumbs">
+              {afondo.gallery.thumbs.map((t) => (
+                <img src={t.src} alt={t.alt} width="400" height="300" loading="lazy" decoding="async" class="galeria__thumb" />
+              ))}
+            </div>
+          </figure>
+
+          <section class="bloque" id="como-funciona">
+            <h2 class="bloque__h2">
+              <span class="bloque__icon" aria-hidden="true"><Fragment set:html={navIcon(svc.id)} /></span>
+              Cómo trabajamos
+            </h2>
+            {afondo.comoFunciona.map((p) => <p class="bloque__p">{p}</p>)}
+          </section>
+
+          {/* ── Cuándo sí / cuándo no ────────────────────────────────────────
+              Enfrentadas, no en secciones separadas: el valor está en leerlas
+              juntas. Un servicio que dice cuándo NO pedirlo se gana la
+              confianza — y en un servicio a domicilio, ahorra una visita que
+              nadie quiere pagar. Ver CONTRATO-L4 §2. */}
+          <section class="bloque" id="cuando">
+            <h2 class="bloque__h2">Cuándo pedirlo</h2>
+            <div class="duo">
+              <div class="duo__col duo__col--si">
+                <h3 class="duo__h3">
+                  <span class="duo__badge duo__badge--si" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                  Te sirve si…
+                </h3>
+                <ul class="duo__list">
+                  {afondo.encajaEn.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+              <div class="duo__col duo__col--no">
+                <h3 class="duo__h3">
+                  <span class="duo__badge duo__badge--no" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </span>
+                  No lo pidas si…
+                </h3>
+                <ul class="duo__list">
+                  {afondo.noConviene.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+            </div>
+
+            {afondo.limite && (
+              /* El "límite" no es letra chica: es lo que más confianza da. Va
+                 destacado, no escondido al pie. */
+              <div class="limite">
+                <span class="limite__icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                </span>
+                <p class="limite__txt">{afondo.limite}</p>
+              </div>
+            )}
+          </section>
+
+          <section class="bloque" id="datos">
+            <h2 class="bloque__h2">Datos rápidos</h2>
+            <table class="datos">
+              <tbody>
+                {afondo.datos.map((d) => (
+                  <tr>
+                    <th scope="row">{d.label}</th>
+                    <td>{d.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {/* No es relleno: es la respuesta a "¿y cuánto tarda / cuánto cuesta?".
+                Decirlo de frente es mejor que dejar al lector buscándolo. */}
+            <p class="datos__nota">
+              ¿Echas en falta plazos y precios? Cada trabajo depende de tu vano y de
+              cuántas piezas sean, así que el número que importa es el de tu caso.
+              Cuéntanos y te lo pasamos — no publicamos una tarifa que luego cambie.
+            </p>
+          </section>
+
+          <section class="bloque" id="pedir">
+            <h2 class="bloque__h2">Cómo se pide</h2>
+            <ol class="pasos">
+              <li class="paso">
+                <span class="paso__n" aria-hidden="true">1</span>
+                <div>
+                  <strong class="paso__t">Mándanos una foto</strong>
+                  <span class="paso__d">De la ventana o de la pieza. Con verla sabemos si {svc.label.toLowerCase()} es lo que te toca — o si es otra cosa.</span>
+                </div>
+              </li>
+              <li class="paso">
+                <span class="paso__n" aria-hidden="true">2</span>
+                <div>
+                  <strong class="paso__t">Cuéntanos tu caso</strong>
+                  <span class="paso__d">Qué te pasa en esa ventana y qué zona eres. Ver <a href="/cobertura">cobertura</a>.</span>
+                </div>
+              </li>
+              <li class="paso">
+                <span class="paso__n" aria-hidden="true">3</span>
+                <div>
+                  <strong class="paso__t">Te decimos qué necesitas</strong>
+                  <span class="paso__d">Y cuánto cuesta, antes de agendar nada. Si lo tuyo no es este servicio, también te lo decimos.</span>
+                </div>
+              </li>
+            </ol>
+          </section>
+        </article>
+
+        {/* ══ SIDEBAR — sin sticky ni scroll interno (CONTRATO-L4 §6) ══════════
+            5 widgets no caben en un viewport, así que NO lleva sticky: es una
+            columna que fluye. Y NUNCA overflow — ese fue el parche que hubo que
+            deshacer en la canónica. */}
+        <aside class="sidebar" aria-label="Índice y contacto">
+          <div class="sidebar__inner">
+            <nav class="widget" aria-labelledby="toc-h">
+              <h2 class="widget__h2 widget__h2--label" id="toc-h">En esta página</h2>
+              <ul class="toc" data-toc>
+                {indice.map((i) => (
+                  <li><a href={`#${i.id}`} class="toc__link" data-toc-link={i.id}>{i.label}</a></li>
+                ))}
+              </ul>
+            </nav>
+
+            <div class="widget widget--cta">
+              <span class="widget__eyebrow">Cotización</span>
+              <h2 class="widget__h2">Pide {svc.label.toLowerCase()}</h2>
+              <p class="widget__p">
+                Cuéntanos tu caso con una foto. Te decimos qué necesitas y cuánto
+                cuesta antes de agendar.
+              </p>
+              <a href={waUrl(waMsg)} class="widget__btn widget__btn--wa" target="_blank" rel="noopener noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.2.2-.3.2-.5s0-.3-.1-.4l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.7 4.3 3.8.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>
+                Cotizar por WhatsApp
+              </a>
+              <a href={telUrl()} class="widget__btn widget__btn--ghost">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                {CONTACT.phone}
+              </a>
+              <p class="widget__nota">{CONTACT.hours.display}</p>
+            </div>
+
+            {/* Enlaces CONTEXTUALES: cambian por servicio (CONTRATO-L4 §3). */}
+            {guias.length > 0 && (
+              <nav class="widget" aria-labelledby="guias-h">
+                <h2 class="widget__h2 widget__h2--label" id="guias-h">Guías que te sirven</h2>
+                <ul class="enlaces">
+                  {guias.map((g) => (
+                    <li>
+                      <a href={`/blog/${g.id}`} class="enlace">
+                        <span class="enlace__icon" aria-hidden="true">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        </span>
+                        <span class="enlace__txt">{g.data.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a href="/blog" class="enlace enlace--all">
+                      Ver todas las guías
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            )}
+
+            {/* Los tipos: el sidebar de /mosquiteros enlaza servicios, así que
+                este cierra el círculo en sentido contrario. */}
+            <nav class="widget" aria-labelledby="tipos-h">
+              <h2 class="widget__h2 widget__h2--label" id="tipos-h">Para qué mosquitero</h2>
+              <ul class="enlaces">
+                {PRODUCT_CATEGORIES.slice(0, 4).map((c) => (
+                  <li>
+                    <a href={c.href} class="enlace">
+                      <span class="enlace__icon" aria-hidden="true"><Fragment set:html={navIcon(c.icon)} /></span>
+                      <span class="enlace__txt">{c.label}</span>
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a href="/mosquiteros" class="enlace enlace--all">
+                    Ver todos los tipos
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <div class="widget">
+              <h2 class="widget__h2 widget__h2--label">Dónde lo hacemos</h2>
+              <ul class="enlaces">
+                {COVERAGE_STATES.map((z) => (
+                  <li>
+                    <a href={zonaHref(z.slug)} class="enlace">
+                      <span class="enlace__icon" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      </span>
+                      <span class="enlace__txt">{z.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p class="widget__nota widget__nota--left">Vamos a tu domicilio.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      {/* ── Otros servicios — al final, no en la sidebar ─────────────────────
+          Se lee al TERMINAR, que es cuando decides si era éste el que
+          necesitabas. Y a ancho completo caben con su descripción. */}
+      <nav class="otros-l4" aria-labelledby="otros-h">
+        <h2 class="otros-l4__h2" id="otros-h">¿No era esto? Mira los otros</h2>
+        <p class="otros-l4__sub">
+          Los cuatro suelen ir juntos pero se piden sueltos. Si no tienes claro cuál
+          te toca, cuéntanos qué te pasa en la ventana y te lo decimos nosotros.
+        </p>
+        <ul class="otros-l4__grid">
+          {otros.map((s) => (
+            <li>
+              <a href={servicioHref(s.id)} class="otros-l4__card">
+                <span class="otros-l4__icon" aria-hidden="true"><Fragment set:html={navIcon(s.id)} /></span>
+                <span class="otros-l4__body">
+                  <span class="otros-l4__label">{s.label}</span>
+                  <span class="otros-l4__desc">{s.desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="otros-l4__all">
+          <a href="/servicios">Ver todos los servicios</a> ·
+          Trabajamos en {COVERAGE_STATES.map((z, i) => (
+            <>
+              {i > 0 && (i === COVERAGE_STATES.length - 1 ? " y " : ", ")}
+              <a href={zonaHref(z.slug)}>{z.label}</a>
+            </>
+          ))}
+        </p>
+      </nav>
+    </div>
+  </section>
+
+  {/* ═══ FAQ + COTIZACIÓN — el módulo del index ══════════════════════════════
+       Las dudas y el formulario van JUNTOS: resolver la duda y no tener dónde
+       actuar es perder el lead; poner el formulario antes de resolverla es
+       pedirle datos a alguien que todavía no sabe qué pedir.
+       El JSON-LD FAQPage lo emite lib/seo.ts vía schemaData → el acordeón va SIN
+       `emitSchema` (anti-patrón B3). `id="faq"`: lo apunta el índice. ═══════ */}
+  <section class="section section--faq" id="faq">
+    <div class="container">
+      <SectionHeading
+        id="faq-heading"
+        eyebrow="Dudas"
+        title={`Sobre ${svc.label.toLowerCase()}`}
+        body={[
+          "Lo que más nos preguntan de este servicio en concreto — no de los mosquiteros en general. Si tu duda es qué tipo te toca o qué malla aguanta tu caso, eso está en el catálogo.",
+          "Si la tuya no está aquí, mándanos tu caso en el formulario: llena lo que sepas, aunque no tengas las medidas todavía. Preferimos resolverla antes de agendar que con el instalador en la puerta.",
+        ]}
+      />
+      <div class="faq-bloque">
+        <FAQAccordion items={[...afondo.faqs]} title="" flush>
+          <QuoteForm
+            slot="aside"
+            eyebrow="Cotización"
+            title={`Pide tu ${svc.label.toLowerCase()}`}
+            desc="Déjanos tus datos y te contactamos."
+          />
+        </FAQAccordion>
+      </div>
+    </div>
+  </section>
+
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+</PageLayout>
+
+<script>
+  // ══════════════════════════════════════════════════════════════════════════
+  // Scroll-spy del índice — igual que la canónica (CONTRATO-L4 §7).
+  // NO es una animación: solo conmuta una clase, sin transición.
+  // IntersectionObserver y no listener de scroll: el listener corre en cada
+  // frame y es lo que hace que una página se sienta pesada.
+  // rootMargin: el header sticky tapa la parte de arriba, así que la "línea de
+  // lectura" real no es y=0. El -20%/-70% define una banda en el tercio superior.
+  // ══════════════════════════════════════════════════════════════════════════
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+  if (links.length > 0) {
+    const byId = new Map<string, HTMLAnchorElement>();
+    links.forEach((l) => byId.set(l.dataset.tocLink!, l));
+
+    const marcar = (id: string) => {
+      links.forEach((l) => l.classList.remove("is-active"));
+      byId.get(id)?.classList.add("is-active");
+    };
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visibles = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visibles[0]) marcar(visibles[0].target.id);
+      },
+      { rootMargin: "-20% 0px -70% 0px", threshold: 0 },
+    );
+
+    byId.forEach((_, id) => {
+      const sec = document.getElementById(id);
+      if (sec) obs.observe(sec);
+    });
+  }
+</script>
+
+<style>
+  /* ─────────────────────────────────────────────────────────────────────────
+     TODO el CSS de esta plantilla vive en src/styles/ficha.css — la MISMA que
+     usa /mosquiteros/<tipo>. Ver docs/CONTRATO-L4.md.
+     Aquí SOLO lo propio de esta página. No redeclares clases de ficha.css.
+     ───────────────────────────────────────────────────────────────────────── */
+
+  /* Retícula de "otros servicios": 3 hermanos → 1 → 3 columnas.
+     A 2 columnas quedaría una tarjeta huérfana; por eso salta directo a 3. */
+  @media (min-width: 640px) {
+    .otros-l4__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

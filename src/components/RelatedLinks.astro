@@ -58,11 +58,14 @@ const items = source.filter((l) => l.slug !== current).slice(0, limit)
   .rel__title { font-size: var(--text-2xl, 1.5rem); font-weight: var(--weight-bold, 700); color: var(--c-ink, var(--color-gray-900, #111827)); margin: 0; }
   .rel__desc { font-size: var(--text-sm, .9375rem); color: var(--text-muted, var(--c-muted, #6b7280)); margin: var(--sp-2, .5rem) 0 0; }
   .rel__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-4, 1rem); list-style: none; padding: 0; margin: 0; }
-  .rel__card { display: flex; flex-direction: column; gap: var(--sp-1, .25rem); padding: var(--sp-5, 1.25rem); background: var(--c-white, #fff); border: 1px solid var(--c-border, var(--border, #e8e8e8)); border-radius: var(--radius-lg, .75rem); text-decoration: none; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; position: relative; }
-  .rel__card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.08); border-color: color-mix(in srgb, var(--color-red, #C41E24) 30%, transparent); }
+  .rel__card { display: flex; flex-direction: column; gap: var(--sp-1, .25rem); padding: var(--sp-5, 1.25rem); background: var(--c-white, #fff); border: 1px solid var(--c-border, var(--border, #e8e8e8)); border-radius: var(--radius-lg, .75rem); text-decoration: none; position: relative; }
+    /* CONTRATO DE MOVIMIENTO (tokens.css): sin transición y SIN el efecto que
+     animaba. Borrar solo la `transition` dejaría el hover pegando un salto seco,
+     que se siente peor que la animación. Se quita el efecto, no su duración. */
+  .rel__card:hover { border-color: color-mix(in srgb, var(--color-red, #C41E24) 30%, transparent); }
   .rel__card-label { font-size: var(--text-base, 1rem); font-weight: var(--weight-semibold, 600); color: var(--c-ink, var(--color-gray-900, #111827)); }
   .rel__card-desc { font-size: var(--text-xs, .75rem); font-weight: var(--weight-bold, 700); letter-spacing: .03em; text-transform: uppercase; color: var(--color-red, var(--c-primary, #C41E24)); }
-  .rel__card-arrow { position: absolute; top: var(--sp-5, 1.25rem); right: var(--sp-5, 1.25rem); color: var(--text-muted, var(--c-muted, #9ca3af)); transition: transform .18s ease, color .18s ease; }
-  .rel__card:hover .rel__card-arrow { color: var(--color-red, var(--c-primary, #C41E24)); transform: translateX(3px); }
+  .rel__card-arrow { position: absolute; top: var(--sp-5, 1.25rem); right: var(--sp-5, 1.25rem); color: var(--text-muted, var(--c-muted, #9ca3af)); }
+  .rel__card:hover .rel__card-arrow { color: var(--color-red, var(--c-primary, #C41E24)); }
   .rel__card:focus-visible { outline: 2px solid var(--color-red, var(--c-primary, #C41E24)); outline-offset: 2px; }
 </style>

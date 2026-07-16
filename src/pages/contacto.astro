@@ -1,0 +1,276 @@
+---
+// ============================================================================
+// contacto.astro — CONTACTO (L2). Ruta: /contacto
+// ----------------------------------------------------------------------------
+// POR QUÉ ESTA PÁGINA EXISTE Y POR QUÉ ES LA PRIMERA DE SU TANDA
+// `NAV`, el Header y el Footer llevan enlazando a /contacto desde el scaffold —
+// y daba 404. De todas las secciones prometidas, ésta es la única que se puede
+// escribir SIN inventar nada: sus datos (teléfono, WhatsApp, email, domicilio,
+// horario) los confirmó Frank el 2026-07-14.
+//
+// CERO DATOS NUEVOS. Todo sale de CONTACT/SITE (SSoT). Si un dato cambia, se
+// cambia en site.ts y esta página lo refleja. No hay un solo literal aquí.
+//
+// NEGOCIO DE ÁREA DE SERVICIO — esto manda en el diseño de la página:
+// en Insurgentes Sur 716 NO se atiende al público (Frank, 2026-07-14). Así que
+// esta página NO dice "visítanos", NO enlaza a Google Maps y NO pone un mapa.
+// El domicilio se muestra como dato de la empresa, y el peso va a los canales
+// que sí funcionan: WhatsApp, teléfono, email y el formulario. Ver SITE.business.
+//
+// SCHEMA: pageType="page". El LocalBusiness sale del grafo base de lib/seo.ts —
+// NO se emite aquí a mano (anti-patrón B3: doble entidad). Los breadcrumbs los
+// arma PageLayout con el prop `breadcrumbs`.
+// ============================================================================
+import PageLayout from "@layouts/PageLayout.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import { SITE, CONTACT, COVERAGE_STATES, WA_MESSAGES, waUrl, telUrl } from "@config/site";
+
+const title = "Contacto | cotiza tus mosquiteros a medida";
+const description =
+  "Contáctanos para cotizar mosquiteros a medida: WhatsApp, teléfono o correo. Mándanos las medidas de tus ventanas y te pasamos el precio por pieza.";
+
+// Canales de contacto. El orden NO es alfabético ni casual: es el orden en que
+// convierten. WhatsApp primero porque es donde el negocio realmente responde y
+// donde el cliente puede mandar una foto del vano — que es lo que destraba la
+// cotización. El teléfono después, el correo al final (asíncrono, más lento).
+const canales = [
+  {
+    label: "WhatsApp",
+    valor: CONTACT.phone,
+    sub: "Mándanos una foto de la ventana y las medidas. Es la vía más rápida para cotizar.",
+    href: waUrl(WA_MESSAGES.contacto ?? WA_MESSAGES.default),
+    external: true,
+    icon: "wa",
+  },
+  {
+    label: "Teléfono",
+    valor: CONTACT.phone,
+    sub: `Mismo número. ${CONTACT.hours.display}.`,
+    href: telUrl(),
+    external: false,
+    icon: "tel",
+  },
+  {
+    label: "Correo",
+    valor: CONTACT.email,
+    sub: "Para cotizaciones con varias piezas o si prefieres dejarlo por escrito.",
+    href: `mailto:${CONTACT.email}`,
+    external: false,
+    icon: "mail",
+  },
+] as const;
+
+const menuCta = {
+  label: "Cotizar por WhatsApp",
+  href: waUrl(WA_MESSAGES.cotizar),
+  sub: "Mándanos tus medidas",
+  external: true,
+};
+const menuSecciones = [
+  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
+  { label: "Servicios", href: "/servicios", sub: "Fabricación, instalación y reparación" },
+  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
+  { label: "Blog", href: "/blog", sub: "Guías y mantenimiento" },
+];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="page"
+  breadcrumbs={[{ label: "Inicio", href: "/" }, { label: "Contacto" }]}
+>
+  <section class="section">
+    <div class="container">
+      {/* as="h1": esta página NO tiene <Hero>, así que este encabezado ES el
+          título del documento. Sin esto la página queda con CERO H1 y su outline
+          arranca en nivel 2 — ni el lector de pantalla ni el rastreador saben de
+          qué trata. Mismo caso que los listados del blog. Ver `as` en
+          SectionHeading.astro. */}
+      <SectionHeading
+        as="h1"
+        eyebrow="Contacto"
+        title="Cotiza tus mosquiteros"
+        body={[
+          "Para cotizar necesitamos dos cosas: qué tipo de ventana o puerta es, y las medidas del vano. Si no las tienes o no sabes cómo tomarlas, mándanos una foto y te decimos exactamente qué medir.",
+          "Respondemos por WhatsApp, teléfono o correo. Cotizamos por pieza, con el tipo de mosquitero y la malla que corresponden a tu caso — no con un precio de catálogo que luego cambia.",
+        ]}
+      />
+
+      <ul class="canales">
+        {canales.map((c) => (
+          <li class="canal">
+            <a
+              href={c.href}
+              class="canal__link"
+              target={c.external ? "_blank" : undefined}
+              rel={c.external ? "noopener noreferrer" : undefined}
+            >
+              <span class="canal__icon" aria-hidden="true">
+                {c.icon === "wa" && <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.2.2-.3.2-.5s0-.3-.1-.4l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.7 4.3 3.8.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>}
+                {c.icon === "tel" && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>}
+                {c.icon === "mail" && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>}
+              </span>
+              <span class="canal__body">
+                <span class="canal__label">{c.label}</span>
+                <span class="canal__valor">{c.valor}</span>
+                <span class="canal__sub">{c.sub}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="datos">
+        <div class="datos__col">
+          <h2 class="datos__titulo">Horario de atención</h2>
+          <dl class="horario">
+            <div class="horario__row">
+              <dt>{CONTACT.hours.weekdays.split(" ")[0]}</dt>
+              <dd>{CONTACT.hours.weekdays.split(" ").slice(1).join(" ")}</dd>
+            </div>
+            <div class="horario__row">
+              <dt>{CONTACT.hours.saturday.split(" ")[0]}</dt>
+              <dd>{CONTACT.hours.saturday.split(" ").slice(1).join(" ")}</dd>
+            </div>
+            <div class="horario__row">
+              <dt>{CONTACT.hours.sunday.split(" ")[0]}</dt>
+              <dd class="horario__cerrado">{CONTACT.hours.sunday.split(" ").slice(1).join(" ")}</dd>
+            </div>
+          </dl>
+          <p class="datos__nota">
+            Fuera de horario puedes mandarnos el WhatsApp igual: lo respondemos al abrir.
+          </p>
+        </div>
+
+        <div class="datos__col">
+          <h2 class="datos__titulo">Dónde trabajamos</h2>
+          {/* Esto es lo que de verdad importa de un negocio de área de servicio:
+              NO dónde está la oficina, sino a dónde vamos. Sale de COVERAGE_STATES,
+              la misma fuente que alimenta el footer y el areaServed del JSON-LD. */}
+          <ul class="zonas">
+            {COVERAGE_STATES.map((z) => (
+              <li class="zona">
+                <a href={`/cobertura/${z.slug}`} class="zona__link">{z.label}</a>
+              </li>
+            ))}
+          </ul>
+          <p class="datos__nota">
+            Vamos a tu domicilio a medir e instalar. Si no estás seguro de que
+            llegamos a tu zona, pregúntanos antes de nada.
+          </p>
+
+          <h2 class="datos__titulo datos__titulo--mt">Domicilio</h2>
+          {/* SIN enlace a Maps y SIN mapa, a propósito: aquí NO se atiende al
+              público (Frank, 2026-07-14 — ver SITE.business en site.ts). Un pin
+              invitaría a venir a un sitio donde nadie va a recibir al cliente.
+              Se muestra porque es un dato real de la empresa y da confianza. */}
+          <address class="domicilio">
+            {CONTACT.street}<br />
+            {CONTACT.postalCode} {CONTACT.city}, {CONTACT.state}
+          </address>
+          <p class="datos__nota datos__nota--warn">
+            Oficina — no atendemos público en esta dirección. La atención es por
+            WhatsApp o teléfono, y el trabajo lo hacemos en tu domicilio.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-bloque">
+        <QuoteForm
+          eyebrow="Formulario"
+          title="O déjanos tus datos y te escribimos"
+          desc="Si prefieres no abrir WhatsApp, llena esto y te contactamos nosotros."
+        />
+      </div>
+    </div>
+  </section>
+
+  <SectionMenu items={menuSecciones} cta={menuCta} />
+</PageLayout>
+
+<style>
+
+  /* ── Canales ── */
+  .canales {
+    list-style: none; margin: var(--sp-6) 0 0; padding: 0;
+    display: grid; grid-template-columns: 1fr; gap: var(--sp-4);
+  }
+  .canal { display: flex; }
+  .canal__link {
+    display: flex; align-items: flex-start; gap: var(--sp-4);
+    width: 100%; padding: var(--sp-5);
+    background: var(--c-white); border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg); text-decoration: none;
+  }
+  .canal__link:hover { border-color: var(--c-primary); }
+  .canal__link:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+  .canal__icon {
+    flex-shrink: 0; display: grid; place-items: center;
+    width: 44px; height: 44px; border-radius: var(--radius-md);
+    background: rgba(var(--c-primary-rgb), .08); color: var(--c-primary);
+  }
+  .canal__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .canal__label {
+    font-size: var(--text-xs); font-weight: var(--weight-bold);
+    letter-spacing: .04em; text-transform: uppercase; color: var(--c-muted);
+  }
+  .canal__valor {
+    font-family: var(--font-heading); font-size: var(--text-lg);
+    font-weight: var(--weight-semibold); color: var(--c-ink);
+    overflow-wrap: anywhere;
+  }
+  .canal__sub { font-size: var(--text-sm); color: var(--c-ink-2); line-height: var(--leading-normal); }
+
+  /* ── Datos: horario + zonas + domicilio ── */
+  .datos {
+    display: grid; grid-template-columns: 1fr; gap: var(--sp-6);
+    margin-top: var(--sp-8); padding-top: var(--sp-8);
+    border-top: 1px solid var(--c-border);
+  }
+  .datos__titulo {
+    margin: 0 0 var(--sp-3); font-family: var(--font-heading);
+    font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--c-ink);
+  }
+  .datos__titulo--mt { margin-top: var(--sp-6); }
+  .datos__nota {
+    margin: var(--sp-3) 0 0; font-size: var(--text-sm);
+    color: var(--c-muted); line-height: var(--leading-normal);
+  }
+  .datos__nota--warn { color: var(--c-ink-2); }
+
+  .horario { margin: 0; display: grid; gap: var(--sp-2); }
+  .horario__row {
+    display: flex; justify-content: space-between; gap: var(--sp-4);
+    padding-bottom: var(--sp-2); border-bottom: 1px solid var(--c-border);
+  }
+  .horario__row dt { font-size: var(--text-sm); color: var(--c-ink-2); }
+  .horario__row dd { margin: 0; font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--c-ink); }
+  .horario__cerrado { color: var(--c-muted) !important; font-weight: var(--weight-regular) !important; }
+
+  .zonas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .zona__link {
+    display: inline-block; padding: .35em .9em;
+    font-size: var(--text-sm); color: var(--c-ink-2); text-decoration: none;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--radius-full);
+  }
+  .zona__link:hover { border-color: var(--c-primary); color: var(--c-primary); }
+  .zona__link:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+
+  .domicilio { margin: 0; font-style: normal; font-size: var(--text-sm); color: var(--c-ink-2); line-height: var(--leading-relaxed); }
+
+  .form-bloque {
+    margin-top: var(--sp-8); padding-top: var(--sp-8);
+    border-top: 1px solid var(--c-border);
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 768px) {
+    .section { padding: var(--sp-10) 0; }
+    .canales { grid-template-columns: repeat(3, 1fr); }
+    .datos { grid-template-columns: 1fr 1fr; gap: var(--sp-8); }
+  }
+</style>

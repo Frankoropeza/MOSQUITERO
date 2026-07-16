@@ -81,7 +81,7 @@ const ICONS: Record<string, string> = {
   .cta-banner__btns { display: flex; gap: .75rem; flex-wrap: wrap; }
   .cta-banner--centered .cta-banner__btns { justify-content: center; }
 
-  .cta-btn { display: inline-flex; align-items: center; gap: .45rem; padding: .8125rem 1.625rem; font-size: .9375rem; font-weight: var(--weight-bold, 700); border-radius: var(--radius-md, 6px); text-decoration: none; white-space: nowrap; transition: all .18s ease; }
+  .cta-btn { display: inline-flex; align-items: center; gap: .45rem; padding: .8125rem 1.625rem; font-size: .9375rem; font-weight: var(--weight-bold, 700); border-radius: var(--radius-md, 6px); text-decoration: none; white-space: nowrap; transition: background-color var(--transition-btn), color var(--transition-btn), border-color var(--transition-btn); }
   .cta-banner--red .cta-btn--primary, .cta-banner--dark .cta-btn--primary { background: #fff; color: var(--color-red, #C41E24); border: 2px solid #fff; }
   .cta-banner--red .cta-btn--primary:hover, .cta-banner--dark .cta-btn--primary:hover { background: rgba(255,255,255,.9); }
   .cta-banner--light .cta-btn--primary { background: var(--color-red, #C41E24); color: #fff; border: 2px solid var(--color-red, #C41E24); }

@@ -1,0 +1,209 @@
+---
+// BlogCard.astro — Tarjeta de artículo para los listados del blog (/blog, categoría, tag).
+// ============================================================================
+// ORIGEN: CategoryCard.astro (mismo lenguaje visual: imagen 16:9, borde, lift en
+// hover, flecha de acento) adaptado al contrato de la colección `articulos`.
+// Se extrajo a componente porque lo consumen TRES rutas (index, categoría, tag):
+// duplicar el markup en cada una es la vía rápida a que las tres se vean distinto.
+//
+// CONTRATO: recibe datos YA PLANOS (label, href, strings), no la entry de la
+// colección. Motivo: el componente no debe saber de `astro:content` ni de la
+// forma del frontmatter. Si mañana el schema renombra `heroImage`, se toca la
+// página que mapea, no la tarjeta.
+//
+// ACCESIBILIDAD — un solo enlace por tarjeta:
+// toda la tarjeta es un <a>. La alternativa (enlace en el título + "Leer más")
+// mete DOS destinos idénticos en el tab order y obliga al lector de pantalla a
+// anunciar el mismo artículo dos veces. La fecha y la categoría van FUERA del
+// texto accesible del enlace (aria-hidden en la meta decorativa no aplica aquí:
+// son datos útiles, así que se quedan dentro pero después del título).
+// ============================================================================
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  image: string;
+  imageAlt?: string;
+  /** Slug de la categoría (para el href del chip). */
+  category?: string;
+  /** Label humano de la categoría (lo resuelve la página con blogCategoryLabel). */
+  categoryLabel?: string;
+  pubDate: Date;
+  /** true → tarjeta destacada: imagen más alta y título más grande (solo /blog, primer post). */
+  featured?: boolean;
+  /**
+   * Índice en el listado. Las 2 primeras imágenes cargan eager (están sobre el
+   * pliegue → candidatas a LCP); el resto lazy. Sin esto, o se penaliza el LCP
+   * (todo lazy) o se descargan 12 imágenes de golpe (todo eager).
+   */
+  index?: number;
+}
+
+const {
+  title,
+  description,
+  href,
+  image,
+  imageAlt,
+  category,
+  categoryLabel,
+  pubDate,
+  featured = false,
+  index = 0,
+} = Astro.props;
+
+const eager = index < 2;
+// Fecha corta para la tarjeta ("14 jul 2026"); la larga se reserva al artículo.
+const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+<article class:list={['bcard', { 'bcard--featured': featured }]}>
+  <a class="bcard__link" href={href}>
+    <div class="bcard__media">
+      <img
+        src={image}
+        alt={imageAlt ?? title}
+        width={featured ? 1200 : 600}
+        height={featured ? 675 : 338}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+    </div>
+
+    <div class="bcard__body">
+      <p class="bcard__meta">
+        {categoryLabel && <span class="bcard__cat">{categoryLabel}</span>}
+        <time datetime={pubDate.toISOString()}>{fechaCorta}</time>
+      </p>
+
+      {/* H3: el H2 del listado lo pone el SectionHeading de la página. */}
+      <h3 class="bcard__title">{title}</h3>
+      <p class="bcard__desc">{description}</p>
+
+      <span class="bcard__cta">
+        Leer artículo
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  /* CSS vanilla + tokens (C1/C2). Mismo lenguaje que CategoryCard: la tarjeta de
+     blog y la de catálogo tienen que sentirse del mismo sitio. */
+  .bcard {
+    display: flex;
+    background: var(--c-white);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;   /* recorta la imagen contra el radio de la tarjeta */
+  }
+  /* CONTRATO DE MOVIMIENTO (tokens.css): la tarjeta no anima ni reacciona al
+     hover con movimiento. El feedback de "esto se puede pulsar" lo dan el color
+     del título y el anillo de foco — no un levantamiento de 3px. */
+  .bcard:hover {
+    border-color: color-mix(in srgb, var(--c-primary) 35%, transparent);
+  }
+  /* :focus-within, no :focus — el foco lo recibe el <a> interno, no la tarjeta.
+     Sin esto, navegar con teclado no muestra ningún anillo alrededor del bloque. */
+  .bcard:focus-within {
+    outline: 2px solid var(--c-primary);
+    outline-offset: 2px;
+  }
+  .bcard__link {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+  .bcard__link:focus-visible { outline: none; } /* el anillo lo pinta :focus-within */
+
+  /* ── Media: aspect-ratio fijo → cero CLS, todas las tarjetas de la misma altura ── */
+  .bcard__media {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--c-surface);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .bcard__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ── Cuerpo ──
+     flex + margin-top:auto en el CTA → el "Leer artículo" queda pegado abajo
+     aunque los títulos midan distinto. Sin esto la fila se ve dentada. */
+  .bcard__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--sp-5);
+    gap: var(--sp-2);
+  }
+
+  .bcard__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--c-muted);
+  }
+  .bcard__cat {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-primary);
+  }
+
+  .bcard__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: -0.01em;
+    color: var(--c-ink);
+    text-wrap: balance;
+  }
+  .bcard:hover .bcard__title { color: var(--c-primary); }
+
+  .bcard__desc {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--c-muted);
+  }
+
+  .bcard__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-top: auto;      /* ← ancla el CTA al pie de la tarjeta */
+    padding-top: var(--sp-3);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--c-primary);
+  }
+  /* La flecha no se desplaza en hover: es un indicador de dirección, no un juguete. */
+
+  /* ── Destacada: en escritorio se vuelve horizontal y ocupa la fila entera ──
+     El grid padre le da grid-column:1/-1; aquí solo cambia la dirección. */
+  @media (min-width: 768px) {
+    .bcard--featured .bcard__link { flex-direction: row; }
+    .bcard--featured .bcard__media {
+      flex: 0 0 55%;
+      aspect-ratio: auto;      /* la altura la manda la columna de texto */
+      border-bottom: 0;
+      border-right: 1px solid var(--c-border);
+    }
+    .bcard--featured .bcard__body { padding: var(--sp-6); gap: var(--sp-3); justify-content: center; }
+    .bcard--featured .bcard__title { font-size: var(--text-2xl); }
+    .bcard--featured .bcard__desc { font-size: var(--text-base); }
+  }
+</style>

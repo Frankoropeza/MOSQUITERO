@@ -33,7 +33,18 @@
 // escritorio (flex:1, alturas iguales).
 // ============================================================================
 export type MenuItem = { label: string; href: string; sub?: string; icon?: string };
-export type MenuCta = { label: string; href: string; sub?: string; external?: boolean };
+// `icon` del CTA: hasta 2026-07-14 el ícono de WhatsApp estaba HARDCODEADO en el
+// markup, así que el botón destacado solo podía ser un CTA de WhatsApp. La home
+// usa ahora una segunda barra cuyo botón destacado lleva a /blog: pintarle un
+// WhatsApp sería mentir sobre el destino. Default "wa" → el uso existente no
+// cambia. "arrow" para destinos internos; "none" si no quieres ícono.
+export type MenuCta = {
+  label: string;
+  href: string;
+  sub?: string;
+  external?: boolean;
+  icon?: "wa" | "arrow" | "none";
+};
 
 interface Props {
   items?: MenuItem[];
@@ -43,10 +54,10 @@ interface Props {
 
 const {
   items = [
-    { label: "Productos", href: "/productos/", sub: "Catálogo del sitio" },
-    { label: "Servicios", href: "/servicios/", sub: "Lo que ofreces" },
-    { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atiendes" },
-    { label: "Blog", href: "/blog/", sub: "Guías y artículos" },
+    { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
+    { label: "Servicios", href: "/servicios", sub: "Lo que ofreces" },
+    { label: "Cobertura", href: "/cobertura", sub: "Zonas que atiendes" },
+    { label: "Blog", href: "/blog", sub: "Guías y artículos" },
   ],
   cta = { label: "Cotizar por WhatsApp", href: "#", sub: "Respuesta inmediata", external: true },
   ariaLabel = "Secciones del sitio",
@@ -78,9 +89,15 @@ const {
             {...(cta.external ? { target: "_blank", rel: "noopener" } : {})}
           >
             <span class="secbtn__top">
-              <span class="secbtn__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.2.2-.3.2-.5s0-.3-.1-.4l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.7 4.3 3.8.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>
-              </span>
+              {(cta.icon ?? "wa") !== "none" && (
+                <span class="secbtn__icon" aria-hidden="true">
+                  {(cta.icon ?? "wa") === "wa" ? (
+                    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.2.2-.3.2-.5s0-.3-.1-.4l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.7 4.3 3.8.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  )}
+                </span>
+              )}
               <span class="secbtn__label">{cta.label}</span>
             </span>
             {cta.sub && <span class="secbtn__sub">{cta.sub}</span>}
@@ -124,7 +141,9 @@ const {
     padding: var(--sp-4);
     background: var(--c-white);
     text-decoration: none;
-    transition: background var(--transition), color var(--transition);
+    /* Excepción del contrato de movimiento (tokens.css): es un BOTÓN.
+       Solo color/fondo — nunca transform, el botón no se levanta. */
+    transition: background-color var(--transition-btn), color var(--transition-btn);
   }
   .secbtn:hover { background: var(--c-surface); }
   .secbtn:focus-visible { outline: 2px solid var(--c-primary); outline-offset: -2px; }
@@ -166,8 +185,4 @@ const {
     .secbtn { padding: var(--sp-5) var(--sp-4); }
   }
 
-  /* Respeta usuarios que prefieren menos movimiento. */
-  @media (prefers-reduced-motion: reduce) {
-    .secbtn { transition: none; }
-  }
 </style>

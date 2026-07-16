@@ -6,7 +6,14 @@
 
 :root {
   /* ---------- COLOR (marca) ---------- */
-  --c-primary: #5b3df5;          /* TODO: color de marca real de mosquitero.mx. Este es el placeholder heredado del template. Al cambiarlo, actualiza theme_color en public/site.webmanifest. */
+  /* TODO: color de marca real de mosquitero.mx. Es el índigo heredado del template.
+     ⚠️ El hex vive en 3 sitios que no pueden leerse entre sí. Al cambiarlo, cambia
+     LOS TRES o el sitio se pinta de dos colores distintos:
+       1. AQUÍ → --c-primary  (y --c-primary-rgb abajo: es su canal RGB, se calcula a mano)
+       2. public/site.webmanifest → "theme_color"
+       3. src/config/site.ts → SITE.themeColor (lo lee el <meta name="theme-color">)
+     El contrato completo está explicado en site.ts, junto a SITE.themeColor. */
+  --c-primary: #5b3df5;
   --c-primary-light: #7c66f7;
   --c-primary-dark: #3f28c2;
   --c-accent: var(--c-primary);
@@ -50,19 +57,70 @@
   --container-max: 90%;          /* Ancho del sitio = 90% del viewport, centrado con margin-inline:auto → gutters ~5% izq/der. %-based (antes 1200px fijo). */
   --container-prose: 720px;      /* Ancho de lectura (prose en artículos). Se mantiene en px por legibilidad (line-length); NO es el ancho del sitio. */
   --container-px: clamp(1rem, 4vw, 2rem);  /* Padding interior dentro del 90%. */
-  --topbar-height: 36px;
-  --header-height: 64px;
   /* Padding vertical estándar de sección (RelatedLinks/FAQAccordion). */
   --section-py: clamp(3rem, 6vw, 5rem);
 
-  /* ---------- Z-INDEX ---------- */
+  /* ---------- CHROME (topbar + header) ----------
+     FUENTE ÚNICA de las alturas del chrome. Header.astro y TopBar.astro LEEN
+     estas variables sin fallback: si el valor debe cambiar, se cambia AQUÍ.
+     (Antes cada componente traía su propio fallback —64px en tokens vs. 80px en
+     el CSS del Header— y las dos cifras nunca coincidían.)
+     --header-height → altura del Header. ÚNICA: desde el 2026-07-14 el header ya
+     no se compacta al hacer scroll (ver CONTRATO DE MOVIMIENTO abajo), así que
+     se eliminó --header-height-sm (58px) y con él la ambigüedad de "¿qué altura
+     tiene el header AHORA MISMO?". Todo lo que se pega debajo del header
+     (anclas, sidebars sticky) mide contra esta y solo esta.
+     El TopBar NO es sticky: scrollea y desaparece; solo el Header se pega. */
+  --topbar-height: 36px;
+  --header-height: 72px;
+
+  /* ---------- Z-INDEX (escala única) ----------
+     Un solo lugar donde se decide qué tapa a qué. Nada de números sueltos
+     (antes: 480/490/500/501 escritos a mano en cada componente). */
   --z-sticky: 50;                /* barras sticky internas (TOC de servicio, etc.) */
+  --z-float: 400;                /* botón flotante de WhatsApp: debajo del velo */
+  --z-overlay: 480;              /* velo. Con el drawer abierto sube a --z-header + 1 (ver .is-over-chrome) */
+  --z-header: 500;               /* header pegado + topbar */
+  /* --z-panel aplica de verdad SOLO al drawer, que es hermano del header en el
+     contexto raíz: 505 > 500 lo pone por encima. El mega/dropdown también lo
+     usan, pero ahí es ornamental: viven DENTRO del header, que con z-index:500
+     ya creó contexto de apilamiento, así que su 505 solo compite con hermanos
+     dentro del header — nunca puede superar al header desde fuera. Se deja por
+     coherencia de lectura; no lo subas creyendo que hará algo. */
+  --z-panel: 505;
 
   /* ---------- SOMBRAS / TRANSICIONES ---------- */
   --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
   --shadow-md: 0 4px 16px rgba(0,0,0,.10);
-  --transition: .2s ease;
-  --transition-base: .2s ease;   /* alias usado por pagina-directorio (hover cards) */
+  --shadow-header: 0 1px 2px rgba(20,24,31,.05);          /* header (única: ya no hay estado "al hacer scroll") */
+  --shadow-panel: 0 16px 40px rgba(20,24,31,.14), 0 2px 8px rgba(20,24,31,.06);       /* mega/dropdown/drawer */
+  /* ══════════════════════════════════════════════════════════════════════════
+     CONTRATO DE MOVIMIENTO — mosquitero.mx · decisión de Frank, 2026-07-14
+     ──────────────────────────────────────────────────────────────────────────
+     EL SITIO NO ANIMA. Cero transiciones y cero @keyframes en tarjetas,
+     imágenes, enlaces, chevrons, header, paneles, drawer y acordeones. Todo
+     cambia de estado al instante.
+     ÚNICA EXCEPCIÓN: los BOTONES y CTAs (.btn*, .cta*, burger, WhatsApp float)
+     conservan su transición de color/fondo — son el feedback de "esto se puede
+     pulsar" y quitarlo se siente roto, no rápido.
+
+     Si vas a añadir un componente: NO escribas `transition` salvo que sea un
+     botón, y usa --transition-btn. No hay tokens de duración genéricos a
+     propósito — si necesitas uno, el componente probablemente no debería animar.
+
+     ⚠️ OJO al quitar transiciones que llevan `visibility`: en Header los paneles
+     y el drawer usan `visibility` para SACAR SUS ENLACES DEL TAB ORDER cuando
+     están cerrados. Eso NO es decorativo. El delay que tenían solo existía para
+     no cortar la animación; sin animación, `visibility` conmuta al instante y
+     sigue siendo correcto. Nunca borres la propiedad `visibility` misma.
+     ══════════════════════════════════════════════════════════════════════════ */
+  --transition-btn: .16s ease;   /* SOLO botones/CTA. Ver contrato arriba. */
+  /* Aquí vivían --transition y --transition-base (.2s ease), heredados del
+     template. Eliminados el 2026-07-14: cero usos tras la purga. Si copias un
+     componente del template que traiga `transition: background var(--transition)`,
+     la variable no existirá, la declaración será inválida y el navegador la
+     tirará — que es exactamente lo que queremos. No las recrees: si el
+     componente de verdad necesita animar, es un botón y usa --transition-btn. */
 
   /* ============ PUENTE DE ALIAS (heredados → canónico) ============ */
   /* Permite que componentes extraídos de MESECI/otros funcionen sin reescritura. */
@@ -94,7 +152,12 @@
    ============================================================================ */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+/* scroll-padding-top: con el header pegado, un ancla (#id) aterrizaba DEBAJO del
+   header y el título quedaba tapado. Se reserva la altura compacta + holgura. */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-height) + var(--sp-4));
+}
 
 body {
   margin: 0;
@@ -106,3 +169,21 @@ body {
 }
 
 img, picture, video, canvas { max-width: 100%; }
+
+/* Accesibilidad: respeta "reducir movimiento" del SO.
+   Desde el CONTRATO DE MOVIMIENTO (ver arriba) el sitio ya no anima nada salvo
+   el color de los botones, así que este bloque quedó casi sin trabajo: su único
+   efecto real hoy es apagar esa transición de botón y el scroll suave.
+   NO lo borres. Es la red de seguridad: si mañana alguien mete un `transition`
+   o un `@keyframes` en un componente nuevo, esto lo apaga sin que ese
+   componente tenga que acordarse de hacerlo. Cuesta 6 líneas y no se mantiene.
+   `scroll-behavior` sí sigue siendo suyo: eso no es CSS de componente. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

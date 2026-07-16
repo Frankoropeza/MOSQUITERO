@@ -1,7 +1,7 @@
 ---
 // Footer.astro — Footer profesional de 4 columnas con contacto enriquecido, sucursales, banda de certificaciones y bottom bar. ORIGEN: PROYECTORED/src/components/global/Footer.astro (el más completo: BRANCHES, schedule, badges de cobertura, todo desde config).
 // 100% data-driven desde config/site (SITE, CONTACT, BRANCHES?, PRODUCT_CATEGORIES, SERVICES, SECTORS, COVERAGE_STATES, waUrl, WA_MESSAGES). Pasa `certifications` por props (varían por negocio).
-import { SITE, CONTACT, BRANCHES, PRODUCT_CATEGORIES, SERVICES, SECTORS, COVERAGE_STATES, waUrl, WA_MESSAGES } from '@config/site'
+import { SITE, CONTACT, BRANCHES, PRODUCT_CATEGORIES, SERVICES, SECTORS, COVERAGE_STATES, waUrl, WA_MESSAGES, servicioHref } from '@config/site'
 
 interface Cert { label: string; title?: string }
 interface Branch { label: string; address: string; mapsUrl?: string }
@@ -56,6 +56,23 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
             <span class="footer__contact-text"><strong>{CONTACT.email}</strong></span>
           </a>
 
+          {/* Dirección. Hasta el 2026-07-14 el domicilio SOLO existía dentro del
+              JSON-LD: invisible para una persona. Se muestra aquí.
+              ⚠️ NO va como "Sucursal" ni enlaza a Google Maps a propósito: en
+              Insurgentes Sur 716 no se atiende al público (es negocio de área de
+              servicio, ver SITE.business en site.ts). Un pin de Maps invitaría a
+              ir a un sitio donde nadie va a recibir al cliente. Lo que sí es
+              cierto —dónde SÍ trabajamos— lo dice la columna Cobertura. */}
+          {CONTACT.street && (
+            <div class="footer__contact-row">
+              <span class="footer__contact-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <span class="footer__contact-text">
+                <strong>{CONTACT.street}</strong>
+                <em>{CONTACT.postalCode} {CONTACT.city}, {CONTACT.state}</em>
+              </span>
+            </div>
+          )}
+
           {branches.length > 0 && (
             <div class="footer__branches" role="group" aria-label="Sucursales">
               <span class="footer__branches-label">Sucursales</span>
@@ -84,7 +101,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
       <nav class="footer__col" aria-label="Productos">
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Productos</h3>
         <ul class="footer__nav-list" role="list">
-          <li><a href="/productos/" class="footer__nav-link footer__nav-link--all">Ver catálogo completo<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+          <li><a href="/mosquiteros" class="footer__nav-link footer__nav-link--all">Ver catálogo completo<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
           {PRODUCT_CATEGORIES.map((cat) => (
             <li><a href={cat.href} class="footer__nav-link">{cat.label}{(cat as any).badge && <span class="footer__nav-badge">{(cat as any).badge}</span>}</a></li>
           ))}
@@ -94,30 +111,46 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
       <nav class="footer__col" aria-label="Servicios">
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Servicios</h3>
         <ul class="footer__nav-list" role="list">
-          {SERVICES.map((svc) => (<li><a href={`/servicios/${svc.id}/`} class="footer__nav-link">{svc.label}</a></li>))}
+          {/* servicioHref, no `/servicios/${id}` a mano: esa ruta no existe y
+              este footer la enlazaba en las 35 páginas. Ver el interruptor en
+              site.ts (productoHref/servicioHref). */}
+          {SERVICES.map((svc) => (<li><a href={servicioHref(svc.id)} class="footer__nav-link">{svc.label}</a></li>))}
         </ul>
-        <h3 class="footer__col-heading footer__col-heading--mt"><span class="footer__col-heading-accent" aria-hidden="true"></span>Sectores</h3>
-        <ul class="footer__nav-list" role="list">
-          {SECTORS.map((sec) => (<li><a href={`/sectores/${sec.slug}/`} class="footer__nav-link">{sec.label}</a></li>))}
-        </ul>
+        {/* El encabezado va DENTRO del guard, no fuera. Antes se pintaba siempre
+            y `SECTORS` está vacío (site.ts: "TODO: definir si aplica"), así que
+            el footer mostraba un título "Sectores" con nada debajo — un hueco
+            visible en producción. Un encabezado sin contenido no es un encabezado. */}
+        {SECTORS.length > 0 && (
+          <>
+            <h3 class="footer__col-heading footer__col-heading--mt"><span class="footer__col-heading-accent" aria-hidden="true"></span>Sectores</h3>
+            <ul class="footer__nav-list" role="list">
+              {SECTORS.map((sec) => (<li><a href={`/sectores/${sec.slug}`} class="footer__nav-link">{sec.label}</a></li>))}
+            </ul>
+          </>
+        )}
       </nav>
 
       <nav class="footer__col" aria-label="Cobertura y Empresa">
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Cobertura</h3>
         <ul class="footer__nav-list footer__coverage-list" role="list">
           {COVERAGE_STATES.map((state) => (
-            <li><a href={`/cobertura/${state.slug}/`} class="footer__nav-link">{state.label}
+            <li><a href={`/cobertura/${state.slug}`} class="footer__nav-link">{state.label}
               {(state as any).type && <span class={`footer__coverage-badge footer__coverage-badge--${(state as any).type}`}>{(state as any).type === 'operativo' ? 'Operativo' : 'Comercial'}</span>}
             </a></li>
           ))}
         </ul>
         <h3 class="footer__col-heading footer__col-heading--mt"><span class="footer__col-heading-accent" aria-hidden="true"></span>Empresa</h3>
+        {/* Aquí había un <a href="/nosotros">Nosotros</a>. Se quitó el
+            2026-07-14: esa página NO existe y el footer la enlazaba desde las 35
+            páginas del sitio. Un enlace a 404 en el footer global es de los
+            peores: aparece en todas partes y le dice a Google que el sitio está
+            roto. Cuando exista /nosotros, se vuelve a poner — no antes.
+            (Y /nosotros necesita historia real del negocio: nadie la ha dado.) */}
         <ul class="footer__nav-list" role="list">
-          <li><a href="/nosotros/" class="footer__nav-link">Nosotros</a></li>
-          <li><a href="/servicios/" class="footer__nav-link">Todos los servicios</a></li>
-          <li><a href="/productos/" class="footer__nav-link">Catálogo de productos</a></li>
-          <li><a href="/blog/" class="footer__nav-link">Blog</a></li>
-          <li><a href="/contacto/" class="footer__nav-link">Contacto y cotización</a></li>
+          <li><a href="/servicios" class="footer__nav-link">Todos los servicios</a></li>
+          <li><a href="/mosquiteros" class="footer__nav-link">Catálogo de productos</a></li>
+          <li><a href="/blog" class="footer__nav-link">Blog</a></li>
+          <li><a href="/contacto" class="footer__nav-link">Contacto y cotización</a></li>
         </ul>
       </nav>
 

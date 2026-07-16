@@ -105,11 +105,13 @@ const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen si
     border: 1px solid var(--c-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+
   }
+  /* CONTRATO DE MOVIMIENTO (tokens.css): se quitó el alza de 3px y la sombra.
+     No basta con borrar la `transition`: dejar el `transform` sin ella hace que
+     la tarjeta BRINQUE al pasar el ratón, que se siente peor que la animación.
+     Queda el borde — es feedback de "esto se puede pulsar", no movimiento. */
   .ccard:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
     border-color: var(--c-primary);
   }
 
@@ -119,8 +121,8 @@ const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen si
     position: relative; aspect-ratio: 16 / 10; overflow: hidden;
     background: var(--c-surface);
   }
-  .ccard__img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
-  .ccard:hover .ccard__img { transform: scale(1.04); }
+  /* CONTRATO DE MOVIMIENTO (tokens.css): la foto no crece en hover. */
+  .ccard__img { width: 100%; height: 100%; object-fit: cover; }
   .ccard__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.18) 100%); }
   .ccard__badge {
     position: absolute; top: var(--sp-3); left: var(--sp-3);
@@ -155,7 +157,7 @@ const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen si
     background: var(--c-surface);
     border: 1px solid var(--c-border); border-radius: var(--radius-full);
     padding: .3em .8em;
-    transition: background var(--transition), color var(--transition), border-color var(--transition);
+
   }
   .ccard__sub:hover, .ccard__sub:focus-visible {
     color: #fff; background: var(--c-primary); border-color: var(--c-primary);
@@ -172,14 +174,11 @@ const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen si
     font-family: var(--font-heading); font-weight: var(--weight-semibold);
     font-size: var(--text-sm); color: #fff; text-decoration: none;
     background: var(--c-primary); border-radius: var(--radius-md);
-    transition: background var(--transition), gap var(--transition);
+
   }
-  .ccard__cta:hover { background: var(--c-primary-dark); gap: var(--sp-3); }
+  .ccard__cta:hover { background: var(--c-primary-dark); }
   .ccard__cta:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
 
-  @media (prefers-reduced-motion: reduce) {
-    .ccard, .ccard__img, .ccard__sub, .ccard__cta { transition: none; }
-    .ccard:hover { transform: none; }
-    .ccard:hover .ccard__img { transform: none; }
-  }
+  /* El bloque `prefers-reduced-motion` de aquí se fue con las transiciones que
+     apagaba: ya no hay ninguna. El único del sitio es el global de tokens.css. */
 </style>

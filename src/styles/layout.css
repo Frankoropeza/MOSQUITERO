@@ -1,0 +1,48 @@
+/* ============================================================================
+   layout.css — el contenedor y el ritmo de sección del sitio.
+   ----------------------------------------------------------------------------
+   POR QUÉ EXISTE (creado 2026-07-14):
+   `.container` y `.section` estaban COPIADOS en 9 archivos de páginas, dentro de
+   sus <style> scoped. Nueve definiciones idénticas del ancho del sitio: nueve
+   oportunidades de que una diverja y una página quede más ancha que el resto,
+   sin que nadie sepa por qué.
+
+   Aquí hay UNA. Lo importa BaseLayout, así que aplica a todo el sitio sin que
+   cada página tenga que acordarse.
+
+   ⚠️ NO redeclares `.container` ni `.section` en el <style> de una página. Si
+   necesitas otro ancho, es un caso nuevo: dale su propia clase y documenta por
+   qué. El ancho del sitio se decide aquí y en `--container-max` (tokens.css).
+
+   Ojo con la cascada: al ser global, cualquier `.container` en un <style>
+   scoped de página GANA (el atributo [data-astro-cid] suma especificidad). Ese
+   es justo el accidente que esto viene a evitar.
+   ============================================================================ */
+
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-px);
+}
+
+/* Ritmo vertical del sitio. Mobile-first: más aire en escritorio. */
+.section {
+  padding: var(--sp-8) 0;
+}
+
+/* Fondo alterno. Marca el cambio de sección sin una línea ni un título extra. */
+.section--surface {
+  background: var(--c-surface);
+}
+
+/* El módulo FAQ + cotización cierra las páginas y usa el mismo fondo: es el
+   bloque de conversión y conviene que se lea como una unidad aparte. */
+.section--faq {
+  background: var(--c-surface);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding: var(--sp-10) 0;
+  }
+}
