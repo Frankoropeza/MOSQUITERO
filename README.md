@@ -14,6 +14,7 @@ Antes de tocar código o crear una página nueva:
 | --- | --- |
 | **[docs/PROCEDENCIA.md](./docs/PROCEDENCIA.md)** | De dónde salió cada cosa. Qué está verificado, qué es heredado y **qué escribí sin que nadie del negocio lo confirmara**. Hallazgos abiertos. Empieza aquí. |
 | **[docs/CONTRATO-ENCABEZADOS.md](./docs/CONTRATO-ENCABEZADOS.md)** | Cómo DEBE verse un encabezado de sección. Normativo: el build falla si no se cumple. Incluye checklist para páginas nuevas y decisiones ya descartadas. |
+| **[docs/CONTRATO-BLOG.md](./docs/CONTRATO-BLOG.md)** | Spec normativa del módulo blog: rutas, contrato de datos (los DOS archivos del enum), componentes, y las **trampas que ya se cayeron una vez**. Incluye checklist para artículos nuevos. Léelo antes de tocar el blog o escribir un `.mdx`. |
 
 > ⚠️ Buena parte del contenido de la home (tipos de mosquitero, servicios, copy, keywords) está marcado **🟠 Sin validar** en PROCEDENCIA.md: lo redacté a partir de conocimiento general del oficio y **nadie del negocio lo confirmó**. Es andamiaje para poder ver y discutir la página, no verdad del negocio.
 

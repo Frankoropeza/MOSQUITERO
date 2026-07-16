@@ -25,7 +25,11 @@ const href = waUrl(WA_MESSAGES[message])
     position: fixed;
     bottom: var(--sp-6, 1.5rem);
     right: var(--sp-6, 1.5rem);
-    z-index: 9999;
+    /* Escala de tokens, no 9999. Con z-index:9999 este botón se pintaba ENCIMA
+       del drawer móvil y de su velo: al abrir el menú quedaba un botón verde
+       flotando sobre el panel. --z-float (400) lo deja por debajo del overlay
+       (480) y de los paneles (505), y por encima del contenido. */
+    z-index: var(--z-float, 400);
     display: flex;
     align-items: center;
     gap: var(--sp-2, .5rem);
@@ -36,12 +40,13 @@ const href = waUrl(WA_MESSAGES[message])
     box-shadow: 0 4px 16px rgba(37,211,102,.4);
     font-size: var(--text-sm, .875rem);
     font-weight: var(--weight-semibold, 600);
-    transition: transform .2s ease, box-shadow .2s ease;
+    /* Excepción del contrato: es un CTA flotante. Solo color/fondo. */
+    transition: background-color var(--transition-btn);
     text-decoration: none;
     /* respeta el notch / barra inferior iOS */
     margin-bottom: env(safe-area-inset-bottom, 0px);
   }
-  .wa-float:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(37,211,102,.5); }
+  .wa-float:hover { background: #1ebe5d; }
   .wa-float:focus-visible { outline: 3px solid rgba(37,211,102,.5); outline-offset: 2px; }
   @media (max-width: 640px) {
     .wa-float__label { display: none; }

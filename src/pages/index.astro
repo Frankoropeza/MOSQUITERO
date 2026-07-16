@@ -2,10 +2,11 @@
 // ============================================================================
 // index.astro — HOME de mosquitero.mx (L1).
 // ----------------------------------------------------------------------------
-// ESTADO: scaffold inicial. Es la ÚNICA página del sitio por ahora; el resto de
-// las rutas (/productos, /servicios, /cobertura, /blog, /contacto) están
-// contempladas en NAV (site.ts) pero AÚN NO EXISTEN → sus enlaces dan 404 hasta
-// que se construyan. Ver README.md → "Hoja de ruta".
+// ESTADO: ya NO es la única página. El 2026-07-14 se construyeron /mosquiteros
+// (+7 fichas), /servicios (+4 fichas), /cobertura (+2 zonas) y /contacto: 46
+// páginas. Los enlaces del NAV ya resuelven — verificado con `npm run check:links`.
+// La L2 de catálogo es /mosquiteros, NO /productos: la URL dice lo mismo que el
+// botón que lleva a ella (renombrada por Frank).
 //
 // REGLAS:
 //   • Cero datos de negocio hardcodeados: todo sale de src/config/site.ts.
@@ -20,12 +21,19 @@ import Hero from "@components/Hero.astro";
 import SectionMenu from "@components/SectionMenu.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import CategoryCard from "@components/CategoryCard.astro";
+import CategoryDetail from "@components/CategoryDetail.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
-import CTABanner from "@components/CTABanner.astro";
-import { KEYWORDS, NAV, SERVICES, WA_MESSAGES, SHOWCASE, waUrl } from "@config/site";
+import QuoteForm from "@components/QuoteForm.astro";
+import { getCollection } from "astro:content";
+// SHOWCASE_HOME, no SHOWCASE: la home presenta 4 tipos; el catálogo completo (7)
+// es la L2 /mosquiteros. El corte vive en site.ts para que meter una categoría
+// nueva no alargue la home sin que nadie lo decida. Ver SHOWCASE_HOME.
+import { KEYWORDS, NAV, SERVICES, WA_MESSAGES, SHOWCASE_HOME, AFONDO, waUrl } from "@config/site";
 
-// ── WhatsApp: SIEMPRE vía waUrl() (regla D4) ──
-const waLink = waUrl();
+// Se fueron con el CTA final (2026-07-14): el import de CTABanner y el
+// `const waLink = waUrl()`, que era su único consumidor en esta página. El
+// componente sigue vivo y en uso en los layouts y en /blog — solo la home dejó
+// de llamarlo. `waUrl` se queda: lo usa menuCta más abajo.
 
 // ── Menú de secciones (barra bajo el hero) ───────────────────────────────────
 // DATA-DRIVEN desde NAV (site.ts) — la MISMA fuente que alimenta el Header. Se
@@ -50,44 +58,148 @@ const menuCta = {
   external: true,
 };
 
+// ── Menú de guías (segunda barra, antes del footer) ──────────────────────────
+// Objetivo: enlazado interno. Enlaza SOLO a artículos del blog que existen
+// —con guarda que rompe el build si un slug deja de generar ruta—. Cuando se
+// escribió, la barra del hero apuntaba a rutas inexistentes; ya no es el caso.
+//
+// ⚠️ CONTEXTO: `SITE.noindexAll = true` → todo el sitio emite noindex,nofollow.
+// Este enlazado no mueve nada en Google hasta que se quite el gate. Se construye
+// ahora para que ya esté bien cuando se quite, no porque esté surtiendo efecto.
+//
+// DATA-DRIVEN CON GUARDA: los slugs NO se escriben a mano en un array de hrefs.
+// Se declaran aquí, se resuelven contra la colección y, si uno no existe, el
+// BUILD ROMPE. Mismo criterio que la guarda de SectionHeading: un enlace roto
+// debe verse en build, no en producción. Si renombras un .mdx, esto te lo dice.
+const GUIAS_MENU: { slug: string; label: string; sub: string }[] = [
+  { slug: "como-medir-ventana-mosquitero", label: "Cómo medir", sub: "Toma bien las medidas de tu vano" },
+  { slug: "tipos-de-mosquitero-cual-elegir", label: "Qué tipo elegir", sub: "Cuál va con tu ventana" },
+  { slug: "tipos-de-malla-mosquitero", label: "Tipos de malla", sub: "Cuál aguanta tu caso" },
+  { slug: "de-que-depende-el-precio-de-un-mosquitero", label: "De qué depende el precio", sub: "Qué mueve el costo por pieza" },
+];
+
+const articulosPublicados = await getCollection("articulos", ({ data }) => data.draft !== true);
+const slugsPublicados = new Set(articulosPublicados.map((p) => p.id));
+
+// La guarda: mismo filtro `draft !== true` que usa blog/[slug].astro para generar
+// rutas. Así no basta con que el archivo exista — si está en draft no tiene ruta,
+// y enlazarlo sería un 404 igual.
+const guiasRotas = GUIAS_MENU.filter((g) => !slugsPublicados.has(g.slug));
+if (guiasRotas.length > 0) {
+  throw new Error(
+    `[index.astro] El menú de guías apunta a artículos que no generan ruta: ` +
+      `${guiasRotas.map((g) => g.slug).join(", ")}.\n` +
+      `Causa probable: el .mdx se renombró, se borró, o tiene draft: true.\n` +
+      `Publicados ahora mismo: ${[...slugsPublicados].sort().join(", ")}.\n` +
+      `Arregla el slug en GUIAS_MENU o publica el artículo — no enlaces a un 404.`,
+  );
+}
+
+const menuGuias = GUIAS_MENU.map((g) => ({ label: g.label, href: `/blog/${g.slug}`, sub: g.sub }));
+// El botón destacado NO es de WhatsApp, a propósito: el CTA final de WhatsApp se
+// quitó de esta página (ver más abajo) porque la home ya pide la conversión en el
+// formulario y en el WhatsAppFloat. Reponerlo aquí sería devolverlo por la puerta
+// de atrás. Lleva a /blog — que es otro enlace interno real, que es el punto.
+// El conteo sale de la colección: si publicas un artículo, el número se corrige
+// solo (por eso `icon: "arrow"`, ver MenuCta en SectionMenu.astro).
+const menuGuiasCta = {
+  label: "Ver todas las guías",
+  href: "/blog",
+  sub: `${articulosPublicados.length} artículos`,
+  icon: "arrow" as const,
+};
+
 // ── Cómo se pide un mosquitero (proceso) ─────────────────────────────────────
 // TODO: confirmar el proceso REAL del cliente (¿mide él?, ¿cobra la visita?,
 // ¿cuánto tarda la entrega?). No prometer tiempos sin dato verificado.
-const proceso: { paso: string; titulo: string; detalle: string }[] = [
-  { paso: "1", titulo: "Nos escribes", detalle: "Mándanos por WhatsApp el tipo de ventana o puerta y, si las tienes, las medidas." },
-  { paso: "2", titulo: "Medición", detalle: "Te decimos cómo medir o agendamos una visita para tomar las medidas exactas." },
-  { paso: "3", titulo: "Cotización", detalle: "Recibes el precio por pieza con el tipo de mosquitero y malla recomendados." },
-  { paso: "4", titulo: "Fabricación", detalle: "Armamos cada mosquitero a la medida de tu vano." },
-  { paso: "5", titulo: "Instalación", detalle: "Lo colocamos y verificamos que cierre y corra bien antes de irnos." },
+//
+// ⚠️ TODO CRÍTICO — 8 pasos, de los cuales 5 venían del scaffold original y 3 los
+// añadí el 2026-07-14 a petición de Frank para llenar dos filas de 4 tarjetas:
+// «Tipo de mosquitero» (3), «Malla» (4) y «Revisión y cuidado» (8). Son un
+// DESGLOSE de lo que ya hacía el flujo de 5 (la asesoría de tipo/malla estaba
+// embutida en Cotización; la revisión, en Instalación) — NO son servicios nuevos
+// inventados. Aun así: nadie del negocio confirmó que el flujo real tenga estos
+// cortes. Si el cliente dice que asesora y cotiza en el mismo mensaje, esto
+// vuelve a 5 pasos o a 6, y la retícula lo aguanta (ver .pasos en <style>).
+// El motivo de los 8 es de diseño, no de negocio. Ver docs/PROCEDENCIA.md §5.
+//
+// Cada paso declara su propia imagen y su alt: el alt vive AQUÍ, no en el SVG,
+// para que al sustituir el placeholder por la foto real (public/images/proceso/
+// paso-N.*) no se pierda la descripción. Mantener el 4:3 del placeholder.
+const proceso: { paso: string; titulo: string; detalle: string; img: string; alt: string }[] = [
+  { paso: "1", titulo: "Nos escribes", detalle: "Mándanos por WhatsApp el tipo de ventana o puerta y, si las tienes, las medidas.", img: "/images/proceso/paso-1.svg", alt: "Cliente enviando las medidas de su ventana por WhatsApp" },
+  { paso: "2", titulo: "Medición", detalle: "Te decimos cómo medir o agendamos una visita para tomar las medidas exactas.", img: "/images/proceso/paso-2.svg", alt: "Flexómetro midiendo el ancho del vano de una ventana" },
+  { paso: "3", titulo: "Tipo de mosquitero", detalle: "Según cómo abre tu ventana y el uso que le das, te decimos qué tipo le queda: corredizo, enrollable, abatible o plisado.", img: "/images/proceso/paso-3.svg", alt: "Comparación de tipos de mosquitero según la apertura de la ventana" },
+  { paso: "4", titulo: "Malla", detalle: "Elegimos la malla con el mismo criterio: si hay mascotas, si pega el sol, si necesitas ver hacia afuera o frenar insectos más chicos.", img: "/images/proceso/paso-4.svg", alt: "Muestras de distintos tipos de malla para mosquitero" },
+  { paso: "5", titulo: "Cotización", detalle: "Recibes el precio por pieza, ya con el tipo y la malla que quedamos.", img: "/images/proceso/paso-5.svg", alt: "Cotización por pieza con el tipo de mosquitero y la malla acordados" },
+  { paso: "6", titulo: "Fabricación", detalle: "Armamos cada mosquitero a la medida de tu vano.", img: "/images/proceso/paso-6.svg", alt: "Armado del marco de aluminio del mosquitero en el taller" },
+  { paso: "7", titulo: "Instalación", detalle: "Lo colocamos en tu ventana o puerta, ajustado al vano.", img: "/images/proceso/paso-7.svg", alt: "Instalación del mosquitero en la ventana" },
+  { paso: "8", titulo: "Revisión y cuidado", detalle: "Verificamos que cierre y corra bien antes de irnos, y te decimos cómo limpiarlo para que dure.", img: "/images/proceso/paso-8.svg", alt: "Prueba de que la corredera del mosquitero cierre y corra bien" },
 ];
 
 // ── FAQ — preguntas reales de compra ─────────────────────────────────────────
 // TODO: validar cada respuesta con el cliente. Sin garantías ni plazos inventados.
+//
+// CRITERIO DE REDACCIÓN (por qué están escritas así y no en tres líneas):
+//   • Responden con el CRITERIO, no solo con el dato: no basta "mide el vano",
+//     hay que decir por qué se toma la medida MENOR — ahí está el oficio, y es
+//     lo que separa a un proveedor de un catálogo.
+//   • Cada respuesta cierra devolviendo la pelota (mándanos, cuéntanos): la
+//     columna de al lado es el formulario, y la respuesta debe empujar a él.
+//   • Cero cifras, plazos ni garantías sin dato verificado. Donde el negocio aún
+//     no confirmó la política, la respuesta dice "te lo confirmamos al cotizar"
+//     — que es verdad — en vez de inventar un número que luego no se sostenga.
+//   • El <strong> marca el dato accionable, no el énfasis emocional.
+//
+// El JSON-LD FAQPage se alimenta de este array (lib/seo.ts) y ahí el HTML se
+// limpia: por eso las respuestas deben leerse bien también SIN las negritas.
 const faqs: { question: string; answer: string }[] = [
   {
-    question: "¿Cómo mido mi ventana para un mosquitero?",
+    question: "¿Cómo mido el vano de mi ventana para pedir un mosquitero?",
     answer:
-      "Mide el <strong>ancho</strong> y el <strong>alto</strong> del vano por dentro, en tres puntos cada uno (arriba, en medio y abajo), y quédate con la medida menor. Mándanos esos números por WhatsApp y te decimos si el vano requiere algún ajuste.",
+      "Con un flexómetro metálico, mide por dentro del marco: el <strong>ancho</strong> en tres alturas (arriba, en medio y abajo) y el <strong>alto</strong> en tres puntos (izquierda, centro y derecha). De cada terna, quédate con la <strong>medida menor</strong>. Los vanos casi nunca son perfectamente rectangulares, y una pieza fabricada sobre la medida mayor simplemente no entra. Anota los números en centímetros y mándanoslos con una foto de la ventana completa: con eso confirmamos el tipo y te decimos si el vano necesita algún ajuste antes de fabricar.",
   },
   {
     question: "¿Qué tipo de mosquitero me conviene?",
     answer:
-      "Depende de la ventana y del uso: los <strong>corredizos</strong> van con ventanas corredizas, los <strong>abatibles</strong> con puertas de acceso diario, los <strong>enrollables</strong> cuando quieres que la malla desaparezca, y los <strong>plisados</strong> para vanos amplios. Cuéntanos tu caso y te recomendamos el correcto.",
+      "Lo define el marco que ya tienes y el uso que le das, no el gusto. Los <strong>corredizos</strong> van con ventanas corredizas; los <strong>abatibles</strong>, con puertas de acceso diario; los <strong>enrollables</strong>, cuando quieres que la malla desaparezca al no usarla; los <strong>plisados</strong>, en vanos amplios y puertas de cristal; los <strong>fijos</strong>, en ventanas que no se abren. Si tu caso no encaja claro en ninguno, mándanos una foto de la ventana abierta: con verla sabemos cuál corresponde y te evitamos pagar la pieza equivocada.",
   },
   {
-    question: "¿Hacen mosquiteros a medida?",
+    question: "¿Hacen mosquiteros a medida o venden medidas estándar?",
     answer:
-      "Sí. Cada mosquitero se fabrica a la medida exacta de tu ventana o puerta; no trabajamos con medidas estándar de línea.",
+      "Solo <strong>a medida</strong>. Cada pieza se fabrica con las dimensiones exactas de tu vano; no cortamos sobre medidas de línea ni adaptamos un marco genérico. Es la única forma de que el mosquitero cierre completo, sin las holguras por donde se cuela justo lo que querías dejar afuera.",
   },
   {
     question: "¿Pueden cambiar la malla de un mosquitero que ya tengo?",
     answer:
-      "Sí. Si el marco está en buen estado, se cambia solo la tela. Si el marco o los herrajes están dañados, te decimos qué conviene más: reparar o reponer la pieza.",
+      "Sí. Si el marco y los herrajes están sanos, se cambia <strong>solo la tela</strong> y la pieza queda funcional otra vez por una fracción de lo que cuesta reponerla. Si el perfil está vencido o torcido, o el herraje ya no sujeta, te lo decimos con franqueza y te damos las dos cifras —reparar y reponer— para que decidas tú con los números enfrente.",
   },
   {
-    question: "¿Cuánto cuesta un mosquitero?",
+    question: "¿De qué depende el precio de un mosquitero?",
     answer:
-      "El precio depende de las medidas, el tipo de mosquitero y la malla. Mándanos las medidas por WhatsApp y te pasamos la cotización por pieza.",
+      "De tres cosas: las <strong>medidas</strong> del vano, el <strong>tipo</strong> de mosquitero y la <strong>malla</strong> que lleve. Por eso no publicamos lista de precios: una cifra genérica no aplicaría a tu ventana y solo serviría para que la comparación salga mal. Mándanos las medidas y te pasamos el precio <strong>por pieza</strong>, con el tipo y la malla que recomendamos para tu caso.",
+  },
+  {
+    question: "¿Qué malla conviene en mi caso?",
+    // TODO: confirmar con el cliente el catálogo REAL de mallas (nombres y
+    // disponibilidad) antes de publicar. La respuesta describe criterios de
+    // selección, no productos concretos, justo para no comprometer stock.
+    answer:
+      "Depende de lo que tengas que resolver, no del precio por metro. Hay tela estándar para insecto común, tejidos <strong>reforzados</strong> donde hay perros o gatos que se recargan, y tramas más cerradas para insecto pequeño. Cuéntanos si hay mascotas, si la ventana da a jardín o a la calle y qué tanto te importa conservar la vista: con eso te decimos qué tela pedir y por qué.",
+  },
+  {
+    question: "¿Hacen medición a domicilio?",
+    // TODO: confirmar si la visita tiene costo, si se acredita a la compra y en
+    // qué zonas aplica. Hasta entonces la respuesta NO promete gratuidad.
+    answer:
+      "Sí, sobre todo cuando el vano es complicado o son <strong>varias piezas</strong> y un error de medición se multiplica. Escríbenos con tu zona y te confirmamos disponibilidad y condiciones de la visita antes de agendar nada. Si tu caso es simple, te ahorramos el paso: te decimos cómo medir y listo.",
+  },
+  {
+    question: "¿Cuánto tardan en entregar e instalar?",
+    // TODO: el cliente debe dar el plazo REAL por tipo de pieza. Prohibido poner
+    // un número aquí hasta tenerlo verificado (regla: cero contenido fabricado).
+    answer:
+      "El plazo depende del tipo de pieza y de cuántas sean. Te lo confirmamos <strong>al cotizar</strong>, junto con el precio y por escrito: preferimos darte una fecha que podamos sostener a una cifra bonita que se caiga a la semana.",
   },
 ];
 ---
@@ -110,7 +222,7 @@ const faqs: { question: string; answer: string }[] = [
   {/* ═══ MENÚ DE SECCIONES — barra full-width bajo el hero (data-driven desde NAV) ═══ */}
   <SectionMenu items={menuSecciones} cta={menuCta} />
 
-  {/* ═══ 2) TIPOS DE MOSQUITERO — vitrina de categorías (data-driven desde SHOWCASE) ═══ */}
+  {/* ═══ 2) TIPOS DE MOSQUITERO — vitrina de categorías (data-driven desde SHOWCASE_HOME: los 4 principales) ═══ */}
   <section class="section section--surface">
     <div class="container">
       <SectionHeading
@@ -122,7 +234,7 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="showcase">
-        {SHOWCASE.map((cat, i) => (
+        {SHOWCASE_HOME.map((cat, i) => (
           <CategoryCard
             label={cat.label}
             href={cat.href}
@@ -133,6 +245,41 @@ const faqs: { question: string; answer: string }[] = [
             subcategories={cat.subcategories}
             ctaLabel={cat.ctaLabel}
             index={i}
+          />
+        ))}
+      </div>
+
+      {/* ── CADA TIPO, A FONDO ──────────────────────────────────────────────
+          La vitrina de arriba entrega el catálogo de un vistazo, pero cada
+          tarjeta solo cabe una frase. Estos bloques amplían sin obligar a
+          entrar a otra página: cómo funciona cada tipo y qué caso resuelve.
+
+          Data-driven: se recorre SHOWCASE_HOME y se filtra por AFONDO[slug]. Una
+          categoría sin entrada en AFONDO simplemente no pinta bloque — así
+          agregar categorías al catálogo nunca rompe esta sección.
+
+          Regla canónica: TODOS idénticos —info a la IZQUIERDA, galería a la
+          DERECHA (1 grande + 2 chicas debajo)—, sin alternar lados ni fondos.
+          La galería no es opcional en el diseño: es la mitad del módulo.
+          Las fotos aún son placeholders que declaran qué toma va en cada hueco;
+          se sustituyen en AFONDO (site.ts) sin tocar este archivo.
+
+          as="h3" NO es opcional: estos bloques cuelgan de la sección cuyo H2 es
+          "Tipos de mosquitero". Con el H2 por defecto del componente salían
+          cuatro H2 anidados bajo otro H2 —y encima detrás de los H3 de las
+          tarjetas—, o sea un salto de jerarquía hacia arriba. La regla es
+          H2 sección padre → H3 sub-bloque. */}
+      <div class="afondo">
+        {SHOWCASE_HOME.filter((cat) => AFONDO[cat.slug]).map((cat) => (
+          <CategoryDetail
+            id={`afondo-${cat.slug}`}
+            as="h3"
+            eyebrow="El tipo a fondo"
+            title={cat.label}
+            body={AFONDO[cat.slug].body}
+            points={AFONDO[cat.slug].points}
+            gallery={AFONDO[cat.slug].gallery}
+            cta={{ label: cat.ctaLabel ?? `Ver ${cat.label}`, href: cat.href }}
           />
         ))}
       </div>
@@ -152,10 +299,12 @@ const faqs: { question: string; answer: string }[] = [
       />
       <div class="servicios">
         {SERVICES.map((s) => (
-          <div class="servicio">
-            <p class="servicio__titulo">{s.label}</p>
-            <p class="servicio__desc">{s.desc}</p>
-          </div>
+          <article class="servicio">
+            <div class="servicio__contenido">
+              <h3 class="servicio__titulo">{s.label}</h3>
+              <p class="servicio__desc">{s.desc}</p>
+            </div>
+          </article>
         ))}
       </div>
     </div>
@@ -169,15 +318,27 @@ const faqs: { question: string; answer: string }[] = [
         title="Cómo pedir tu mosquitero"
         body={[
           "Pedir un mosquitero a medida es más simple de lo que parece: empieza con un mensaje y unas medidas. No necesitas saber qué tipo es el tuyo ni cómo se llama la malla — para eso estamos.",
-          "Estos son los cinco pasos, del primer mensaje a la pieza instalada, para que sepas qué sigue en cada momento y qué necesitamos de ti en cada uno.",
+          "Estos son los ocho pasos, del primer mensaje a la pieza instalada, para que sepas qué sigue en cada momento y qué necesitamos de ti en cada uno.",
         ]}
       />
       <ol class="pasos">
-        {proceso.map((e) => (
+        {proceso.map((e, i) => (
           <li class="paso">
-            <span class="paso__num" aria-hidden="true">{e.paso}</span>
+            <div class="paso__media">
+              <img
+                src={e.img}
+                alt={e.alt}
+                width="800"
+                height="600"
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                class="paso__img"
+              />
+              <span class="paso__velo" aria-hidden="true"></span>
+              <span class="paso__num" aria-hidden="true">{e.paso}</span>
+            </div>
             <div class="paso__body">
-              <p class="paso__titulo">{e.titulo}</p>
+              <h3 class="paso__titulo">{e.titulo}</h3>
               <p class="paso__detalle">{e.detalle}</p>
             </div>
           </li>
@@ -186,91 +347,242 @@ const faqs: { question: string; answer: string }[] = [
     </div>
   </section>
 
-  {/* ═══ 5) FAQ — alimenta el JSON-LD FAQPage vía lib/seo.ts ═══
-       El encabezado lo pone <SectionHeading> (contrato de 2 columnas), NO el
-       `title` de <FAQAccordion> — así el bloque abre igual que el resto del
-       sitio. Por eso el acordeón va con title={undefined}: un solo H2 por
-       sección, sin encabezado duplicado. */}
-  <section class="section">
+  {/* ═══ 5) FAQ + COTIZACIÓN — dos columnas ═══════════════════════════════════
+       Las dudas y el formulario van en el MISMO bloque a propósito: resolver la
+       duda y no tener dónde actuar es perder el lead; poner el formulario antes
+       de resolverla es pedirle datos a alguien que todavía no sabe qué pedir.
+       Juntos, cada respuesta desemboca en la columna de acción, que en
+       escritorio queda pegada (sticky) mientras se recorre el acordeón.
+
+       ESTRUCTURA — una sola <section>, un solo <div class="container">:
+         SectionHeading  → el H2 del bloque (contrato de 2 columnas del sitio).
+         FAQAccordion    → title="" para NO pintar un segundo H2; su
+                           aria-labelledby apunta a #faq-heading, que es ese H2.
+                           flush → hereda ancho y padding del .container (antes
+                           el acordeón traía su propio ancho de 820px y su
+                           propio padding de sección: dos anchos distintos en la
+                           misma página y un hueco muerto entre encabezado y
+                           preguntas).
+         slot="aside"    → QuoteForm. El acordeón no sabe qué es: solo lo coloca.
+
+       El JSON-LD FAQPage lo emite buildSchema() desde `faqs` (schemaData arriba),
+       NO este componente — sin `emitSchema` no hay doble FAQPage (anti-patrón B3).
+       ══════════════════════════════════════════════════════════════════════ */}
+  <section class="section section--faq">
     <div class="container">
       <SectionHeading
         id="faq-heading"
         eyebrow="Dudas"
         title="Preguntas frecuentes"
         body={[
-          "Estas son las preguntas que más nos llegan por WhatsApp antes de cotizar: cómo medir, qué tipo conviene y de qué depende el precio.",
-          "Si la tuya no está aquí, escríbenos. Preferimos resolverla antes de fabricar que después de instalar.",
+          "Estas son las preguntas que más nos llegan por WhatsApp antes de cotizar: cómo medir el vano, qué tipo de mosquitero corresponde a cada ventana, de qué depende el precio y cuándo conviene reparar en vez de reponer.",
+          "Si la tuya no está aquí, mándanos tu caso en el formulario de cotización: llena lo que sepas —aunque no tengas las medidas todavía— y te contestamos con el precio por pieza. Preferimos resolver la duda antes de fabricar que después de instalar.",
         ]}
       />
+      <div class="faq-bloque">
+        <FAQAccordion items={faqs} title="" flush>
+          <QuoteForm slot="aside" />
+        </FAQAccordion>
+      </div>
     </div>
   </section>
-  {/* title="" → el acordeón NO pinta su propio H2 (lo puso SectionHeading arriba).
-      Su aria-labelledby sigue apuntando a #faq-heading, que ahora es ese H2. */}
-  <FAQAccordion items={faqs} title="" />
 
-  {/* ═══ 6) CTA FINAL ═══ */}
-  <CTABanner
-    heading="¿Listo para cotizar tus mosquiteros?"
-    desc="Mándanos las medidas de tus ventanas por WhatsApp y te pasamos el precio por pieza, con el tipo de mosquitero y la malla que te convienen."
-    btns={[
-      { label: "Cotizar por WhatsApp", href: waLink, icon: "wa", primary: true, external: true },
-    ]}
-    variant="dark"
-    centered={true}
-  />
+  {/* ═══ 6) MENÚ DE GUÍAS — segunda barra full-width, antes del footer ═══
+      MISMO componente que la barra del hero, otros destinos. Aquí iba el CTA
+      FINAL (<CTABanner> oscuro, "¿Listo para cotizar tus mosquiteros?"), quitado
+      el 2026-07-14: la home ya pide la conversión en el formulario de la sección
+      5 y en el WhatsAppFloat.
+      Los 4 botones apuntan a artículos que EXISTEN (guarda en el frontmatter: si
+      un slug deja de generar ruta, el build rompe). La barra del hero apunta a
+      NAV, cuyas rutas todavía no se construyen — esta no repite ese error. */}
+  <SectionMenu items={menuGuias} cta={menuGuiasCta} ariaLabel="Guías sobre mosquiteros" />
 </PageLayout>
 
 <style>
-  /* CSS vanilla con tokens (tokens.css = fuente única). Mobile-first. */
-  .container {
-    max-width: var(--container-max);
-    margin-inline: auto;
-    padding-inline: var(--container-px);
-  }
 
-  .section { padding: var(--sp-8) 0; }
-  .section--surface { background: var(--c-surface); }
 
   /* ── Vitrina de categorías — 4 por fila en escritorio (2 tablet, 1 móvil) ── */
   .showcase { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
   @media (min-width: 640px) { .showcase { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .showcase { grid-template-columns: repeat(4, 1fr); } }
 
-  /* ── Servicios ── */
-  .servicios { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
-  .servicio {
-    background: var(--c-white); border: 1px solid var(--c-border);
-    border-left: 4px solid var(--c-primary);
-    border-radius: var(--radius-md); padding: var(--sp-4);
-  }
-  .servicio__titulo {
-    margin: 0 0 4px; font-family: var(--font-heading);
-    font-weight: var(--weight-semibold); color: var(--c-ink);
-  }
-  .servicio__desc { margin: 0; font-size: var(--text-sm); color: var(--c-muted); line-height: var(--leading-normal); }
+  /* Pila de bloques "a fondo". El gap es GRANDE y uniforme a propósito: cada
+     bloque es una unidad de lectura completa y necesita respirar para no leerse
+     como una lista. Regla canónica: gap parejo, sin alternar lados ni fondos.
+     El separador superior marca el corte entre "catálogo de un vistazo"
+     (tarjetas) y "cada tipo explicado" (estos bloques).
 
-  /* ── Proceso ── */
-  .pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+     SIN max-width: estos bloques ocupan el MISMO ancho que la vitrina de
+     tarjetas y que el resto de la home (el .container, --container-max: 90%).
+     Lo probé capado a 1140px para equilibrar la altura de las columnas y era
+     peor: metía un ancho distinto al del resto de la página. La coherencia de
+     ancho manda; el equilibrio vertical se resuelve dentro del bloque, no
+     estrechándolo (ver la nota de .cdetail__gallery en CategoryDetail.astro). */
+  .afondo {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    margin-top: var(--sp-8);
+    padding-top: var(--sp-8);
+    border-top: 1px solid var(--c-border);
+  }
+  /* Con 4+ bloques apilados, el clamp de escritorio se siente excesivo en
+     pantallas chicas: comprime sin llegar a sentirse apretado. */
+  @media (max-width: 480px) {
+    .afondo { gap: var(--sp-6); margin-top: var(--sp-6); padding-top: var(--sp-6); }
+  }
+
+  /* ── Servicios ────────────────────────────────────────────────────────────
+     CONCEPTO: la tarjeta ES un mosquitero. No hay ícono, imagen ni movimiento:
+     la carga visual la lleva la construcción de la pieza.
+       • marco exterior + hairline interior = el PERFIL de aluminio con su junta.
+       • trama CSS a 5px = la TELA tensada dentro del marco.
+       • esquina superior izquierda = la ESCUADRA de ensamble del perfil.
+     Es la única sección de la home sin foto; la textura evita que se lea como un
+     hueco, y sale del producto — no es decoración prestada de otra plantilla.
+
+     POR QUÉ SIN HOVER: estas tarjetas NO son enlaces (/servicios/{id}/ aún no
+     existe). Un lift o un cambio de color prometería un clic que no hay. */
+  .servicios { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+
+  /* El marco: fondo blanco = cara del perfil de aluminio. */
+  .servicio {
+    position: relative;
+    /* Top a --sp-6 (32px): deja respirar la escuadra, que llega hasta los 26px
+       (inset 8 + 18 de trazo). Con --sp-5 el título se le montaba. */
+    padding: var(--sp-6) var(--sp-5) var(--sp-5);
+    background: var(--c-white);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm);
+  }
+
+  /* El panel de tela: hairline de junta + trama. La malla real es cuadrícula
+     fina, no un patrón diagonal: dos repeating-linear-gradient a 5px de paso
+     con alfa muy baja (.045) — se lee como textura de papel, no como reja, y no
+     estorba al texto que va encima (z-index). */
+  .servicio::before {
+    content: "";
+    position: absolute; inset: var(--sp-2); z-index: 0;
+    border: 1px solid var(--c-border);
+    background-image:
+      repeating-linear-gradient(0deg,  rgba(20, 24, 31, .045) 0 1px, transparent 1px 5px),
+      repeating-linear-gradient(90deg, rgba(20, 24, 31, .045) 0 1px, transparent 1px 5px);
+    pointer-events: none;
+  }
+
+  /* La escuadra: dos trazos en ángulo, en primario, sobre la junta superior
+     izquierda. Es el único punto de color de la tarjeta — marca el inicio de
+     lectura sin robarle peso al título. */
+  .servicio::after {
+    content: "";
+    position: absolute; z-index: 1;
+    top: var(--sp-2); left: var(--sp-2);
+    width: 18px; height: 18px;
+    border-top: 2px solid var(--c-primary);
+    border-left: 2px solid var(--c-primary);
+    pointer-events: none;
+  }
+
+  .servicio__contenido { position: relative; z-index: 1; }
+
+  /* El título sube a --text-lg y a font-heading: sin ícono, la jerarquía la
+     tiene que llevar la tipografía sola. */
+  .servicio__titulo {
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-heading); font-size: var(--text-lg);
+    font-weight: var(--weight-semibold); line-height: var(--leading-tight);
+    color: var(--c-ink); text-wrap: balance;
+  }
+  /* Filete corto bajo el título: separa sin meter una línea de borde completa. */
+  .servicio__titulo::after {
+    content: ""; display: block;
+    width: 28px; height: 2px; margin-top: var(--sp-3);
+    background: var(--c-primary);
+  }
+  .servicio__desc {
+    margin: 0; font-size: var(--text-sm); color: var(--c-ink-2);
+    line-height: var(--leading-normal); text-wrap: pretty;
+  }
+
+  /* La trama es decorativa: en alto contraste desaparece antes que el texto. */
+  @media (prefers-contrast: more) {
+    .servicio::before { background-image: none; }
+  }
+
+  /* ── Proceso ──
+     MISMA tarjeta que .servicio (borde, radio, filete de acento en hover, alza
+     de 3px) + media 4:3 arriba. Se mantiene <ol>/<li>: el orden de los pasos es
+     semántico, no decorativo — el número visible es el badge sobre la foto y va
+     aria-hidden porque la lista ya lo comunica. */
+  .pasos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+  /* CONTRATO DE MOVIMIENTO (tokens.css): la tarjeta NO anima y NO reacciona al
+     hover. Antes se levantaba 3px, crecía la foto y le barría un filete de color
+     por arriba. Todo eso se quitó de raíz — no basta con borrar la `transition`:
+     dejar el `:hover { transform }` sin transición hace que la tarjeta PEGUE UN
+     SALTO instantáneo, que se siente peor que la animación. Se quita el efecto,
+     no su duración. El filete superior se queda fijo: era el único elemento con
+     valor informativo del conjunto (marca el inicio de la tarjeta). */
   .paso {
-    display: flex; align-items: flex-start; gap: var(--sp-4);
+    position: relative; isolation: isolate; overflow: hidden;
+    display: flex; flex-direction: column;
     background: var(--c-white); border: 1px solid var(--c-border);
-    border-radius: var(--radius-md); padding: var(--sp-4);
+    border-radius: var(--radius-lg);
   }
+  .paso::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; z-index: 2;
+    background: linear-gradient(90deg, var(--c-primary), var(--c-primary-light));
+  }
+
+  .paso__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--c-surface); }
+  .paso__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Velo inferior: asienta el badge cuando llegue la foto real (contraste). */
+  .paso__velo { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,.16) 100%); }
+
   .paso__num {
-    flex-shrink: 0; display: grid; place-items: center; width: 34px; height: 34px;
+    position: absolute; top: var(--sp-3); left: var(--sp-3);
+    display: grid; place-items: center; width: 34px; height: 34px;
     border-radius: var(--radius-full); background: var(--c-primary); color: #fff;
-    font-family: var(--font-heading); font-weight: var(--weight-bold);
+    font-family: var(--font-heading); font-size: var(--text-sm); font-weight: var(--weight-bold);
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
   }
-  .paso__body { display: grid; gap: 2px; }
-  .paso__titulo { margin: 0; font-weight: var(--weight-semibold); color: var(--c-ink); }
-  .paso__detalle { margin: 0; font-size: var(--text-sm); color: var(--c-muted); line-height: var(--leading-normal); }
+
+  .paso__body { display: flex; flex-direction: column; gap: var(--sp-2); flex-grow: 1; padding: var(--sp-5); }
+  .paso__titulo {
+    margin: 0; font-family: var(--font-heading); font-size: var(--text-base);
+    font-weight: var(--weight-semibold); line-height: var(--leading-snug); color: var(--c-ink);
+  }
+  .paso__detalle { margin: 0; font-size: var(--text-sm); color: var(--c-ink-2); line-height: var(--leading-normal); }
+
+  /* ── FAQ + cotización ─────────────────────────────────────────────────────
+     El separador NO es decoración: marca que el bloque cambia de registro —de
+     "te explicamos" a "ahora te toca a ti"— y le da al formulario un borde
+     superior contra el cual apoyarse. Mismo recurso que .afondo, a propósito:
+     una sola forma de anunciar un corte dentro de una sección. */
+  .faq-bloque {
+    margin-top: var(--sp-8);
+    padding-top: var(--sp-8);
+    border-top: 1px solid var(--c-border);
+  }
+  @media (max-width: 480px) {
+    .faq-bloque { margin-top: var(--sp-6); padding-top: var(--sp-6); }
+  }
+
+  /* Aquí vivía un bloque `prefers-reduced-motion` que apagaba las transiciones de
+     .paso. Se fue con ellas: ya no hay nada que apagar. El único bloque de
+     movimiento reducido del sitio es el global de tokens.css. */
 
   /* ── Desktop ── */
   @media (min-width: 768px) {
     .section { padding: var(--sp-10) 0; }
     .servicios { grid-template-columns: repeat(2, 1fr); }
+    .pasos { grid-template-columns: repeat(2, 1fr); }
   }
   @media (min-width: 1024px) {
     .servicios { grid-template-columns: repeat(4, 1fr); }
+    /* 8 pasos = dos filas limpias de 4, misma retícula que .servicios. Se fue el
+       truco de span/centrado que hacía falta con 5: con múltiplo de 4 no hay
+       fila huérfana. Si el cliente confirma otro número de pasos (ver el TODO
+       de `proceso` en el frontmatter), esto no se rompe — solo deja hueco en la
+       última fila. */
+    .pasos { grid-template-columns: repeat(4, 1fr); }
   }
 </style>

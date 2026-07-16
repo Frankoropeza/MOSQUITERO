@@ -1,0 +1,4558 @@
+{
+  "nodes": [
+    {
+      "id": "components_blogcard",
+      "label": "BlogCard.astro",
+      "file_type": "code",
+      "source_file": "components/BlogCard.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogsidebar",
+      "label": "BlogSidebar.astro",
+      "file_type": "code",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro_content",
+      "label": "astro:content",
+      "file_type": "code",
+      "source_file": "astro:content",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_nav_icons",
+      "label": "@config/nav-icons",
+      "file_type": "code",
+      "source_file": "config/nav-icons.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_breadcrumbs",
+      "label": "Breadcrumbs.astro",
+      "file_type": "code",
+      "source_file": "components/Breadcrumbs.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_categorycard",
+      "label": "CategoryCard.astro",
+      "file_type": "code",
+      "source_file": "components/CategoryCard.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_categorydetail",
+      "label": "CategoryDetail.astro",
+      "file_type": "code",
+      "source_file": "components/CategoryDetail.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_faqaccordion",
+      "label": "FAQAccordion.astro",
+      "file_type": "code",
+      "source_file": "components/FAQAccordion.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_footer",
+      "label": "Footer.astro",
+      "file_type": "code",
+      "source_file": "components/Footer.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_header",
+      "label": "Header.astro",
+      "file_type": "code",
+      "source_file": "components/Header.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_hero",
+      "label": "Hero.astro",
+      "file_type": "code",
+      "source_file": "components/Hero.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_productcard",
+      "label": "ProductCard.astro",
+      "file_type": "code",
+      "source_file": "components/ProductCard.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_productcard_var",
+      "label": "var()",
+      "file_type": "code",
+      "source_file": "components/ProductCard.astro",
+      "source_location": "L54",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_relatedlinks",
+      "label": "RelatedLinks.astro",
+      "file_type": "code",
+      "source_file": "components/RelatedLinks.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionheading",
+      "label": "SectionHeading.astro",
+      "file_type": "code",
+      "source_file": "components/SectionHeading.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionmenu",
+      "label": "SectionMenu.astro",
+      "file_type": "code",
+      "source_file": "components/SectionMenu.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_servicecard",
+      "label": "ServiceCard.astro",
+      "file_type": "code",
+      "source_file": "components/ServiceCard.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_servicecard_var",
+      "label": "var()",
+      "file_type": "code",
+      "source_file": "components/ServiceCard.astro",
+      "source_location": "L51",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_topbar",
+      "label": "TopBar.astro",
+      "file_type": "code",
+      "source_file": "components/TopBar.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_topbar_puntos",
+      "label": "PUNTOS",
+      "file_type": "code",
+      "source_file": "components/TopBar.astro",
+      "source_location": "L34",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_whatsappfloat",
+      "label": "WhatsAppFloat.astro",
+      "file_type": "code",
+      "source_file": "components/WhatsAppFloat.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_whatsappfloat_href",
+      "label": "href",
+      "file_type": "code",
+      "source_file": "components/WhatsAppFloat.astro",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets",
+      "label": "cta-presets.ts",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_btndef",
+      "label": "BtnDef",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L17",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_ctapreset",
+      "label": "CTAPreset",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L24",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_btn_wa",
+      "label": "BTN_WA",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L34",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_btn_catalogo",
+      "label": "BTN_CATALOGO",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L35",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_btn_contacto",
+      "label": "BTN_CONTACTO",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L36",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_preset_general",
+      "label": "PRESET_GENERAL",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L39",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_preset_categoria",
+      "label": "PRESET_CATEGORIA",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L48",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_cta_presets_preset_contacto",
+      "label": "PRESET_CONTACTO",
+      "file_type": "code",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L57",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_nav_icons",
+      "label": "nav-icons.ts",
+      "file_type": "code",
+      "source_file": "config/nav-icons.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_nav_icons_nav_icons",
+      "label": "NAV_ICONS",
+      "file_type": "code",
+      "source_file": "config/nav-icons.ts",
+      "source_location": "L37",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_nav_icons_navicon",
+      "label": "navIcon()",
+      "file_type": "code",
+      "source_file": "config/nav-icons.ts",
+      "source_location": "L80",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "site.ts",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_site",
+      "label": "SITE",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L22",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_keywords",
+      "label": "KEYWORDS",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L118",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_contact",
+      "label": "CONTACT",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L127",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_taxonomy",
+      "label": "TAXONOMY",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L164",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_productcategory",
+      "label": "ProductCategory",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L242",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_service",
+      "label": "Service",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L243",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_sector",
+      "label": "Sector",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L244",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_coveragestate",
+      "label": "CoverageState",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L245",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_blogcategory",
+      "label": "BlogCategory",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L246",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_blogcategorylabel",
+      "label": "blogCategoryLabel()",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L249",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_navlink",
+      "label": "NavLink",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L263",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_navitem",
+      "label": "NavItem",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L264",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_nav",
+      "label": "NAV",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L273",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_showcasesub",
+      "label": "ShowcaseSub",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L320",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_showcasecategory",
+      "label": "ShowcaseCategory",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L321",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_showcase",
+      "label": "SHOWCASE",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L332",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_afondoimage",
+      "label": "AfondoImage",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L426",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_afondoentry",
+      "label": "AfondoEntry",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L427",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_afondo",
+      "label": "AFONDO",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L433",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_branches",
+      "label": "BRANCHES",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L515",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_wa_messages",
+      "label": "WA_MESSAGES",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L520",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_waurl",
+      "label": "waUrl()",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L537",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_telurl",
+      "label": "telUrl()",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "source_location": "L542",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_rationale_70",
+      "label": "TODO: agregar SOLO perfiles oficiales verificables del cliente.",
+      "file_type": "rationale",
+      "source_file": "config/site.ts",
+      "source_location": "L70",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_rationale_89",
+      "label": "TODO: si NO hay sede f\u00edsica verificable, pon `business: undefined` y buildSchema",
+      "file_type": "rationale",
+      "source_file": "config/site.ts",
+      "source_location": "L89",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_rationale_117",
+      "label": "TODO: validar la tripleta contra volumen/intenci\u00f3n real antes de escalar conteni",
+      "file_type": "rationale",
+      "source_file": "config/site.ts",
+      "source_location": "L117",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_rationale_318",
+      "label": "TODO: reemplazar im\u00e1genes placeholder por foto real optimizada (AVIF/WebP) y",
+      "file_type": "rationale",
+      "source_file": "config/site.ts",
+      "source_location": "L318",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site_rationale_514",
+      "label": "TODO: agregar solo sucursales reales con domicilio verificable.",
+      "file_type": "rationale",
+      "source_file": "config/site.ts",
+      "source_location": "L514",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config",
+      "label": "content.config.ts",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_imagepath",
+      "label": "imagePath",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L35",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_faqschema",
+      "label": "faqSchema",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L40",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_heroschema",
+      "label": "heroSchema",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L50",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_seofields",
+      "label": "seoFields",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L62",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_product_categories",
+      "label": "PRODUCT_CATEGORIES",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L74",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_service_categories",
+      "label": "SERVICE_CATEGORIES",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L85",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_article_categories",
+      "label": "ARTICLE_CATEGORIES",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L96",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_zone_types",
+      "label": "ZONE_TYPES",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L105",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_productos",
+      "label": "productos",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L109",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_servicios",
+      "label": "servicios",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L135",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_articulos",
+      "label": "articulos",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L170",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_zonas",
+      "label": "zonas",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L197",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_casos",
+      "label": "casos",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L237",
+      "_origin": "ast"
+    },
+    {
+      "id": "content_config_collections",
+      "label": "collections",
+      "file_type": "code",
+      "source_file": "content.config.ts",
+      "source_location": "L264",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_articlelayout",
+      "label": "ArticleLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "./PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogsidebar",
+      "label": "@components/BlogSidebar.astro",
+      "file_type": "code",
+      "source_file": "components/BlogSidebar.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_relatedlinks",
+      "label": "@components/RelatedLinks.astro",
+      "file_type": "code",
+      "source_file": "components/RelatedLinks.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_faqaccordion",
+      "label": "@components/FAQAccordion.astro",
+      "file_type": "code",
+      "source_file": "components/FAQAccordion.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "@components/CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_typography_css",
+      "label": "../styles/typography.css",
+      "file_type": "code",
+      "source_file": "styles/typography.css",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_baselayout",
+      "label": "BaseLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_baselayout_meta",
+      "label": "meta",
+      "file_type": "code",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L93",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_baselayout_jsonld",
+      "label": "jsonLd",
+      "file_type": "code",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L105",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo",
+      "label": "@lib/seo",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_tokens_css",
+      "label": "../styles/tokens.css",
+      "file_type": "code",
+      "source_file": "styles/tokens.css",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout_schemadata",
+      "label": "SchemaData",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L54",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_baselayout",
+      "label": "./BaseLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/BaseLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_topbar",
+      "label": "@components/TopBar.astro",
+      "file_type": "code",
+      "source_file": "components/TopBar.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_header",
+      "label": "@components/Header.astro",
+      "file_type": "code",
+      "source_file": "components/Header.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_footer",
+      "label": "@components/Footer.astro",
+      "file_type": "code",
+      "source_file": "components/Footer.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_breadcrumbs",
+      "label": "@components/Breadcrumbs.astro",
+      "file_type": "code",
+      "source_file": "components/Breadcrumbs.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_whatsappfloat",
+      "label": "@components/WhatsAppFloat.astro",
+      "file_type": "code",
+      "source_file": "components/WhatsAppFloat.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo",
+      "label": "@lib/seo",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_productlayout",
+      "label": "ProductLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "./PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionheading",
+      "label": "@components/SectionHeading.astro",
+      "file_type": "code",
+      "source_file": "components/SectionHeading.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_faqaccordion",
+      "label": "@components/FAQAccordion.astro",
+      "file_type": "code",
+      "source_file": "components/FAQAccordion.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "@components/CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_relatedlinks",
+      "label": "@components/RelatedLinks.astro",
+      "file_type": "code",
+      "source_file": "components/RelatedLinks.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_servicelayout",
+      "label": "ServiceLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "./PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionheading",
+      "label": "@components/SectionHeading.astro",
+      "file_type": "code",
+      "source_file": "components/SectionHeading.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_faqaccordion",
+      "label": "@components/FAQAccordion.astro",
+      "file_type": "code",
+      "source_file": "components/FAQAccordion.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "@components/CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_relatedlinks",
+      "label": "@components/RelatedLinks.astro",
+      "file_type": "code",
+      "source_file": "components/RelatedLinks.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo",
+      "label": "seo.ts",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_absurl",
+      "label": "absUrl()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L61",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_absimage",
+      "label": "absImage()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L79",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_captitlecore",
+      "label": "capTitleCore()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L89",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_formattitle",
+      "label": "formatTitle()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L103",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_weak_endings",
+      "label": "WEAK_ENDINGS",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L127",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_truncatemetadescription",
+      "label": "truncateMetaDescription()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L138",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_buildkeywordtitle",
+      "label": "buildKeywordTitle()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L189",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_buildkeyworddescription",
+      "label": "buildKeywordDescription()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L203",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_meta_stop",
+      "label": "META_STOP",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L213",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_metatokens",
+      "label": "metaTokens()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L219",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_metaaudit",
+      "label": "MetaAudit",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L229",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_metainput",
+      "label": "MetaInput",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L304",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_metaoutput",
+      "label": "MetaOutput",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L315",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_buildmeta",
+      "label": "buildMeta()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L337",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_orgschema",
+      "label": "orgSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L362",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_websiteschema",
+      "label": "websiteSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L386",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_localbusinessschema",
+      "label": "localBusinessSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L413",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_crumb",
+      "label": "Crumb",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L468",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_breadcrumbschema",
+      "label": "breadcrumbSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L471",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_productdata",
+      "label": "ProductData",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L483",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_productschema",
+      "label": "productSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L503",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_servicedata",
+      "label": "ServiceData",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L543",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_serviceschema",
+      "label": "serviceSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L555",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_articledata",
+      "label": "ArticleData",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L588",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_articleschema",
+      "label": "articleSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L601",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_faqitem",
+      "label": "FaqItem",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L622",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_faqschema",
+      "label": "faqSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L625",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_listitem",
+      "label": "ListItem",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L636",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_directoryschema",
+      "label": "directorySchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L642",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_review",
+      "label": "Review",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L678",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_emitreviews",
+      "label": "emitReviews()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L680",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_pagetype",
+      "label": "PageType",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L725",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_schemadata",
+      "label": "SchemaData",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L727",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_buildschema",
+      "label": "buildSchema()",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L737",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_page",
+      "label": "[...page].astro",
+      "file_type": "code",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_page_schemadata",
+      "label": "schemaData",
+      "file_type": "code",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L79",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro",
+      "label": "astro",
+      "file_type": "code",
+      "source_file": "astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro_content",
+      "label": "astro:content",
+      "file_type": "code",
+      "source_file": "astro:content",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "@layouts/PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionheading",
+      "label": "@components/SectionHeading.astro",
+      "file_type": "code",
+      "source_file": "components/SectionHeading.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogcard",
+      "label": "@components/BlogCard.astro",
+      "file_type": "code",
+      "source_file": "components/BlogCard.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogsidebar",
+      "label": "@components/BlogSidebar.astro",
+      "file_type": "code",
+      "source_file": "components/BlogSidebar.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "@components/CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_slug",
+      "label": "[slug].astro",
+      "file_type": "code",
+      "source_file": "pages/blog/[slug].astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro",
+      "label": "astro",
+      "file_type": "code",
+      "source_file": "astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro_content",
+      "label": "astro:content",
+      "file_type": "code",
+      "source_file": "astro:content",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_articlelayout",
+      "label": "@layouts/ArticleLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/ArticleLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_categoria_categoria",
+      "label": "[categoria].astro",
+      "file_type": "code",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_categoria_categoria_schemadata",
+      "label": "schemaData",
+      "file_type": "code",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L57",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_categoria_categoria_breadcrumbs",
+      "label": "breadcrumbs",
+      "file_type": "code",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L71",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro",
+      "label": "astro",
+      "file_type": "code",
+      "source_file": "astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro_content",
+      "label": "astro:content",
+      "file_type": "code",
+      "source_file": "astro:content",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "@layouts/PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionheading",
+      "label": "@components/SectionHeading.astro",
+      "file_type": "code",
+      "source_file": "components/SectionHeading.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogcard",
+      "label": "@components/BlogCard.astro",
+      "file_type": "code",
+      "source_file": "components/BlogCard.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogsidebar",
+      "label": "@components/BlogSidebar.astro",
+      "file_type": "code",
+      "source_file": "components/BlogSidebar.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "@components/CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_tag_tag",
+      "label": "[tag].astro",
+      "file_type": "code",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_blog_tag_tag_breadcrumbs",
+      "label": "breadcrumbs",
+      "file_type": "code",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L58",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro",
+      "label": "astro",
+      "file_type": "code",
+      "source_file": "astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "astro_content",
+      "label": "astro:content",
+      "file_type": "code",
+      "source_file": "astro:content",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "@layouts/PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionheading",
+      "label": "@components/SectionHeading.astro",
+      "file_type": "code",
+      "source_file": "components/SectionHeading.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogcard",
+      "label": "@components/BlogCard.astro",
+      "file_type": "code",
+      "source_file": "components/BlogCard.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_blogsidebar",
+      "label": "@components/BlogSidebar.astro",
+      "file_type": "code",
+      "source_file": "components/BlogSidebar.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "@components/CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_index",
+      "label": "index.astro",
+      "file_type": "code",
+      "source_file": "pages/index.astro",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "@layouts/PageLayout.astro",
+      "file_type": "code",
+      "source_file": "layouts/PageLayout.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_hero",
+      "label": "@components/Hero.astro",
+      "file_type": "code",
+      "source_file": "components/Hero.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionmenu",
+      "label": "@components/SectionMenu.astro",
+      "file_type": "code",
+      "source_file": "components/SectionMenu.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_sectionheading",
+      "label": "@components/SectionHeading.astro",
+      "file_type": "code",
+      "source_file": "components/SectionHeading.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_categorycard",
+      "label": "@components/CategoryCard.astro",
+      "file_type": "code",
+      "source_file": "components/CategoryCard.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_categorydetail",
+      "label": "@components/CategoryDetail.astro",
+      "file_type": "code",
+      "source_file": "components/CategoryDetail.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_faqaccordion",
+      "label": "@components/FAQAccordion.astro",
+      "file_type": "code",
+      "source_file": "components/FAQAccordion.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "components_ctabanner",
+      "label": "@components/CTABanner.astro",
+      "file_type": "code",
+      "source_file": "components/CTABanner.astro",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "file_type": "code",
+      "source_file": "config/site.ts",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_rss_xml",
+      "label": "rss.xml.ts",
+      "file_type": "code",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "pages_rss_xml_get",
+      "label": "GET()",
+      "file_type": "code",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L25",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_seo_metaaudit",
+      "label": "metaAudit",
+      "file_type": "code",
+      "source_file": "lib/seo.ts",
+      "source_location": "L246",
+      "_origin": "ast"
+    }
+  ],
+  "edges": [
+    {
+      "source": "components_blogsidebar",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_config_site_blog_categories",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_config_site_product_categories",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "config_site_wa_messages",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "config_nav_icons",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "config_nav_icons_navicon",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "astro_content",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro"
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro"
+    },
+    {
+      "source": "components_blogsidebar",
+      "target": "config_nav_icons",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/BlogSidebar.astro"
+    },
+    {
+      "source": "components_footer",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Footer.astro"
+    },
+    {
+      "source": "components_header",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Header.astro"
+    },
+    {
+      "source": "components_productcard",
+      "target": "components_productcard_var",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ProductCard.astro",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "components_relatedlinks",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/RelatedLinks.astro"
+    },
+    {
+      "source": "components_servicecard",
+      "target": "components_servicecard_var",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ServiceCard.astro",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "components_topbar",
+      "target": "components_topbar_puntos",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/TopBar.astro",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "components_topbar",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/TopBar.astro"
+    },
+    {
+      "source": "components_whatsappfloat",
+      "target": "components_whatsappfloat_href",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/WhatsAppFloat.astro",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "components_whatsappfloat",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "components/WhatsAppFloat.astro"
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_site_wa_messages",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_btndef",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_ctapreset",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_btn_wa",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_btn_catalogo",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_btn_contacto",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_preset_general",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_preset_categoria",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "config_cta_presets",
+      "target": "config_cta_presets_preset_contacto",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/cta-presets.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "config_nav_icons",
+      "target": "config_nav_icons_nav_icons",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/nav-icons.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "config_nav_icons",
+      "target": "config_nav_icons_navicon",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/nav-icons.ts",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_site",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_keywords",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L118",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_contact",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_taxonomy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_productcategory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L242",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_service",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L243",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_sector",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L244",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_coveragestate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L245",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_blogcategory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L246",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_blogcategorylabel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L249",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_navlink",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L263",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_navitem",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L264",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_nav",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L273",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_showcasesub",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L320",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_showcasecategory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L321",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_showcase",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L332",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_afondoimage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L426",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_afondoentry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L427",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_afondo",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L433",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_branches",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L515",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_wa_messages",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L520",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_waurl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L537",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site",
+      "target": "config_site_telurl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L542",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site_rationale_70",
+      "target": "config_site",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site_rationale_89",
+      "target": "config_site",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site_rationale_117",
+      "target": "config_site",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site_rationale_318",
+      "target": "config_site",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L318",
+      "weight": 1.0
+    },
+    {
+      "source": "config_site_rationale_514",
+      "target": "config_site",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "config/site.ts",
+      "source_location": "L514",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "ref_astro_content",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "ref_astro_loaders",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_imagepath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_faqschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_heroschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_seofields",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_product_categories",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_service_categories",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_article_categories",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_zone_types",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_productos",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_servicios",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L135",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_articulos",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_zonas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L197",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_casos",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L237",
+      "weight": 1.0
+    },
+    {
+      "source": "content_config",
+      "target": "content_config_collections",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "content.config.ts",
+      "source_location": "L264",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_relatedlinks",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "config_site_site",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "config_site_blogcategorylabel",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_typography_css",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro"
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro"
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_relatedlinks",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro"
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro"
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro"
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro"
+    },
+    {
+      "source": "layouts_articlelayout",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_typography_css",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ArticleLayout.astro"
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "config_site_site",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo_buildmeta",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo_buildschema",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo_buildkeywordtitle",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo_buildkeyworddescription",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo_pagetype",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo_schemadata",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_tokens_css",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "layouts_baselayout_meta",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "layouts_baselayout_jsonld",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro"
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "lib_seo",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro"
+    },
+    {
+      "source": "layouts_baselayout",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_tokens_css",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/BaseLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "layouts_baselayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_topbar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_header",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_footer",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_breadcrumbs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_whatsappfloat",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "config_site_site",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "lib_seo",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "lib_seo_pagetype",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "lib_seo_schemadata",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "layouts_pagelayout_schemadata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "layouts_baselayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_topbar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_header",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_footer",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_breadcrumbs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "components_whatsappfloat",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_pagelayout",
+      "target": "lib_seo",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/PageLayout.astro"
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_relatedlinks",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "config_site_telurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro"
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro"
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro"
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro"
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "components_relatedlinks",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro"
+    },
+    {
+      "source": "layouts_productlayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ProductLayout.astro"
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_relatedlinks",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "config_site_site",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro"
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro"
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro"
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro"
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "components_relatedlinks",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro"
+    },
+    {
+      "source": "layouts_servicelayout",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "layouts/ServiceLayout.astro"
+    },
+    {
+      "source": "lib_seo",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "config_site_site",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "config_site_contact",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_absurl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_absimage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_captitlecore",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_formattitle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_weak_endings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_truncatemetadescription",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L138",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_buildkeywordtitle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L189",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_buildkeyworddescription",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L203",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_meta_stop",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L213",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_metatokens",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L219",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_metaaudit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L229",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_metaaudit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L246",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_metainput",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L304",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_metaoutput",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L315",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_buildmeta",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L337",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_orgschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L362",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_websiteschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L386",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_localbusinessschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L413",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_crumb",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L468",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_breadcrumbschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L471",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_productdata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L483",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_productschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L503",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_servicedata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L543",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_serviceschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L555",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_articledata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L588",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_articleschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L601",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_faqitem",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L622",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_faqschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L625",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_listitem",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L636",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_directoryschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L642",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_review",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L678",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_emitreviews",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L680",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_pagetype",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L725",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_schemadata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L727",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo",
+      "target": "lib_seo_buildschema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L737",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_formattitle",
+      "target": "lib_seo_captitlecore",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L111",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildkeywordtitle",
+      "target": "lib_seo_formattitle",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L199",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildkeyworddescription",
+      "target": "lib_seo_truncatemetadescription",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L210",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_metaaudit",
+      "target": "lib_seo_metatokens",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L247",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildmeta",
+      "target": "lib_seo_formattitle",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L339",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildmeta",
+      "target": "lib_seo_truncatemetadescription",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L340",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildmeta",
+      "target": "lib_seo_absurl",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L341",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildmeta",
+      "target": "lib_seo_absimage",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L342",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_orgschema",
+      "target": "lib_seo_absimage",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L369",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_localbusinessschema",
+      "target": "lib_seo_absimage",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L422",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_breadcrumbschema",
+      "target": "lib_seo_absurl",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L478",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_productschema",
+      "target": "lib_seo_absurl",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L504",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_productschema",
+      "target": "lib_seo_absimage",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L531",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_productschema",
+      "target": "lib_seo_emitreviews",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L539",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_serviceschema",
+      "target": "lib_seo_absurl",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L556",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_serviceschema",
+      "target": "lib_seo_absimage",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L563",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_serviceschema",
+      "target": "lib_seo_emitreviews",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L584",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_articleschema",
+      "target": "lib_seo_absurl",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L602",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_articleschema",
+      "target": "lib_seo_absimage",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L609",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_directoryschema",
+      "target": "lib_seo_absurl",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L647",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_directoryschema",
+      "target": "lib_seo_absimage",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L661",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_orgschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L741",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_websiteschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L741",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_localbusinessschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L743",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_breadcrumbschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L747",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_productschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L754",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_serviceschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L757",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_articleschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L760",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_directoryschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L764",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_buildschema",
+      "target": "lib_seo_faqschema",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/seo.ts",
+      "source_location": "L771",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "ref_astro_content",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_blogcard",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "config_site_site",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "config_site_wa_messages",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "config_site_blogcategorylabel",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "pages_blog_page_schemadata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "astro",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "astro_content",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_blogcard",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_page",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[...page].astro"
+    },
+    {
+      "source": "pages_blog_slug",
+      "target": "ref_astro_content",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[slug].astro",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_slug",
+      "target": "layouts_articlelayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[slug].astro",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_slug",
+      "target": "astro",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[slug].astro"
+    },
+    {
+      "source": "pages_blog_slug",
+      "target": "astro_content",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[slug].astro"
+    },
+    {
+      "source": "pages_blog_slug",
+      "target": "layouts_articlelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/[slug].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "ref_astro_content",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_blogcard",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_config_site_blog_categories",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "config_site_wa_messages",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "pages_blog_categoria_categoria_schemadata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "pages_blog_categoria_categoria_breadcrumbs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "astro",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "astro_content",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_blogcard",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_categoria_categoria",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/categoria/[categoria].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "ref_astro_content",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_blogcard",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "config_site_wa_messages",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "config_site_blogcategorylabel",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "pages_blog_tag_tag_breadcrumbs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "astro",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "astro_content",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_blogcard",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_blogsidebar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_blog_tag_tag",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/blog/tag/[tag].astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_hero",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "components_sectionmenu",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "components_categorycard",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "components_categorydetail",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site_keywords",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site_nav",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "users_frankoropeza_documents_claude_projects_mosquitero_src_config_site_services",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site_wa_messages",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site_showcase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site_afondo",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site_waurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_index",
+      "target": "layouts_pagelayout",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_hero",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_sectionmenu",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_sectionheading",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_categorycard",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_categorydetail",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_faqaccordion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "components_ctabanner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_index",
+      "target": "config_site",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/index.astro"
+    },
+    {
+      "source": "pages_rss_xml",
+      "target": "ref_astrojs_rss",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_rss_xml",
+      "target": "ref_astro",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_rss_xml",
+      "target": "ref_astro_content",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_rss_xml",
+      "target": "config_site",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_rss_xml",
+      "target": "config_site_site",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_rss_xml",
+      "target": "config_site_blogcategorylabel",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_rss_xml",
+      "target": "pages_rss_xml_get",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_rss_xml_get",
+      "target": "config_site_blogcategorylabel",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "pages/rss.xml.ts",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_truncatemetadescription",
+      "target": "lib_seo_weak_endings",
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "lib/seo.ts",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "lib_seo_metatokens",
+      "target": "lib_seo_meta_stop",
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "lib/seo.ts",
+      "source_location": "L226",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -1,0 +1,388 @@
+---
+// ============================================================================
+// servicios/index.astro — SERVICIOS (L2). Ruta: /servicios
+// ----------------------------------------------------------------------------
+// HOMOLOGADA CON /mosquiteros Y CON LA HOME. Mismo ritmo, mismos componentes:
+//     1) Hero            → H1 único
+//     2) SectionMenu     → barra full-width bajo el hero
+//     3) Vitrina         → CategoryCard, uno por servicio
+//     4) Cuál necesitas  → tabla de decisión (lo que esta L2 aporta)
+//     5) A fondo         → CategoryDetail por servicio (as="h3")
+//     6) FAQ + QuoteForm → dos columnas
+//     7) SectionMenu     → menú de guías antes del footer
+// Si cambias el patrón aquí, revisa mosquiteros/index.astro e index.astro.
+//
+// TEXTO PROPIO — NADA COPIADO DE /mosquiteros:
+// Las dos L2 comparten esqueleto, no palabras. /mosquiteros responde "¿qué tipo
+// necesito?" (lo define el marco de tu ventana). Ésta responde "¿qué me van a
+// hacer y cómo?" (lo define en qué punto estás: sin medidas, con la malla rota,
+// con la pieza ya comprada). Si las dos dijeran lo mismo, competirían entre sí
+// por la misma búsqueda y Google descartaría una.
+//
+// SEO:
+//   • kw3 "instalación de mosquiteros" es la de esta página — no kw1, que es de
+//     /mosquiteros. Dos páginas peleando por la misma keyword se canibalizan.
+//   • Un solo H1 (el Hero). Secciones en H2, "a fondo" en H3.
+//   • FAQ propia, SIN solapar con la home (8) ni con /mosquiteros (6): éstas son
+//     de intención de servicio — cómo trabajan, si hay que estar, quién mide.
+//   • CollectionPage + ItemList con los 4 servicios → sus fichas reales.
+//
+// ⚠️ ESTADO: 🟢 Frank confirmó (2026-07-14) que se prestan los 4. NO se ha
+// preguntado si cobra la medición, cuánto tarda la entrega ni si hay garantía —
+// por eso NADA aquí lo afirma. Ver docs/GATE-LANZAMIENTO.md §3.
+// ============================================================================
+import PageLayout from "@layouts/PageLayout.astro";
+import Hero from "@components/Hero.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import CategoryCard from "@components/CategoryCard.astro";
+import CategoryDetail from "@components/CategoryDetail.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import {
+  SERVICES,
+  SERVICIOS_AFONDO,
+  COVERAGE_STATES,
+  WA_MESSAGES,
+  waUrl,
+  servicioHref,
+} from "@config/site";
+
+const title = "Servicios | instalación de mosquiteros a medida";
+const description =
+  "Instalación de mosquiteros a medida, fabricación, medición a domicilio y reparación. Del vano a la pieza instalada en CDMX y Edomex. Cotiza por WhatsApp.";
+
+// Guarda: mismo criterio que la ficha [servicio].astro. Si un servicio no tiene
+// entrada en SERVICIOS_AFONDO, esta página lo pintaría sin cuerpo ni galería.
+// Que rompa el build, no la página.
+const sinAfondo = SERVICES.filter((s) => !SERVICIOS_AFONDO[s.id]);
+if (sinAfondo.length > 0) {
+  throw new Error(
+    `[servicios/index] Estos servicios no tienen entrada en SERVICIOS_AFONDO: ` +
+      `${sinAfondo.map((s) => s.id).join(", ")}.\n` +
+      `  → La vitrina y los bloques "a fondo" salen de ahí: sin entrada, tarjeta vacía.\n` +
+      `  → Escríbela en site.ts o quita el servicio de TAXONOMY.services.`,
+  );
+}
+
+const menuSecciones = [
+  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
+  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
+  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
+  { label: "Blog", href: "/blog", sub: "Guías y mantenimiento" },
+];
+const menuCta = {
+  label: "Cotizar por WhatsApp",
+  href: waUrl(WA_MESSAGES.servicios ?? WA_MESSAGES.cotizar),
+  sub: "Cuéntanos tu caso",
+  external: true,
+};
+
+// Guías de intención de SERVICIO — distintas de las de /mosquiteros (que son de
+// elección de tipo). Un menú idéntico en las dos páginas no aporta enlazado
+// nuevo, solo repite.
+const menuGuias = [
+  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero", sub: "Si prefieres medir tú" },
+  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion", sub: "De la medida a la pieza instalada" },
+  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero", sub: "Cómo lo decidimos" },
+  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros", sub: "Antes de contratar a alguien" },
+];
+const menuGuiasCta = {
+  label: "Ver todas las guías",
+  href: "/blog",
+  sub: "Guías y mantenimiento",
+  icon: "arrow" as const,
+};
+
+// ── Tabla de decisión — el bloque que justifica esta L2 ──────────────────────
+// /mosquiteros ordena por TIPO DE VENTANA. Ésta ordena por EN QUÉ PUNTO ESTÁS:
+// es la pregunta real de quien busca un servicio, no un producto.
+// 🟠 Oficio general. No dice precios, plazos ni si la visita se cobra.
+const decision: { situacion: string; servicio: string; id: string; nota: string }[] = [
+  {
+    situacion: "No tengo mosquiteros y no sé medir",
+    servicio: "Medición a domicilio",
+    id: "medicion",
+    nota: "Vamos, medimos y de paso te decimos qué tipo corresponde a tu marco.",
+  },
+  {
+    situacion: "Ya tengo las medidas del vano",
+    servicio: "Fabricación a medida",
+    id: "fabricacion",
+    nota: "Con las medidas y una foto cotizamos por pieza, sin visita previa.",
+  },
+  {
+    situacion: "Ya tengo la pieza y falta ponerla",
+    servicio: "Instalación",
+    id: "instalacion",
+    nota: "La colocamos, la ajustamos y verificamos que cierre antes de irnos.",
+  },
+  {
+    situacion: "Se rompió la malla, el marco está bien",
+    servicio: "Reparación",
+    id: "reparacion",
+    nota: "Se cambia solo la tela: cuesta una fracción de una pieza nueva.",
+  },
+  {
+    situacion: "El marco está vencido o no corre",
+    servicio: "Te decimos cuál conviene",
+    id: "reparacion",
+    nota: "A veces reparar sale casi lo mismo que reponer. Te lo decimos de frente.",
+  },
+];
+
+// ── FAQ de servicio ─────────────────────────────────────────────────────────
+// SIN SOLAPAR con la home (8 preguntas) ni con /mosquiteros (6): esas responden
+// "qué tipo elijo" y "qué malla". Éstas responden a quien ya sabe qué quiere y
+// pregunta CÓMO se trabaja.
+// 🟠 Sin validar. Cero precios, plazos y garantías — nadie los ha confirmado.
+const faqs: { question: string; answer: string }[] = [
+  {
+    question: "¿Tengo que estar en casa cuando vayan?",
+    answer:
+      "Para la <strong>medición</strong> y la <strong>instalación</strong>, sí: alguien tiene que abrir y, en la medición, enseñarnos qué ventanas entran en el trabajo. La fabricación ocurre en el taller, así que ahí no. Cuando agendemos te decimos qué día vamos y para qué, no aparecemos sin avisar.",
+  },
+  {
+    question: "¿Puedo medir yo y ahorrarme la visita?",
+    answer:
+      "Sí, y mucha gente lo hace. Necesitamos el <strong>ancho</strong> y el <strong>alto</strong> del vano medidos por dentro, en tres puntos cada uno, quedándote con la <strong>medida menor</strong> — los vanos casi nunca son cuadrados y una pieza hecha sobre la medida mayor no entra. Está explicado paso a paso en <a href=\"/blog/como-medir-ventana-mosquitero\">cómo medir tu ventana</a>. Si te da inseguridad, vamos nosotros: prefiero una visita a una pieza que no cierra.",
+  },
+  {
+    question: "¿Instalan mosquiteros que no fabricaron ustedes?",
+    answer:
+      "Cuéntanos el caso. Si la pieza está bien hecha y corresponde al vano, normalmente sí. El problema aparece cuando la pieza ya viene con una medida que no es la de tu ventana: ahí no hay instalación que lo arregle, y preferimos decírtelo antes de ir que cobrarte una visita para nada.",
+  },
+  {
+    question: "¿Cómo sé si conviene reparar o cambiar el mosquitero?",
+    answer:
+      "La regla que usamos: si el <strong>bastidor y los herrajes aguantan</strong>, se cambia solo la malla y queda como nuevo. Si el marco está vencido, deformado o los rodamientos ya no corren, reparar sale casi lo mismo que reponer y encima dura menos. Mándanos una foto y te lo decimos <strong>antes</strong> de ir — aunque signifique no vender la reparación. El criterio completo, en <a href=\"/blog/reparar-o-reponer-un-mosquitero\">reparar o reponer</a>.",
+  },
+  {
+    question: "¿Trabajan puertas y domos, o solo ventanas?",
+    answer:
+      "Ventanas, puertas y domos. El tipo de pieza cambia según el vano —una puerta de acceso diario pide un abatible o un magnético, un domo pide otra solución— pero el servicio es el mismo: medimos, fabricamos a esa medida e instalamos. Si tienes un vano raro, mándanos la foto: casi siempre hay forma.",
+  },
+  {
+    question: "¿Atienden en mi zona?",
+    answer:
+      "Trabajamos <a href=\"/cobertura/cdmx\">Ciudad de México</a> y <a href=\"/cobertura/edomex\">Estado de México</a>. Como el Edomex es un área grande, si estás ahí confírmanos tu municipio antes de agendar — te decimos en el momento si llegamos, en vez de hacerte esperar una visita que no va a pasar.",
+  },
+];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="category"
+  breadcrumbs={[{ label: "Inicio", href: "/" }, { label: "Servicios" }]}
+  schemaData={{
+    list: {
+      name: "Servicios de Mosquitero.mx",
+      description,
+      path: "/servicios",
+      items: SERVICES.map((s) => ({
+        name: s.label,
+        path: servicioHref(s.id),
+        description: s.desc,
+      })),
+    },
+    faqs,
+  }}
+>
+  {/* ═══ 1) HERO — H1 único. ═══ */}
+  <Hero
+    title="Del vano a la pieza instalada, sin"
+    accent="intermediarios"
+    subtitle="Medimos, fabricamos, instalamos y reparamos. Todo lo hace el mismo equipo, así que no hay a quién echarle la culpa si algo no cierra."
+    descRight={[
+      "La mayoría de los problemas con un mosquitero no vienen de la pieza: vienen de una medida mal tomada o de una instalación a medias. Por eso cubrimos el trabajo completo — tomamos la medida en tu ventana, armamos la pieza con esas dimensiones y volvemos a colocarla nosotros.",
+      "Y si ya tienes mosquiteros, no siempre hay que reponerlos. Cuando el bastidor aguanta, se cambia solo la malla. Cuando no, te lo decimos de frente aunque eso signifique no vender la reparación.",
+    ]}
+  />
+
+  {/* ═══ MENÚ DE SECCIONES ═══ */}
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+
+  {/* ═══ 2) VITRINA — un servicio por tarjeta ═══ */}
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Servicios"
+        title="Qué hacemos"
+        body={[
+          "Cuatro servicios que suelen ir juntos pero se pueden pedir sueltos: medir, fabricar, instalar y reparar. Puedes contratarnos el trabajo completo o solo la parte que te falta.",
+          "No hay que llevar nada a ningún taller ni esperar a que pases a recoger. Nosotros vamos, tomamos lo que haga falta y volvemos con la pieza puesta.",
+        ]}
+      />
+      <div class="showcase">
+        {SERVICES.map((s, i) => (
+          <CategoryCard
+            label={s.label}
+            href={servicioHref(s.id)}
+            image={SERVICIOS_AFONDO[s.id].gallery.main.src}
+            imageAlt={SERVICIOS_AFONDO[s.id].gallery.main.alt}
+            blurb={SERVICIOS_AFONDO[s.id].blurb}
+            ctaLabel={`Ver ${s.label.toLowerCase()}`}
+            index={i}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 3) CUÁL NECESITAS — el bloque que justifica esta L2 ═════════════════
+      /mosquiteros ordena por TIPO DE VENTANA. Ésta ordena por EN QUÉ PUNTO
+      ESTÁS, que es la pregunta real de quien busca un servicio. Sin este bloque
+      la página sería una lista de cuatro tarjetas: nada que la home no diga ya.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Cuál necesitas"
+        title="Depende de dónde estés parado"
+        body={[
+          "Casi nadie llega pidiendo «una medición» o «una fabricación»: llega diciendo qué le pasa en su ventana. Busca tu caso en la columna izquierda y ahí está el servicio que le corresponde.",
+          "Si tu caso está entre dos, o no aparece, escríbenos con una foto. Preferimos gastar cinco minutos entendiendo el problema que mandarte a alguien a hacer lo que no era.",
+        ]}
+      />
+
+      <div class="tabla-wrap">
+        <table class="tabla">
+          <caption class="tabla__caption">Qué servicio corresponde a cada situación</caption>
+          <thead>
+            <tr>
+              <th scope="col">Si tu caso es…</th>
+              <th scope="col">Lo que necesitas</th>
+              <th scope="col">Por qué</th>
+            </tr>
+          </thead>
+          <tbody>
+            {decision.map((d) => (
+              <tr>
+                <th scope="row" class="tabla__caso">{d.situacion}</th>
+                <td class="tabla__svc"><a href={servicioHref(d.id)}>{d.servicio}</a></td>
+                <td class="tabla__nota-col">{d.nota}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 4) CADA SERVICIO, A FONDO ══════════════════════════════════════════
+      Mismo patrón que /mosquiteros: se recorre SERVICES y se filtra por
+      SERVICIOS_AFONDO[id]. as="h3" NO es opcional — estos bloques cuelgan del H2
+      de esta sección. Regla: H2 sección padre → H3 sub-bloque.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="A fondo"
+        title="Cómo trabajamos cada uno"
+        body={[
+          "Qué incluye cada servicio, cómo lo hacemos y —lo que casi nadie te dice— dónde no llega. Un servicio que declara su límite es más fiable que uno que solo promete.",
+          "Si quieres el detalle completo de uno, entra a su ficha desde el botón del bloque.",
+        ]}
+      />
+      <div class="afondo">
+        {SERVICES.filter((s) => SERVICIOS_AFONDO[s.id]).map((s) => (
+          <CategoryDetail
+            id={`afondo-${s.id}`}
+            as="h3"
+            eyebrow="El servicio a fondo"
+            title={s.label}
+            body={SERVICIOS_AFONDO[s.id].body}
+            points={SERVICIOS_AFONDO[s.id].points}
+            gallery={SERVICIOS_AFONDO[s.id].gallery}
+            cta={{ label: `Ver ${s.label.toLowerCase()}`, href: servicioHref(s.id) }}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 5) FAQ + COTIZACIÓN — misma estructura que la home y /mosquiteros ═══
+      El JSON-LD FAQPage lo emite lib/seo.ts vía schemaData → <FAQAccordion> va
+      SIN `emitSchema` (anti-patrón B3: doble FAQPage). `flush` hace que herede
+      el .container en vez de crear el suyo. ══════════════════════════════════ */}
+  <section class="section section--faq">
+    <div class="container">
+      <SectionHeading
+        id="faq-heading"
+        eyebrow="Dudas"
+        title="Antes de agendar"
+        body={[
+          "Lo que más nos preguntan cuando ya saben qué quieren y falta acordar cómo: si hay que estar en casa, si pueden medir ellos, si instalamos piezas de fuera.",
+          "Si la tuya no está aquí, escríbenos. Resolverla ahora sale más barato que resolverla con el instalador en la puerta.",
+        ]}
+      />
+      <div class="faq-bloque">
+        <FAQAccordion items={faqs} title="" flush>
+          <QuoteForm slot="aside" />
+        </FAQAccordion>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 6) MENÚ DE GUÍAS ═══ */}
+  <SectionMenu items={menuGuias} cta={menuGuiasCta} ariaLabel="Guías sobre nuestros servicios" />
+</PageLayout>
+
+<style>
+
+  /* Vitrina — 4 servicios = una fila limpia de 4 en escritorio. */
+  .showcase { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
+  @media (min-width: 640px) { .showcase { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .showcase { grid-template-columns: repeat(4, 1fr); } }
+
+  /* ── Tabla de decisión ──
+     Scroll horizontal en móvil, igual que en /mosquiteros: una tabla de
+     comparación apilada deja de ser comparación. */
+  .tabla-wrap {
+    margin-top: var(--sp-6);
+    overflow-x: auto;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    background: var(--c-white);
+  }
+  .tabla { width: 100%; border-collapse: collapse; min-width: 680px; }
+  .tabla__caption {
+    padding: var(--sp-4) var(--sp-5) 0;
+    font-size: var(--text-sm); color: var(--c-muted); text-align: left;
+  }
+  .tabla th, .tabla td {
+    padding: var(--sp-4) var(--sp-5);
+    text-align: left; vertical-align: top;
+    font-size: var(--text-sm); line-height: var(--leading-normal);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .tabla thead th {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs); font-weight: var(--weight-bold);
+    letter-spacing: .04em; text-transform: uppercase;
+    color: var(--c-muted); background: var(--c-surface);
+  }
+  .tabla tbody tr:last-child th, .tabla tbody tr:last-child td { border-bottom: 0; }
+  .tabla__caso {
+    font-weight: var(--weight-semibold); color: var(--c-ink);
+    max-width: 30ch;
+  }
+  .tabla__svc { white-space: nowrap; }
+  .tabla__svc a {
+    font-family: var(--font-heading); font-weight: var(--weight-semibold);
+    color: var(--c-primary); text-decoration: none;
+  }
+  .tabla__svc a:hover { text-decoration: underline; }
+  .tabla__svc a:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+  .tabla__nota-col { color: var(--c-muted); }
+
+  /* Pila de bloques "a fondo" — mismo gap generoso que /mosquiteros y la home. */
+  .afondo { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin-top: var(--sp-8); }
+
+  .faq-bloque { margin-top: var(--sp-6); }
+
+  @media (min-width: 768px) {
+    .section { padding: var(--sp-10) 0; }
+  }
+</style>

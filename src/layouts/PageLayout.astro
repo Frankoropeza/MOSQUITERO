@@ -26,6 +26,7 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import WhatsAppFloat from "@components/WhatsAppFloat.astro";
+import { SITE } from "@config/site";
 import type { PageType, SchemaData } from "@lib/seo";
 
 export interface Props {
@@ -64,6 +65,25 @@ const schemaData: SchemaData = {
 ---
 
 <BaseLayout {...baseProps} schemaData={schemaData}>
+  {/* Reenvío del slot 'head' hacia BaseLayout. Sin esta línea, una página que
+      extiende PageLayout NO puede inyectar nada en el <head> (preload de la
+      imagen LCP, <link rel="alternate"> del RSS, JSON-LD puntual): su
+      <Fragment slot="head"> se perdería aquí en silencio, sin error. */}
+  <slot name="head" slot="head" />
+
+  {/* Descubrimiento del feed: lo declaran TODAS las páginas, no solo el blog.
+      Es la convención — un lector de RSS busca este <link> en la URL que le
+      pegues, sea la home o un artículo. Va aquí y no en BaseLayout porque el
+      feed es del sitio con chrome, y así el slot 'head' de arriba queda libre
+      para lo que cada página necesite. */}
+  <link
+    slot="head"
+    rel="alternate"
+    type="application/rss+xml"
+    title={`Blog de ${SITE.name}`}
+    href="/rss.xml"
+  />
+
   {/* TopBar: barra utilitaria. Modo producción (sin `guia`). */}
   <TopBar />
   <Header />

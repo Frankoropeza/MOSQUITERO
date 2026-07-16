@@ -1,0 +1,724 @@
+---
+// ============================================================================
+// mosquiteros/[categoria].astro — FICHA DE TIPO (L4). Ruta: /mosquiteros/<slug>
+// ----------------------------------------------------------------------------
+// ⭐ PLANTILLA CANÓNICA DE LAS L4 — registrada por Frank el 2026-07-14.
+//    Contrato completo: docs/CONTRATO-L4.md
+//
+//    Este archivo es la REFERENCIA de las fichas de detalle del sitio. Las L4 de
+//    /servicios y /cobertura están pendientes de homologar contra él (ver §9 del
+//    contrato). Si cambias la estructura aquí, actualiza el documento — y al
+//    revés: lo que el contrato prohíbe, no lo metas aquí sin discutirlo.
+//
+//    Lo que NO se debe redescubrir (ya se pagó una vez, está en el contrato):
+//      · El sidebar NUNCA lleva scroll interno. Si no cabe: quita widget o
+//        suelta el sticky.
+//      · No uses ProductLayout: su CTA promete "tiempos de entrega".
+//      · `Product` sin `price` → sin `offers` (antes emitía price "0" = $0).
+//      · Nada de precios, plazos, garantías ni "gratis". Nunca.
+// ----------------------------------------------------------------------------
+// Genera una ficha por cada entrada de PRODUCT_CATEGORIES (site.ts). Si el
+// cliente deja de fabricar una línea, se borra de site.ts y desaparecen su ficha,
+// su tarjeta, su entrada del mega-menú, del footer y del schema. Una sola fuente.
+//
+// ESTRUCTURA — contenido + SIDEBAR STICKY (2 columnas en escritorio):
+//   Principal: galería · cómo funciona · encaja/no conviene · datos · cómo se
+//              pide · FAQ del tipo
+//   Sidebar:   índice · CTA · de un vistazo · otros tipos · cobertura
+//
+// ⚠️ POR QUÉ SIDEBAR Y NO EL RITMO DE LAS L2 — ESTO SIGUE SIENDO HOMOLOGAR
+// Las L2 (/mosquiteros, /servicios, /cobertura) son secciones anchas: Hero →
+// menú → vitrina → tabla → a fondo → FAQ. Una L4 es OTRA cosa: alguien que YA
+// eligió y viene a leer. Para eso el patrón correcto es contenido + sidebar
+// pegajoso — y es el que el sitio YA usa en los artículos del blog
+// (ArticleLayout + BlogSidebar). O sea que esto no rompe la homologación: la
+// sigue. Sigue el patrón de las páginas de LECTURA, no el de las de ÍNDICE.
+//
+// NO se usa ProductLayout (existe y trae sidebar) por dos motivos concretos:
+//   1. Su <CTABanner> final promete "precio, disponibilidad y tiempos de
+//      entrega" — y los tiempos de entrega son justo uno de los datos que NADIE
+//      ha validado. Copiarlo habría metido una promesa que el cliente paga.
+//   2. Trae bloques de "Certificaciones y normas" que no aplican a este negocio.
+//
+// SCHEMA: pageType="product". El Product va SIN precio → sin `offers` (ver el
+// bug corregido en lib/seo.ts: con el precio omitido emitía price "0", o sea
+// "cuesta $0"). Las FAQ del tipo alimentan el FAQPage vía schemaData, así que el
+// <FAQAccordion> va SIN `emitSchema` (anti-patrón B3: doble FAQPage).
+// El LocalBusiness sale del grafo base; NO se emite aquí.
+//
+// ⚠️ ESTADO: 🟢 Frank confirmó (2026-07-14) que se fabrican los 6 tipos +
+// accesorios. 🟠 El contenido es OFICIO GENERAL, no specs del cliente: sin
+// materiales concretos, medidas máximas, mallas en stock, precios ni plazos.
+// Ver docs/GATE-LANZAMIENTO.md §3.
+// ============================================================================
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Hero from "@components/Hero.astro";
+// SectionHeading vuelve: lo quité al cambiar el H1 a <Hero>, pero el módulo
+// FAQ+cotización de abajo lo necesita para su H2 (contrato de 2 columnas).
+import SectionHeading from "@components/SectionHeading.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import {
+  PRODUCT_CATEGORIES,
+  SHOWCASE,
+  AFONDO,
+  FICHAS,
+  SERVICES,
+  COVERAGE_STATES,
+  CONTACT,
+  WA_MESSAGES,
+  waUrl,
+  telUrl,
+  productoHref,
+  servicioHref,
+  zonaHref,
+} from "@config/site";
+import { navIcon } from "@config/nav-icons";
+// TODO el CSS de esta plantilla L4 vive aquí, en UNA definición compartida con
+// la otra L4. Antes estaba copiado en los <style> de las dos: 200 líneas
+// idénticas con un comentario que decía "si cambias una, cambia la otra" — o
+// sea, una promesa que nadie cumple. Ver docs/CONTRATO-L4.md.
+// Ruta relativa y no alias: es la convención del repo para CSS (BaseLayout y
+// ArticleLayout hacen igual), y un alias a medias revienta en build.
+import "../../styles/ficha.css";
+
+// `async`: la guarda de `guias` consulta la colección para comprobar que cada
+// slug genera ruta de verdad. Sin async, el `await` de getCollection no compila.
+export const getStaticPaths = (async () => {
+  // Guarda doble: sin AFONDO no hay galería ni cuerpo; sin FICHAS esta L4 sería
+  // la L2 recortada — contenido duplicado compitiendo con su propio padre.
+  const rotos = PRODUCT_CATEGORIES.filter((c) => !AFONDO[c.slug] || !FICHAS[c.slug]);
+  if (rotos.length > 0) {
+    throw new Error(
+      `[mosquiteros/[categoria]] Estos tipos no tienen datos completos:\n` +
+        rotos
+          .map((c) => {
+            const falta = [!AFONDO[c.slug] && "AFONDO", !FICHAS[c.slug] && "FICHAS"].filter(Boolean);
+            return `  · ${c.slug}: falta ${falta.join(" y ")}`;
+          })
+          .join("\n") +
+        `\n  → AFONDO da la galería y el cuerpo; FICHAS da la ficha (cómo funciona,\n` +
+        `    cuándo NO conviene, datos y FAQ propia).\n` +
+        `  → Sin FICHAS esta L4 sería la L2 recortada: contenido duplicado que\n` +
+        `    compite con su propio padre por la misma búsqueda.\n` +
+        `  → Escríbelos en site.ts o quita el tipo de TAXONOMY.categories.\n` +
+        `  → Al escribirlos: NADA de materiales, medidas máximas, precios ni plazos.`,
+    );
+  }
+  // ── Guarda de FAQ ─────────────────────────────────────────────────────────
+  // Hasta el 2026-07-14 la unicidad de las preguntas la comprobaba yo A MANO
+  // después de cada cambio. Eso no escala y no sobrevive a la siguiente persona
+  // que edite site.ts: acabaría con dos páginas compitiendo por la misma
+  // pregunta —Google elige un FAQPage y descarta el otro— sin que nadie se
+  // entere hasta ver el tráfico caer.
+  //
+  // Por qué importa el mínimo: una ficha con 2 preguntas no responde a nadie y
+  // es señal de thin content. 8 es el suelo que fijó Frank.
+  const MIN_FAQS = 8;
+  const pocas = PRODUCT_CATEGORIES.filter((c) => (FICHAS[c.slug]?.faqs.length ?? 0) < MIN_FAQS);
+  if (pocas.length > 0) {
+    throw new Error(
+      `[mosquiteros/[categoria]] Fichas con menos de ${MIN_FAQS} preguntas:\n` +
+        pocas.map((c) => `  · ${c.slug}: ${FICHAS[c.slug]?.faqs.length ?? 0}`).join("\n") +
+        `\n  → Escribe más en FICHAS[slug].faqs (site.ts).\n` +
+        `  → Que sean del TIPO, no de mosquiteros en general: eso ya está en\n` +
+        `    /mosquiteros. Y nada de precios, plazos ni garantías.`,
+    );
+  }
+
+  // Duplicadas ENTRE fichas. Normaliza para cazar variantes: mismo texto con
+  // otra tilde o mayúscula sigue siendo la misma pregunta para Google.
+  const norm = (s: string) =>
+    s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
+  const vistas = new Map<string, string>();
+  const dups: string[] = [];
+  for (const c of PRODUCT_CATEGORIES) {
+    for (const f of FICHAS[c.slug]?.faqs ?? []) {
+      const k = norm(f.question);
+      const antes = vistas.get(k);
+      if (antes) dups.push(`  · "${f.question}"\n      en ${antes} y en ${c.slug}`);
+      else vistas.set(k, c.slug);
+    }
+  }
+  if (dups.length > 0) {
+    throw new Error(
+      `[mosquiteros/[categoria]] Preguntas REPETIDAS entre fichas:\n` +
+        dups.join("\n") +
+        `\n  → Dos FAQPage con la misma pregunta compiten: Google elige uno y\n` +
+        `    descarta el otro. Reescribe una para que sea del tipo que la aloja.\n` +
+        `  → OJO: esta guarda solo mira entre FICHAS. Las de la home, /mosquiteros,\n` +
+        `    /servicios, /cobertura y los artículos NO se cruzan aquí — eso hay que\n` +
+        `    revisarlo a mano al escribir preguntas nuevas.`,
+    );
+  }
+
+  // ── Guarda del enlazado contextual ────────────────────────────────────────
+  // Las `guias` son slugs de artículos escritos a mano en site.ts. Si alguien
+  // renombra un .mdx o lo pone en draft, estas 7 fichas enlazarían a un 404 sin
+  // que nadie se entere — y son enlaces que van en el sidebar de cada página.
+  // Mismo filtro `draft !== true` que usa blog/[slug].astro para generar rutas:
+  // que el archivo exista no basta, un draft no tiene ruta.
+  const publicados = new Set(
+    (await getCollection("articulos", ({ data }) => data.draft !== true)).map((p) => p.id),
+  );
+  const guiasRotas: string[] = [];
+  for (const c of PRODUCT_CATEGORIES) {
+    for (const g of FICHAS[c.slug]?.guias ?? []) {
+      if (!publicados.has(g)) guiasRotas.push(`  · ${c.slug} → "${g}"`);
+    }
+  }
+  if (guiasRotas.length > 0) {
+    throw new Error(
+      `[mosquiteros/[categoria]] FICHAS.guias apunta a artículos que no generan ruta:\n` +
+        guiasRotas.join("\n") +
+        `\n  Publicados: ${[...publicados].sort().join(", ")}\n` +
+        `  → Causa probable: el .mdx se renombró, se borró o tiene draft: true.\n` +
+        `  → Estos enlaces van en el sidebar de cada ficha: un slug roto son 404s\n` +
+        `    servidos en todas ellas.`,
+    );
+  }
+
+  // Los `servicios` salen de SERVICES, así que un id inválido también rompería.
+  // `Set<string>` explícito: SERVICES es `as const`, así que sin esto el Set
+  // hereda la unión literal ('fabricacion' | 'instalacion' | …) y `.has()`
+  // rechaza un string cualquiera — que es justo lo que necesitamos comprobar.
+  const idsSvc = new Set<string>(SERVICES.map((s) => s.id));
+  const svcRotos: string[] = [];
+  for (const c of PRODUCT_CATEGORIES) {
+    for (const s of FICHAS[c.slug]?.servicios ?? []) {
+      if (!idsSvc.has(s)) svcRotos.push(`  · ${c.slug} → "${s}"`);
+    }
+  }
+  if (svcRotos.length > 0) {
+    throw new Error(
+      `[mosquiteros/[categoria]] FICHAS.servicios apunta a ids que no existen en\n` +
+        `TAXONOMY.services:\n` +
+        svcRotos.join("\n") +
+        `\n  Válidos: ${[...idsSvc].join(", ")}\n` +
+        `  → Si el cliente dejó de prestar ese servicio, quítalo también de FICHAS.`,
+    );
+  }
+
+  return PRODUCT_CATEGORIES.map((c) => ({ params: { categoria: c.slug }, props: { cat: c } }));
+}) satisfies GetStaticPaths;
+
+const { cat } = Astro.props;
+const afondo = AFONDO[cat.slug]!;
+const ficha = FICHAS[cat.slug]!;
+
+// "Mosquiteros Accesorios y refacciones" no es español: accesorios es el único
+// que no admite el prefijo.
+const esAccesorios = cat.slug === "accesorios";
+const h1 = esAccesorios ? "Accesorios y refacciones" : `Mosquiteros ${cat.label.toLowerCase()}`;
+const title = esAccesorios
+  ? "Accesorios y refacciones para mosquiteros | CDMX"
+  : `Mosquiteros ${cat.label.toLowerCase()} a medida | CDMX y Edomex`;
+const description = `${ficha.comoFunciona[0].slice(0, 150).trim()}…`;
+
+// Subtítulo del hero: el `blurb` de SHOWCASE (~120–160 chars, escrito para
+// vender) en vez del `desc` de PRODUCT_CATEGORIES (~70, escrito para el
+// mega-menú). Fallback a `desc` si un tipo no estuviera en SHOWCASE — hoy están
+// los 7, pero el fallback evita un subtítulo `undefined` si alguien añade uno.
+const showcase = SHOWCASE.find((s) => s.slug === cat.slug);
+const heroSubtitle = showcase?.blurb ?? cat.desc;
+
+// ── Enlazado contextual del sidebar ─────────────────────────────────────────
+// Los títulos salen de la COLECCIÓN, no de site.ts: si alguien reescribe el
+// título de un artículo, el enlace lo refleja sin tocar nada. Un título copiado
+// a mano se queda viejo el día que cambian el original.
+// El orden lo manda FICHAS.guias (relevancia), no el de la colección.
+const articulos = await getCollection("articulos", ({ data }) => data.draft !== true);
+const guias = ficha.guias
+  .map((slug) => articulos.find((a) => a.id === slug))
+  .filter((a): a is NonNullable<typeof a> => Boolean(a));
+
+const serviciosDelTipo = ficha.servicios
+  .map((id) => SERVICES.find((s) => s.id === id))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+const otros = PRODUCT_CATEGORIES.filter((c) => c.slug !== cat.slug);
+const waMsg = WA_MESSAGES.productos ?? WA_MESSAGES.cotizar;
+// Singular para los CTA ("Cotiza tu mosquitero enrollable"). Los labels son
+// plurales; un `.replace(/s$/)` a ciegas destrozaría "Accesorios y refacciones",
+// por eso `esAccesorios` va aparte.
+const singular = cat.label.toLowerCase().replace(/s$/, "");
+
+// Índice del sidebar. Los ids DEBEN existir en el markup de abajo — si renombras
+// una sección, renómbralo aquí: un índice que apunta a un ancla muerta es peor
+// que no tener índice.
+const indice = [
+  { id: "como-funciona", label: "Cómo funciona" },
+  { id: "encaja", label: esAccesorios ? "Para qué sirve" : "En qué ventana encaja" },
+  { id: "datos", label: "Datos rápidos" },
+  { id: "pedir", label: "Cómo se pide" },
+  { id: "faq", label: "Preguntas frecuentes" },
+];
+
+const menuSecciones = [
+  { label: "Todos los tipos", href: "/mosquiteros", sub: "Catálogo completo" },
+  { label: "Servicios", href: "/servicios", sub: "Fabricación, instalación y reparación" },
+  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
+  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
+];
+const menuCta = {
+  label: "Cotizar por WhatsApp",
+  href: waUrl(waMsg),
+  sub: "Mándanos tus medidas",
+  external: true,
+};
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="product"
+  breadcrumbs={[
+    { label: "Inicio", href: "/" },
+    { label: "Mosquiteros", href: "/mosquiteros" },
+    { label: cat.label },
+  ]}
+  schemaData={{
+    product: {
+      name: h1,
+      description,
+      path: productoHref(cat.slug),
+      images: [afondo.gallery.main.src, ...afondo.gallery.thumbs.map((t) => t.src)],
+      category: cat.label,
+      // SIN price ni availability: no hay precios validados y se cotiza por pieza.
+      // Sin price, productSchema() ya NO emite offers (bug corregido 2026-07-14).
+    },
+    faqs: [...ficha.faqs],
+  }}
+>
+  {/* ═══ HERO — H1 único, igual que el index y las L2 ═══════════════════════
+      Antes esto era un <SectionHeading as="h1">. Se cambió a <Hero> el
+      2026-07-14 (Frank): la ficha abre como el resto del sitio.
+      ⚠️ El Hero YA PONE EL H1 — por eso el SectionHeading se fue en vez de
+      convivir: dos H1 en una página rompen el outline y la regla del checklist
+      SEO del portafolio (un solo H1). Los <h2> de los bloques cuelgan de éste.
+      SIN `ctas`: regla canónica «el hero presenta, la franja convierte» — el CTA
+      va en el SectionMenu de abajo, igual que en la home. */}
+  <Hero
+    title={esAccesorios ? "Accesorios y" : "Mosquiteros"}
+    accent={esAccesorios ? "refacciones" : cat.label.toLowerCase()}
+    subtitle={heroSubtitle}
+    descRight={[afondo.body[0], afondo.body[1] ?? afondo.body[0]]}
+  />
+
+  {/* ═══ FRANJA — los botones bajo el hero, como en el index ═══ */}
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+
+  <section class="section">
+    <div class="container">
+      {/* ── 2 columnas: contenido + sidebar sticky ── */}
+      <div class="ficha">
+        <article class="ficha__main">
+          <figure class="galeria">
+            <img
+              src={afondo.gallery.main.src}
+              alt={afondo.gallery.main.alt}
+              width="800"
+              height="600"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="galeria__main"
+            />
+            <div class="galeria__thumbs">
+              {afondo.gallery.thumbs.map((t) => (
+                <img src={t.src} alt={t.alt} width="400" height="300" loading="lazy" decoding="async" class="galeria__thumb" />
+              ))}
+            </div>
+          </figure>
+
+          {/* ── Cómo funciona ── */}
+          <section class="bloque" id="como-funciona">
+            <h2 class="bloque__h2">
+              <span class="bloque__icon" aria-hidden="true"><Fragment set:html={navIcon(cat.icon)} /></span>
+              Cómo funciona
+            </h2>
+            {ficha.comoFunciona.map((p) => <p class="bloque__p">{p}</p>)}
+          </section>
+
+          {/* ── Encaja / No conviene ─────────────────────────────────────────
+              Las dos columnas ENFRENTADAS, no en secciones separadas: el valor
+              está en leerlas juntas. Un catálogo que solo dice bondades no ayuda
+              a decidir; el que dice "esto no es para ti" se gana la confianza —
+              y evita que el cliente pida la pieza equivocada, que en un producto
+              a medida no tiene devolución posible. */}
+          <section class="bloque" id="encaja">
+            <h2 class="bloque__h2">{esAccesorios ? "Para qué sirve" : "En qué ventana encaja"}</h2>
+            <div class="duo">
+              <div class="duo__col duo__col--si">
+                <h3 class="duo__h3">
+                  <span class="duo__badge duo__badge--si" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                  {esAccesorios ? "Te sirve si…" : "Va bien si…"}
+                </h3>
+                <ul class="duo__list">
+                  {ficha.encajaEn.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+              <div class="duo__col duo__col--no">
+                <h3 class="duo__h3">
+                  <span class="duo__badge duo__badge--no" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </span>
+                  Piénsalo si…
+                </h3>
+                <ul class="duo__list">
+                  {ficha.noConviene.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Datos rápidos ── */}
+          <section class="bloque" id="datos">
+            <h2 class="bloque__h2">Datos rápidos</h2>
+            <table class="datos">
+              <tbody>
+                {ficha.datos.map((d) => (
+                  <tr>
+                    <th scope="row">{d.label}</th>
+                    <td>{d.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {/* Esta nota NO es relleno: es la respuesta a "¿y las medidas y los
+                materiales?". Un catálogo a medida no tiene tabla de specs, y
+                decirlo de frente es mejor que dejar al lector buscándola. */}
+            <p class="datos__nota">
+              ¿Echas en falta medidas y materiales? Es a propósito: cada pieza se
+              fabrica a las dimensiones de tu vano, así que el único dato que
+              importa es el tuyo. Mándanos las medidas y te cotizamos por pieza.
+            </p>
+          </section>
+
+          {/* ── Cómo se pide ── */}
+          <section class="bloque" id="pedir">
+            <h2 class="bloque__h2">Cómo se pide</h2>
+            <ol class="pasos">
+              <li class="paso">
+                <span class="paso__n" aria-hidden="true">1</span>
+                <div>
+                  <strong class="paso__t">Mándanos una foto</strong>
+                  <span class="paso__d">
+                    De la ventana completa. Con verla sabemos si
+                    {esAccesorios ? " la refacción que buscas es la correcta" : ` el ${singular} es lo que te corresponde`}.
+                  </span>
+                </div>
+              </li>
+              <li class="paso">
+                <span class="paso__n" aria-hidden="true">2</span>
+                <div>
+                  <strong class="paso__t">Las medidas del vano</strong>
+                  <span class="paso__d">Si las tienes, te ahorras una visita. Si no, te decimos cómo tomarlas o vamos nosotros. Ver <a href="/blog/como-medir-ventana-mosquitero">cómo medir</a>.</span>
+                </div>
+              </li>
+              <li class="paso">
+                <span class="paso__n" aria-hidden="true">3</span>
+                <div>
+                  <strong class="paso__t">Te cotizamos por pieza</strong>
+                  <span class="paso__d">Con el tipo y la malla que corresponden a tu caso — no con un precio de catálogo que luego cambia.</span>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          {/* La FAQ estaba AQUÍ, dentro de la columna de contenido, y el
+              formulario iba suelto debajo del grid. Se movieron los dos al
+              módulo FAQ+cotización de abajo (2026-07-14, Frank): el mismo patrón
+              del index. Ver el porqué ahí. */}
+        </article>
+
+        {/* ══ SIDEBAR ═════════════════════════════════════════════════════════
+            DOS widgets. Ni uno más, y esa es la decisión de diseño.
+
+            ⚠️ HISTÓRICO — POR QUÉ ESTO ERA UN PARCHE (corregido 2026-07-14):
+            antes había CINCO widgets, no cabían en pantalla, y para taparlo la
+            sidebar llevaba `max-height: 100vh` + `overflow-y: auto`. O sea: un
+            scroll DENTRO de un scroll. Eso no resuelve nada — esconde que
+            sobraba contenido, y de paso obliga al usuario a descubrir que ese
+            bloque scrollea por su cuenta.
+            Frank lo detectó. La causa era que dos widgets DUPLICABAN cosas:
+              · "De un vistazo" = `ficha.datos.slice(0,3)`, un subconjunto literal
+                de la tabla "Datos rápidos" que está a 300px, en el cuerpo.
+              · "Dónde instalamos" = las mismas zonas que el footer ya lista en
+                las 46 páginas.
+            Se borraron. "Otros tipos" bajó al final del contenido, donde además
+            sirve más: se lee cuando terminas, no compitiendo con el artículo.
+
+            Lo que queda cabe SIEMPRE en un viewport (~460px), así que el sticky
+            funciona sin trucos y no hace falta scroll interno.
+
+            El sticky lo pone la PÁGINA, no un componente: un bloque que se pega
+            solo es imposible de reutilizar dentro de otro contenedor. Mismo
+            criterio que ArticleLayout con BlogSidebar. */}
+        <aside class="sidebar" aria-label="Índice y contacto">
+          <div class="sidebar__inner">
+            <nav class="widget" aria-labelledby="toc-h">
+              <h2 class="widget__h2" id="toc-h">En esta página</h2>
+              <ul class="toc" data-toc>
+                {indice.map((i) => (
+                  <li><a href={`#${i.id}`} class="toc__link" data-toc-link={i.id}>{i.label}</a></li>
+                ))}
+              </ul>
+            </nav>
+
+            <div class="widget widget--cta">
+              <span class="widget__eyebrow">Cotización</span>
+              <h2 class="widget__h2">Cotiza tu {esAccesorios ? "refacción" : singular}</h2>
+              <p class="widget__p">
+                Se fabrica a la medida de tu vano: el precio depende de tus medidas.
+                Mándanoslas y te cotizamos por pieza.
+              </p>
+              <a href={waUrl(waMsg)} class="widget__btn widget__btn--wa" target="_blank" rel="noopener noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.2.2-.3.2-.5s0-.3-.1-.4l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.7 4.3 3.8.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>
+                Cotizar por WhatsApp
+              </a>
+              <a href={telUrl()} class="widget__btn widget__btn--ghost">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                {CONTACT.phone}
+              </a>
+              <p class="widget__nota">{CONTACT.hours.display}</p>
+            </div>
+
+            {/* ── Guías del tipo ──────────────────────────────────────────────
+                ESTOS son los enlaces que cuentan: cambian según la ficha. Los 7
+                tipos llevan combinaciones distintas (ver FICHAS.guias en
+                site.ts), así que no son boilerplate — son recomendación.
+                Los títulos salen de la colección, no copiados a mano. */}
+            {guias.length > 0 && (
+              <nav class="widget" aria-labelledby="guias-h">
+                <h2 class="widget__h2 widget__h2--label" id="guias-h">Guías que te sirven</h2>
+                <ul class="enlaces">
+                  {guias.map((g) => (
+                    <li>
+                      <a href={`/blog/${g.id}`} class="enlace">
+                        <span class="enlace__icon" aria-hidden="true">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        </span>
+                        <span class="enlace__txt">{g.data.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a href="/blog" class="enlace enlace--all">
+                      Ver todas las guías
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            )}
+
+            {/* ── Servicios del tipo ──
+                También contextual: un enrollable pide medición (por el cajón);
+                unos accesorios, no. Ver FICHAS.servicios. */}
+            {serviciosDelTipo.length > 0 && (
+              <nav class="widget" aria-labelledby="svc-h">
+                <h2 class="widget__h2 widget__h2--label" id="svc-h">
+                  {esAccesorios ? "Si prefieres no meterte" : `Para tu ${singular}`}
+                </h2>
+                <ul class="enlaces">
+                  {serviciosDelTipo.map((s) => (
+                    <li>
+                      <a href={servicioHref(s.id)} class="enlace">
+                        <span class="enlace__icon" aria-hidden="true"><Fragment set:html={navIcon(s.id)} /></span>
+                        <span class="enlace__txt">{s.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
+
+            {/* ── Cobertura ──
+                Sí, el footer también las lista. Aquí no está por SEO —para eso no
+                sirve, es el mismo enlace repetido— sino porque quien lee una
+                ficha necesita saber si llegamos ANTES de pedir la cotización que
+                tiene 20cm más arriba. */}
+            <div class="widget">
+              <h2 class="widget__h2 widget__h2--label">Dónde instalamos</h2>
+              <ul class="enlaces">
+                {COVERAGE_STATES.map((z) => (
+                  <li>
+                    <a href={zonaHref(z.slug)} class="enlace">
+                      <span class="enlace__icon" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      </span>
+                      <span class="enlace__txt">{z.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p class="widget__nota widget__nota--left">Vamos a tu domicilio a medir e instalar.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      {/* ── Otros tipos — bajó aquí desde la sidebar ─────────────────────────
+          Además de que allí no cabía, aquí sirve más: se lee al TERMINAR la
+          ficha —que es cuando decides si éste era el tuyo o hay que ver otro—
+          en vez de competir con el contenido mientras lo lees. Y a ancho
+          completo caben las 7 con su descripción, no solo el nombre. */}
+      <nav class="otros-l4" aria-labelledby="otros-h">
+        <h2 class="otros-l4__h2" id="otros-h">¿No era éste? Mira los otros</h2>
+        <p class="otros-l4__sub">
+          El tipo correcto lo define el marco que ya tienes. Si ninguno te encaja
+          claro, mándanos una foto de la ventana y te lo decimos nosotros.
+        </p>
+        <ul class="otros-l4__grid">
+          {otros.map((c) => (
+            <li>
+              <a href={c.href} class="otros-l4__card">
+                <span class="otros-l4__icon" aria-hidden="true"><Fragment set:html={navIcon(c.icon)} /></span>
+                <span class="otros-l4__body">
+                  <span class="otros-l4__label">{c.label}</span>
+                  <span class="otros-l4__desc">{c.desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="otros-l4__all">
+          <a href="/mosquiteros">Ver el catálogo completo</a> ·
+          Instalamos en {COVERAGE_STATES.map((z, i) => (
+            <>
+              {i > 0 && (i === COVERAGE_STATES.length - 1 ? " y " : ", ")}
+              <a href={zonaHref(z.slug)}>{z.label}</a>
+            </>
+          ))}
+        </p>
+      </nav>
+
+    </div>
+  </section>
+
+  {/* ═══ FAQ + COTIZACIÓN — dos columnas, mismo módulo que el index ══════════
+       Las dudas y el formulario van JUNTOS a propósito: resolver la duda y no
+       tener dónde actuar es perder el lead; poner el formulario antes de
+       resolverla es pedirle datos a alguien que todavía no sabe qué pedir.
+       Juntos, cada respuesta desemboca en la columna de acción, que en
+       escritorio queda pegada mientras se recorre el acordeón.
+
+       Antes de esto (2026-07-14) la FAQ vivía dentro de la columna de contenido
+       —estrujada contra la sidebar— y el formulario iba suelto debajo del grid.
+       O sea: la duda arriba y la acción 400px más abajo, separadas.
+
+       ESTRUCTURA — copiada del index, una sola <section> y un solo .container:
+         SectionHeading  → el H2 del bloque (contrato de 2 columnas del sitio).
+         FAQAccordion    → title="" para NO pintar un segundo H2; su
+                           aria-labelledby apunta a #faq-heading, que es ese H2.
+                           flush → hereda ancho y padding del .container.
+         slot="aside"    → QuoteForm. El acordeón no sabe qué es: solo lo coloca.
+       El JSON-LD FAQPage lo emite buildSchema() desde `faqs` (schemaData arriba),
+       NO este componente — sin `emitSchema` no hay doble FAQPage (anti-patrón B3).
+
+       `id="faq"`: el índice de la sidebar apunta aquí. La sección salió de la
+       columna de contenido pero el ancla sigue viva — y el scroll-spy la observa
+       igual, porque busca por id en toda la página. ══════════════════════════ */}
+  <section class="section section--faq" id="faq">
+    <div class="container">
+      <SectionHeading
+        id="faq-heading"
+        eyebrow="Dudas"
+        title={`Sobre los ${esAccesorios ? "accesorios" : cat.label.toLowerCase()}`}
+        body={[
+          esAccesorios
+            ? "Lo que más nos preguntan quienes reparan por su cuenta: cómo saber qué refacción es, si vendemos malla por metro y cuándo conviene más el servicio que la pieza suelta."
+            : `Lo que más nos preguntan de este tipo en concreto — no de los mosquiteros en general. Si tu duda es cuál te toca o qué malla aguanta tu caso, eso está en el catálogo.`,
+          "Si la tuya no está aquí, mándanos tu caso en el formulario: llena lo que sepas, aunque no tengas las medidas todavía. Preferimos resolver la duda antes de fabricar que después de instalar.",
+        ]}
+      />
+      <div class="faq-bloque">
+        <FAQAccordion items={[...ficha.faqs]} title="" flush>
+          {/* `singular`, no `cat.label`: los labels son plurales y salía "Cotiza
+              tu mosquitero enrollables". */}
+          <QuoteForm
+            slot="aside"
+            eyebrow="Cotización"
+            title={esAccesorios ? "Pide tu refacción" : `Cotiza tu ${singular}`}
+            desc="Déjanos tus datos y te contactamos con el precio por pieza."
+          />
+        </FAQAccordion>
+      </div>
+    </div>
+  </section>
+
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+</PageLayout>
+
+<script>
+  // ══════════════════════════════════════════════════════════════════════════
+  // Scroll-spy del índice: marca en qué sección estás.
+  // --------------------------------------------------------------------------
+  // NO ES UNA ANIMACIÓN — respeta el CONTRATO DE MOVIMIENTO (tokens.css). Solo
+  // añade/quita una clase; el cambio de color es instantáneo, sin transición.
+  //
+  // IntersectionObserver, no un listener de scroll: el listener corre en CADA
+  // frame del scroll y es justo el tipo de cosa que hace que una página se
+  // sienta pesada. El observer solo dispara cuando una sección cruza el umbral.
+  //
+  // rootMargin: el header sticky tapa la parte de arriba del viewport, así que
+  // la "línea de lectura" real no es y=0 — está bajo el header. El -20%/-70%
+  // define una banda estrecha en el tercio superior: la sección activa es la que
+  // cruza esa banda, no la que asoma por abajo.
+  // ══════════════════════════════════════════════════════════════════════════
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+  if (links.length > 0) {
+    const byId = new Map<string, HTMLAnchorElement>();
+    links.forEach((l) => byId.set(l.dataset.tocLink!, l));
+
+    const marcar = (id: string) => {
+      links.forEach((l) => l.classList.remove("is-active"));
+      byId.get(id)?.classList.add("is-active");
+    };
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        // Puede haber varias secciones en la banda a la vez (bloques cortos).
+        // Se toma la más alta: es la que estás leyendo.
+        const visibles = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visibles[0]) marcar(visibles[0].target.id);
+      },
+      { rootMargin: "-20% 0px -70% 0px", threshold: 0 },
+    );
+
+    byId.forEach((_, id) => {
+      const sec = document.getElementById(id);
+      if (sec) obs.observe(sec);
+    });
+  }
+</script>
+
+<style>
+  /* ─────────────────────────────────────────────────────────────────────────
+     TODO el CSS de esta plantilla vive en src/styles/ficha.css — una sola
+     definición compartida con /servicios/<id>, para que las dos L4 no puedan
+     divergir. Ver docs/CONTRATO-L4.md.
+
+     Aquí SOLO va lo que de verdad es propio de esta página. Si vas a añadir
+     algo, pregúntate primero si la otra L4 lo necesita igual: si sí, va a
+     ficha.css. Y NUNCA redeclares una clase de ficha.css — el <style> scoped
+     gana por especificidad y volverías a tener dos verdades.
+     ───────────────────────────────────────────────────────────────────────── */
+
+  /* Retícula de "otros tipos": 6 hermanos → 1 → 2 → 3 columnas.
+     La base (1fr) y todo lo demás lo pone ficha.css. */
+  @media (min-width: 640px) {
+    .otros-l4__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .otros-l4__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

@@ -24,10 +24,23 @@ const r = (p) => fileURLToPath(new URL(p, import.meta.url));
 /** @type {import('@astrojs/sitemap').SitemapOptions} */
 const sitemapOptions = {
   // Excluye rutas internas, drafts y páginas que no deben indexarse.
+  //
+  // /blog/tag/* — los archivos de tags se sirven con `noindex` (ver la nota en
+  // src/pages/blog/tag/[tag].astro: son etiquetas, no taxonomía, y cada una
+  // duplica el contenido de su categoría). Listar en el sitemap una URL que
+  // luego responde noindex es una contradicción: el sitemap le dice a Google
+  // "indexa esto" y la página le dice "no lo indexes". Google resuelve el
+  // conflicto obedeciendo al noindex y anotando el sitemap como poco fiable —
+  // lo que degrada la confianza en el resto de las URLs del archivo. Un sitemap
+  // solo debe contener URLs canónicas e indexables.
+  //
+  // NOTA: las CATEGORÍAS (/blog/categoria/*) sí van al sitemap: son enum cerrado,
+  // indexables y con intención de búsqueda propia. La diferencia es deliberada.
   filter: (page) =>
     !page.includes('/404') &&
     !page.includes('/_') &&
-    !page.includes('/admin'),
+    !page.includes('/admin') &&
+    !page.includes('/blog/tag/'),
 
   // Prioridades por tipo de página: home y categorías empujan más que fichas.
   serialize(item) {

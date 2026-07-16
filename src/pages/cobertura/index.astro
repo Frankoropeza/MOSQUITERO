@@ -1,0 +1,390 @@
+---
+// ============================================================================
+// cobertura/index.astro — COBERTURA (L2). Ruta: /cobertura
+// ----------------------------------------------------------------------------
+// HOMOLOGADA con /mosquiteros y /servicios. Mismo ritmo, mismos componentes:
+//     1) Hero            → H1 único
+//     2) SectionMenu     → barra full-width bajo el hero
+//     3) Vitrina         → CategoryCard, una por zona
+//     4) Comparativa     → en qué se diferencian CDMX y Edomex (lo que aporta)
+//     5) A fondo         → CategoryDetail por zona (as="h3")
+//     6) FAQ + QuoteForm → dos columnas
+//     7) SectionMenu     → menú de guías antes del footer
+//
+// POR QUÉ ESTA L2 ES LA MÁS IMPORTANTE DE LAS TRES
+// Mosquitero.mx es un NEGOCIO DE ÁREA DE SERVICIO: no se atiende al público en
+// la oficina (Frank, 2026-07-14). Para Google, `areaServed` —no el domicilio— es
+// el campo que decide a quién le apareces. Esta sección es la cara pública de ese
+// campo: si el sitio va a posicionar por "mosquiteros en [zona]", posiciona aquí.
+//
+// ⚠️ Y POR QUÉ, AUN ASÍ, NO SE INFLA — LÉELO ANTES DE AMPLIARLA:
+// La tentación evidente es clonar la ficha por colonia ("Mosquiteros en
+// Coyoacán", "…en Polanco", "…en Naucalpan") cambiando el nombre. Eso son
+// DOORWAY PAGES: páginas casi idénticas cuyo único fin es capturar una variante
+// geográfica. Google las penaliza explícitamente y puede caer el dominio ENTERO,
+// no solo esas páginas. Con 2 zonas reales y sustancia se posiciona; con 50
+// clonadas se hunde el sitio.
+// Una zona se gana su página SOLO si dice algo que las otras no pueden: tiempos
+// reales, condiciones propias, trabajos hechos ahí. Nada de eso está validado.
+//
+// TEXTO PROPIO — nada copiado de las otras dos L2. /mosquiteros responde "¿qué
+// tipo?", /servicios responde "¿qué me hacen?", ésta responde "¿llegan a mi
+// casa?". Tres intenciones distintas, tres textos distintos.
+//
+// SEO: kw2 "mosquiteros para ventanas" no encaja aquí; esta página va por la
+// intención geográfica ("mosquiteros en CDMX"), que no compite con kw1 ni kw3.
+// FAQ propia, sin solapar con las otras tres páginas.
+// ============================================================================
+import PageLayout from "@layouts/PageLayout.astro";
+import Hero from "@components/Hero.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import CategoryCard from "@components/CategoryCard.astro";
+import CategoryDetail from "@components/CategoryDetail.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import {
+  COVERAGE_STATES,
+  ZONAS_AFONDO,
+  CONTACT,
+  WA_MESSAGES,
+  waUrl,
+  zonaHref,
+} from "@config/site";
+
+const title = "Cobertura | mosquiteros en CDMX y Estado de México";
+const description =
+  "Instalamos mosquiteros a medida en CDMX y Estado de México. Vamos a tu domicilio a medir e instalar. Consulta si llegamos a tu zona por WhatsApp.";
+
+// Guarda: mismo criterio que las otras dos L2. Sin entrada en ZONAS_AFONDO, la
+// tarjeta y el bloque saldrían vacíos. Que rompa el build, no la página.
+const sinAfondo = COVERAGE_STATES.filter((z) => !ZONAS_AFONDO[z.slug]);
+if (sinAfondo.length > 0) {
+  throw new Error(
+    `[cobertura/index] Estas zonas no tienen entrada en ZONAS_AFONDO: ` +
+      `${sinAfondo.map((z) => z.slug).join(", ")}.\n` +
+      `  → La vitrina y los bloques "a fondo" salen de ahí: sin entrada, tarjeta vacía.\n` +
+      `  → Escríbela en site.ts o quita la zona de TAXONOMY.coverageStates.\n` +
+      `  → Al escribirla: NADA de tiempos de llegada, costos de visita ni listas de\n` +
+      `    colonias (doorway pages). Ver la cabecera de este archivo.`,
+  );
+}
+
+const menuSecciones = [
+  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
+  { label: "Servicios", href: "/servicios", sub: "Fabricación, instalación y reparación" },
+  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
+  { label: "Blog", href: "/blog", sub: "Guías y mantenimiento" },
+];
+const menuCta = {
+  label: "Preguntar por mi zona",
+  href: waUrl(WA_MESSAGES.cotizar),
+  sub: "Dinos dónde estás",
+  external: true,
+};
+
+// Guías de intención de COBERTURA: quien pregunta si llegamos ya va a agendar.
+// Distintas de las de /mosquiteros (elección de tipo) y /servicios (cómo trabajan).
+const menuGuias = [
+  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion", sub: "Qué pasa cuando vamos" },
+  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero", sub: "Si prefieres adelantarnos las medidas" },
+  { label: "Por qué a medida", href: "/blog/por-que-mosquiteros-a-medida", sub: "Y no de línea" },
+  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros", sub: "Antes de dejar entrar a alguien" },
+];
+const menuGuiasCta = {
+  label: "Ver todas las guías",
+  href: "/blog",
+  sub: "Guías y mantenimiento",
+  icon: "arrow" as const,
+};
+
+// ── Comparativa — el bloque que justifica esta L2 ────────────────────────────
+// No es una tabla de decisión como las otras dos (aquí no eliges: vives donde
+// vives). Es la respuesta honesta a "¿y qué cambia según dónde estoy?".
+// La diferencia operativo/comercial ya venía en COVERAGE_STATES; esto la traduce
+// a algo que el cliente entienda: "cobertura operativa" no significa nada para
+// quien busca un mosquitero.
+// 🟠 Sin tiempos ni costos: nadie los ha validado.
+const comparativa: { fila: string; cdmx: string; edomex: string }[] = [
+  {
+    fila: "¿Llegamos?",
+    cdmx: "Sí, las 16 alcaldías",
+    edomex: "Buena parte del área — confírmanos tu municipio",
+  },
+  {
+    fila: "¿Hay que confirmar antes?",
+    cdmx: "No hace falta",
+    edomex: "Sí: dinos tu municipio antes de agendar",
+  },
+  {
+    fila: "Qué hacemos ahí",
+    cdmx: "Medición, fabricación, instalación y reparación",
+    edomex: "Lo mismo, sin diferencias en el trabajo",
+  },
+  {
+    fila: "Qué necesitamos de ti",
+    cdmx: "Tu alcaldía y una foto de la ventana",
+    edomex: "Tu municipio y colonia, más la foto",
+  },
+];
+
+// ── FAQ de cobertura ────────────────────────────────────────────────────────
+// SIN SOLAPAR con la home (8), /mosquiteros (6) ni /servicios (6). Éstas son de
+// intención geográfica: llegan a mi casa, qué pasa si estoy lejos, cuánto cobran
+// por ir. 🟠 Sin validar. Cero tiempos, costos de visita y garantías.
+const faqs: { question: string; answer: string }[] = [
+  {
+    question: "¿Cobran por ir a mi casa?",
+    answer:
+      "Depende del trabajo y de dónde estés, así que lo confirmamos <strong>antes</strong> de agendar — nunca al llegar. Escríbenos con tu zona y qué necesitas, y te decimos las condiciones de tu caso por adelantado. Preferimos que lo sepas por WhatsApp que en la puerta de tu casa.",
+  },
+  {
+    question: "¿Tienen local al que pueda ir?",
+    answer:
+      "No hay mostrador. Somos un servicio a domicilio: <strong>vamos nosotros</strong>, medimos en tu ventana, fabricamos la pieza a esa medida y volvemos a instalarla. Nuestra dirección de oficina está en el pie de página, pero ahí no se atiende al público ni hay piezas que ver — todo se resuelve por WhatsApp o teléfono.",
+  },
+  {
+    question: "Estoy en Edomex, ¿llegan hasta mi municipio?",
+    answer:
+      "El Estado de México son <strong>125 municipios</strong> repartidos en un área enorme, así que no podemos decir «sí» en bloque sin mentirle a alguien. Dinos tu municipio y te respondemos en el momento. Si no llegamos, te lo decimos de una vez en vez de hacerte esperar — y si estás cerca del límite, a veces sale según cuántas piezas sean.",
+  },
+  {
+    question: "¿Atienden fuera de CDMX y Edomex?",
+    answer:
+      "Hoy no. Preferimos decirlo claro a aceptar un trabajo que no podemos sostener: un mosquitero a medida que llega mal, o una instalación que nadie puede volver a ajustar, es peor negocio para ti que para nosotros. Si estás fuera, escríbenos igual — a veces podemos recomendarte a alguien.",
+  },
+  {
+    question: "¿Cuántas visitas hacen falta?",
+    answer:
+      "Normalmente <strong>dos</strong>: una para medir y otra para instalar. Se puede reducir a una si nos mandas tú las medidas y son correctas — ahí llegamos directo con la pieza hecha. Por eso insistimos tanto en <a href=\"/blog/como-medir-ventana-mosquitero\">cómo medir bien</a>: una medida buena te ahorra una visita.",
+  },
+  {
+    question: "¿Puedo agendar para un sábado?",
+    answer:
+      `Sí, dentro de nuestro horario: <strong>${CONTACT.hours.saturday}</strong>. Entre semana estamos <strong>${CONTACT.hours.weekdays}</strong> y el domingo no trabajamos. Si solo puedes en fin de semana, dilo al escribir y lo acomodamos desde el principio.`,
+  },
+];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="category"
+  breadcrumbs={[{ label: "Inicio", href: "/" }, { label: "Cobertura" }]}
+  schemaData={{
+    list: {
+      name: "Cobertura de Mosquitero.mx",
+      description,
+      path: "/cobertura",
+      items: COVERAGE_STATES.map((z) => ({
+        name: z.label,
+        path: zonaHref(z.slug),
+        description: ZONAS_AFONDO[z.slug]?.blurb,
+      })),
+    },
+    faqs,
+  }}
+>
+  {/* ═══ 1) HERO — H1 único. ═══ */}
+  <Hero
+    title="Vamos a tu casa: CDMX y Estado de"
+    accent="México"
+    subtitle="No hay mostrador ni piezas de línea. Vamos, medimos tu ventana, fabricamos a esa medida y volvemos a instalarla."
+    descRight={[
+      "Como el mosquitero se hace a la medida de tu vano, el trabajo tiene que pasar donde está la ventana. Por eso lo importante de este negocio no es dónde está nuestra oficina —ahí no se atiende a nadie— sino hasta dónde llegamos y qué pasa cuando llegamos.",
+      "Trabajamos la Ciudad de México completa y buena parte del Estado de México. Si no estás seguro de que alcanzamos tu zona, pregúntanos antes de nada: te contestamos al momento y te ahorramos la espera.",
+    ]}
+  />
+
+  {/* ═══ MENÚ DE SECCIONES ═══ */}
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+
+  {/* ═══ 2) VITRINA — una zona por tarjeta ═══ */}
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Cobertura"
+        title="Dónde trabajamos"
+        body={[
+          "Dos zonas, y las dos con el mismo trabajo detrás: medición, fabricación a medida, instalación y reparación. Lo que cambia no es el servicio, es si hace falta confirmar tu ubicación antes de agendar.",
+          "Entra a tu zona para ver qué implica en tu caso y qué necesitamos de ti para arrancar.",
+        ]}
+      />
+      <div class="zonas-grid">
+        {COVERAGE_STATES.map((z, i) => (
+          <CategoryCard
+            label={z.label}
+            href={zonaHref(z.slug)}
+            image={ZONAS_AFONDO[z.slug].gallery.main.src}
+            imageAlt={ZONAS_AFONDO[z.slug].gallery.main.alt}
+            badge={z.type === "operativo" ? "Cobertura completa" : "Consulta tu zona"}
+            blurb={ZONAS_AFONDO[z.slug].blurb}
+            ctaLabel={`Ver ${z.label}`}
+            index={i}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 3) COMPARATIVA — el bloque que justifica esta L2 ════════════════════
+      No es una tabla de decisión como en las otras dos (aquí no eliges: vives
+      donde vives). Es la respuesta a "¿y qué cambia según dónde estoy?", que es
+      lo único que de verdad distingue una zona de otra en este negocio.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Qué cambia"
+        title="CDMX y Edomex, lado a lado"
+        body={[
+          "El trabajo es idéntico en las dos zonas: no hay una versión reducida del servicio para el Estado de México. La única diferencia real es de logística — la ciudad la cubrimos entera, y el Edomex son 125 municipios repartidos en un área enorme.",
+          "Por eso ahí pedimos que nos confirmes el municipio antes de agendar. No es un filtro: es para no hacerte esperar una visita que no va a pasar.",
+        ]}
+      />
+
+      <div class="tabla-wrap">
+        <table class="tabla">
+          <caption class="tabla__caption">Diferencias operativas entre las dos zonas</caption>
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"><a href={zonaHref("cdmx")}>CDMX</a></th>
+              <th scope="col"><a href={zonaHref("edomex")}>Estado de México</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparativa.map((c) => (
+              <tr>
+                <th scope="row" class="tabla__fila">{c.fila}</th>
+                <td>{c.cdmx}</td>
+                <td>{c.edomex}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tabla__nota">
+        ¿Estás justo en el límite entre las dos? Pregúntanos: según el municipio y
+        cuántas piezas sean, a veces sale. Te lo decimos en el momento.
+      </p>
+    </div>
+  </section>
+
+  {/* ═══ 4) CADA ZONA, A FONDO ══════════════════════════════════════════════
+      Mismo patrón que /mosquiteros y /servicios. as="h3": cuelgan del H2 de esta
+      sección. Regla: H2 sección padre → H3 sub-bloque.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="A fondo"
+        title="Tu zona en detalle"
+        body={[
+          "Qué implica cada zona, qué necesitamos de ti para arrancar y qué puedes esperar cuando lleguemos.",
+          "Si quieres el detalle completo de una —con su galería y su formulario— entra a su página desde el botón del bloque.",
+        ]}
+      />
+      <div class="afondo">
+        {COVERAGE_STATES.filter((z) => ZONAS_AFONDO[z.slug]).map((z) => (
+          <CategoryDetail
+            id={`afondo-${z.slug}`}
+            as="h3"
+            eyebrow="La zona a fondo"
+            title={z.label}
+            body={ZONAS_AFONDO[z.slug].body}
+            points={ZONAS_AFONDO[z.slug].points}
+            gallery={ZONAS_AFONDO[z.slug].gallery}
+            cta={{ label: `Ver ${z.label}`, href: zonaHref(z.slug) }}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 5) FAQ + COTIZACIÓN — misma estructura que las otras L2 ═════════════
+      El JSON-LD FAQPage lo emite lib/seo.ts vía schemaData → <FAQAccordion> va
+      SIN `emitSchema` (anti-patrón B3: doble FAQPage). ══════════════════════ */}
+  <section class="section section--faq">
+    <div class="container">
+      <SectionHeading
+        id="faq-heading"
+        eyebrow="Dudas"
+        title="Sobre llegar a tu casa"
+        body={[
+          "Lo que más nos preguntan quienes ya saben qué quieren y solo necesitan saber si vamos: si se cobra la visita, si hay local, cuántas veces hay que abrir la puerta.",
+          "Si tu duda no está aquí, escríbenos con tu zona. Contestar dónde llegamos nos cuesta un minuto; hacerte esperar una visita imposible te cuesta la tarde.",
+        ]}
+      />
+      <div class="faq-bloque">
+        <FAQAccordion items={faqs} title="" flush>
+          <QuoteForm slot="aside" />
+        </FAQAccordion>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ 6) MENÚ DE GUÍAS ═══ */}
+  <SectionMenu items={menuGuias} cta={menuGuiasCta} ariaLabel="Guías antes de agendar" />
+</PageLayout>
+
+<style>
+
+  /* Vitrina — 2 zonas. NO se usa la retícula de 4 de las otras L2: dos tarjetas
+     estiradas a un cuarto del ancho cada una dejarían media fila vacía. A 2
+     columnas llenan la fila y la foto respira, que es lo que las hace creíbles. */
+  .zonas-grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
+  @media (min-width: 640px) { .zonas-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ── Comparativa ──
+     Scroll horizontal en móvil, igual que en las otras dos L2: una comparación
+     apilada deja de ser comparación — el valor está en leer las columnas
+     enfrentadas. */
+  .tabla-wrap {
+    margin-top: var(--sp-6);
+    overflow-x: auto;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    background: var(--c-white);
+  }
+  .tabla { width: 100%; border-collapse: collapse; min-width: 640px; }
+  .tabla__caption {
+    padding: var(--sp-4) var(--sp-5) 0;
+    font-size: var(--text-sm); color: var(--c-muted); text-align: left;
+  }
+  .tabla th, .tabla td {
+    padding: var(--sp-4) var(--sp-5);
+    text-align: left; vertical-align: top;
+    font-size: var(--text-sm); line-height: var(--leading-normal);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .tabla thead th {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm); font-weight: var(--weight-semibold);
+    color: var(--c-ink); background: var(--c-surface);
+  }
+  .tabla thead th a { color: var(--c-primary); text-decoration: none; }
+  .tabla thead th a:hover { text-decoration: underline; }
+  .tabla thead th a:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+  .tabla tbody tr:last-child th, .tabla tbody tr:last-child td { border-bottom: 0; }
+  .tabla__fila {
+    font-size: var(--text-xs) !important; font-weight: var(--weight-bold);
+    letter-spacing: .04em; text-transform: uppercase;
+    color: var(--c-muted); white-space: nowrap;
+  }
+  .tabla td { color: var(--c-ink-2); }
+  .tabla__nota {
+    margin: var(--sp-4) 0 0; font-size: var(--text-sm);
+    color: var(--c-muted); line-height: var(--leading-normal); max-width: 66ch;
+  }
+
+  /* Pila de bloques "a fondo" — mismo gap que las otras L2 y la home. */
+  .afondo { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin-top: var(--sp-8); }
+
+  .faq-bloque { margin-top: var(--sp-6); }
+
+  @media (min-width: 768px) {
+    .section { padding: var(--sp-10) 0; }
+  }
+</style>

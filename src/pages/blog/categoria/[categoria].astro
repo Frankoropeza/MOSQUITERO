@@ -1,0 +1,161 @@
+---
+// ============================================================================
+// blog/categoria/[categoria].astro — ARCHIVO POR CATEGORÍA (L3). /blog/categoria/<slug>
+// ----------------------------------------------------------------------------
+// Es la página que ya enlazaban el chip de categoría del artículo y el sidebar.
+// Antes de esta ruta, esos enlaces eran 404 — es decir, cada artículo publicado
+// exportaba un enlace roto al rastreador.
+//
+// SOLO SE GENERAN LAS CATEGORÍAS CON ARTÍCULOS. El enum de content.config.ts
+// tiene 5 (guias, mantenimiento, tipos-de-malla, novedades, general); si tres
+// están vacías, generarlas produce tres páginas en blanco que Google clasifica
+// como thin content y que arrastran la calidad percibida del dominio. Cuando se
+// publique el primer artículo de esa categoría, la ruta aparece sola.
+//
+// NOINDEX de la paginación: aquí NO hay. El archivo de categoría lista todos sus
+// artículos en una página. Con volumen (>30 por categoría) se pagina igual que
+// /blog — pero paginar 4 artículos es maquinaria para un problema inexistente.
+// ============================================================================
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import BlogCard from "@components/BlogCard.astro";
+import BlogSidebar from "@components/BlogSidebar.astro";
+import CTABanner from "@components/CTABanner.astro";
+import { BLOG_CATEGORIES, WA_MESSAGES, waUrl } from "@config/site";
+
+export const getStaticPaths = (async () => {
+  // Mismo orden que /blog (ver la nota en blog/[...page].astro): pubDate desc,
+  // y a igualdad de fecha `featured` primero y título alfabético. El desempate
+  // por título es lo que evita que el orden cambie entre builds.
+  const posts = (await getCollection("articulos", ({ data }) => data.draft !== true)).sort(
+    (a, b) =>
+      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() ||
+      Number(b.data.featured) - Number(a.data.featured) ||
+      a.data.title.localeCompare(b.data.title, "es"),
+  );
+
+  return BLOG_CATEGORIES.map((cat) => ({
+    cat,
+    posts: posts.filter((p) => p.data.category === cat.slug),
+  }))
+    .filter(({ posts: p }) => p.length > 0) // categorías vacías → sin ruta (ver nota arriba)
+    .map(({ cat, posts: p }) => ({
+      params: { categoria: cat.slug },
+      props: { cat, posts: p },
+    }));
+}) satisfies GetStaticPaths;
+
+const { cat, posts } = Astro.props;
+
+// ── Metas ──
+// El title abre con la keyword de la categoría, sin marca (regla de metas).
+const title = `${cat.label} de mosquiteros | blog de Mosquitero.mx`;
+const description = `${cat.desc} ${posts.length === 1 ? "1 artículo" : `${posts.length} artículos`} sobre mosquiteros a medida, fabricación e instalación.`;
+
+const schemaData = {
+  list: {
+    name: `${cat.label} — blog de Mosquitero.mx`,
+    description: cat.desc,
+    path: `/blog/categoria/${cat.slug}`,
+    items: posts.map((post) => ({
+      name: post.data.title,
+      path: `/blog/${post.id}`,
+      image: post.data.heroImage,
+      description: post.data.description,
+    })),
+  },
+};
+
+const breadcrumbs = [{ label: "Blog", href: "/blog" }, { label: cat.label }];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="directory"
+  schemaData={schemaData}
+  breadcrumbs={breadcrumbs}
+>
+  <section class="section">
+    <div class="container">
+      {/* as="h1": la página no tiene Hero, así que este encabezado es el título
+          del documento (ver la nota del contrato en SectionHeading.astro). */}
+      <SectionHeading
+        as="h1"
+        eyebrow="Categoría"
+        title={cat.label}
+        body={[
+          cat.desc,
+          "Si después de leer sigues con la duda, mándanos una foto de tu ventana por WhatsApp: con verla sabemos qué corresponde y te evitamos comprar la pieza equivocada.",
+        ]}
+      />
+
+      <div class="blog">
+        <div class="blog__main">
+          <div class="blog__grid">
+            {posts.map((post, i) => (
+              <BlogCard
+                title={post.data.title}
+                description={post.data.description}
+                href={`/blog/${post.id}`}
+                image={post.data.heroImage}
+                imageAlt={post.data.title}
+                category={post.data.category}
+                categoryLabel={cat.label}
+                pubDate={post.data.pubDate}
+                index={i}
+              />
+            ))}
+          </div>
+
+          <p class="blog__back">
+            <a href="/blog">← Ver todos los artículos</a>
+          </p>
+        </div>
+
+        <BlogSidebar
+          currentCategory={cat.slug}
+          ctaHeading="¿Prefieres preguntarnos?"
+          waMessage={WA_MESSAGES.blog}
+        />
+      </div>
+    </div>
+  </section>
+
+  <CTABanner
+    heading="¿Ya sabes qué mosquitero necesitas?"
+    desc="Mándanos las medidas de tus ventanas por WhatsApp y te pasamos el precio por pieza, con el tipo de mosquitero y la malla que te convienen."
+    btns={[
+      { label: "Cotizar por WhatsApp", href: waUrl(WA_MESSAGES.cotizar), icon: "wa", primary: true, external: true },
+    ]}
+    variant="dark"
+    centered={true}
+  />
+</PageLayout>
+
+<style>
+
+  .blog { display: grid; grid-template-columns: 1fr; gap: var(--sp-8); }
+  .blog__main { display: grid; gap: var(--sp-5); align-content: start; }
+  .blog__grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
+
+  .blog__back { margin: 0; padding-top: var(--sp-4); border-top: 1px solid var(--c-border); }
+  .blog__back a {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--c-primary);
+    text-decoration: none;
+  }
+  .blog__back a:hover { text-decoration: underline; }
+  .blog__back a:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+
+  @media (min-width: 640px) { .blog__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 768px) { .section { padding: var(--sp-10) 0; } }
+  @media (min-width: 1024px) {
+    .blog { grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--sp-10); }
+    .blog > :global(.bsb) { position: sticky; top: calc(var(--header-height) + var(--sp-4)); }
+  }
+  @media (min-width: 1400px) { .blog__grid { grid-template-columns: repeat(3, 1fr); } }
+</style>

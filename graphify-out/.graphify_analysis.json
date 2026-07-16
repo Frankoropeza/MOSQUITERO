@@ -1,0 +1,420 @@
+{
+  "communities": {
+    "0": [
+      "centimetros_con_decimal",
+      "cinta_metalica",
+      "contacto_whatsapp",
+      "corte_de_aluminio",
+      "cotizacion",
+      "cotizacion_desglosada",
+      "escuadra",
+      "fabricacion",
+      "hueco_perimetral",
+      "instalacion",
+      "lista_de_ventanas",
+      "malla_aluminio",
+      "malla_de_sombra",
+      "malla_fibra_de_vidrio",
+      "malla_reforzada_mascotas",
+      "marco_ventana",
+      "medicion",
+      "medicion_en_tres_puntos",
+      "medida_menor",
+      "mosquitero_a_medida",
+      "mosquitero_de_linea",
+      "mosquitero_magnetico",
+      "orden_ancho_por_alto",
+      "pregunta_contra_que_medida",
+      "pregunta_desglose_de_cotizacion",
+      "pregunta_que_malla_incluye",
+      "pregunta_que_pasa_si_aparece_algo",
+      "pregunta_verifican_que_cierre",
+      "punto_de_no_retorno",
+      "rationale_cuenta_cuantas_veces_la_compras",
+      "rationale_el_precio_es_una_consecuencia",
+      "rationale_error_de_medicion_no_se_perdona",
+      "rationale_extras_se_avisan_al_medir",
+      "rationale_funciona_al_100_o_no_funciona",
+      "rationale_la_ventana_promedio_no_existe",
+      "rationale_no_publicamos_lista_de_precios",
+      "rationale_pieza_a_medida_nunca_fue_inventario",
+      "rationale_puesto_no_es_instalado",
+      "rationale_vanos_no_son_rectangulos",
+      "solventes_atacan_pvc",
+      "src_content_articulos_como_medir_ventana_mosquitero",
+      "src_content_articulos_como_trabajamos_de_la_medida_a_la_instalacion",
+      "src_content_articulos_de_que_depende_el_precio_de_un_mosquitero",
+      "src_content_articulos_por_que_mosquiteros_a_medida",
+      "src_content_articulos_que_preguntar_antes_de_contratar_mosquiteros",
+      "src_content_articulos_tipos_de_malla_mosquitero",
+      "src_content_articulos_tipos_de_mosquitero_cual_elegir",
+      "tensado_de_malla",
+      "trama_cerrada",
+      "trama_estandar",
+      "vano",
+      "variable_cantidad_de_piezas",
+      "variable_estado_del_vano",
+      "variable_malla",
+      "variable_tamano_del_vano",
+      "verificacion_de_cierre"
+    ],
+    "1": [
+      "config_site_contact",
+      "layouts_baselayout",
+      "layouts_baselayout_jsonld",
+      "layouts_baselayout_meta",
+      "lib_seo",
+      "lib_seo_absimage",
+      "lib_seo_absurl",
+      "lib_seo_articledata",
+      "lib_seo_articleschema",
+      "lib_seo_breadcrumbschema",
+      "lib_seo_buildkeyworddescription",
+      "lib_seo_buildkeywordtitle",
+      "lib_seo_buildmeta",
+      "lib_seo_buildschema",
+      "lib_seo_captitlecore",
+      "lib_seo_crumb",
+      "lib_seo_directoryschema",
+      "lib_seo_emitreviews",
+      "lib_seo_faqitem",
+      "lib_seo_faqschema",
+      "lib_seo_formattitle",
+      "lib_seo_listitem",
+      "lib_seo_localbusinessschema",
+      "lib_seo_meta_stop",
+      "lib_seo_metaaudit",
+      "lib_seo_metainput",
+      "lib_seo_metaoutput",
+      "lib_seo_metatokens",
+      "lib_seo_orgschema",
+      "lib_seo_pagetype",
+      "lib_seo_productdata",
+      "lib_seo_productschema",
+      "lib_seo_review",
+      "lib_seo_schemadata",
+      "lib_seo_servicedata",
+      "lib_seo_serviceschema",
+      "lib_seo_truncatemetadescription",
+      "lib_seo_weak_endings",
+      "lib_seo_websiteschema",
+      "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_tokens_css"
+    ],
+    "2": [
+      "bisagra",
+      "cajon_enrollable",
+      "cepillo_duro_abre_trama",
+      "cierre_automatico",
+      "guias_laterales",
+      "jabon_neutro",
+      "limpieza_de_malla",
+      "limpieza_de_riel",
+      "lubricante_seco",
+      "mosquitero_abatible",
+      "mosquitero_corredizo",
+      "mosquitero_enrollable",
+      "mosquitero_fijo",
+      "mosquitero_plisado",
+      "pregunta_que_tipo_y_por_que",
+      "presion_alta_dana_malla",
+      "resorte_enrollable",
+      "riel",
+      "ruedas",
+      "servicio_del_mecanismo",
+      "src_content_articulos_mantenimiento_limpieza_mosquiteros",
+      "variable_tipo_de_mecanismo"
+    ],
+    "3": [
+      "config_site",
+      "config_site_afondoentry",
+      "config_site_afondoimage",
+      "config_site_blogcategory",
+      "config_site_branches",
+      "config_site_coveragestate",
+      "config_site_navitem",
+      "config_site_navlink",
+      "config_site_productcategory",
+      "config_site_rationale_117",
+      "config_site_rationale_318",
+      "config_site_rationale_514",
+      "config_site_rationale_70",
+      "config_site_rationale_89",
+      "config_site_sector",
+      "config_site_service",
+      "config_site_showcasecategory",
+      "config_site_showcasesub",
+      "config_site_taxonomy"
+    ],
+    "4": [
+      "astro",
+      "astro_content",
+      "components_blogcard",
+      "components_blogsidebar",
+      "config_nav_icons",
+      "config_nav_icons_nav_icons",
+      "config_nav_icons_navicon",
+      "config_site_wa_messages",
+      "pages_blog_categoria_categoria",
+      "pages_blog_categoria_categoria_breadcrumbs",
+      "pages_blog_categoria_categoria_schemadata",
+      "pages_blog_page",
+      "pages_blog_page_schemadata",
+      "pages_blog_slug",
+      "pages_blog_tag_tag",
+      "pages_blog_tag_tag_breadcrumbs"
+    ],
+    "5": [
+      "content_config",
+      "content_config_article_categories",
+      "content_config_articulos",
+      "content_config_casos",
+      "content_config_collections",
+      "content_config_faqschema",
+      "content_config_heroschema",
+      "content_config_imagepath",
+      "content_config_product_categories",
+      "content_config_productos",
+      "content_config_seofields",
+      "content_config_service_categories",
+      "content_config_servicios",
+      "content_config_zonas",
+      "content_config_zone_types"
+    ],
+    "6": [
+      "cambio_de_herraje",
+      "cambio_de_tela",
+      "diagnostico_reparar_reponer",
+      "esquinas_del_marco",
+      "herraje",
+      "marco_de_aluminio",
+      "marco_fuera_de_plano",
+      "pregunta_recambio_de_malla",
+      "rationale_el_marco_es_el_criterio",
+      "rationale_reparar_lo_que_no_lo_merece_es_pagar_dos_veces",
+      "reparacion",
+      "reposicion",
+      "src_content_articulos_reparar_o_reponer_un_mosquitero"
+    ],
+    "7": [
+      "components_ctabanner",
+      "components_faqaccordion",
+      "components_relatedlinks",
+      "components_sectionheading",
+      "config_site_telurl",
+      "config_site_waurl",
+      "layouts_articlelayout",
+      "layouts_productlayout",
+      "layouts_servicelayout",
+      "users_frankoropeza_documents_claude_projects_mosquitero_src_styles_typography_css"
+    ],
+    "8": [
+      "components_breadcrumbs",
+      "components_footer",
+      "components_header",
+      "components_topbar",
+      "components_topbar_puntos",
+      "components_whatsappfloat",
+      "components_whatsappfloat_href",
+      "layouts_pagelayout",
+      "layouts_pagelayout_schemadata"
+    ],
+    "9": [
+      "components_categorycard",
+      "components_categorydetail",
+      "components_hero",
+      "components_sectionmenu",
+      "config_site_afondo",
+      "config_site_keywords",
+      "config_site_nav",
+      "config_site_showcase",
+      "pages_index"
+    ],
+    "10": [
+      "config_cta_presets",
+      "config_cta_presets_btn_catalogo",
+      "config_cta_presets_btn_contacto",
+      "config_cta_presets_btn_wa",
+      "config_cta_presets_btndef",
+      "config_cta_presets_ctapreset",
+      "config_cta_presets_preset_categoria",
+      "config_cta_presets_preset_contacto",
+      "config_cta_presets_preset_general"
+    ],
+    "11": [
+      "config_site_blogcategorylabel",
+      "config_site_site",
+      "pages_rss_xml",
+      "pages_rss_xml_get"
+    ],
+    "12": [
+      "components_productcard",
+      "components_productcard_var"
+    ],
+    "13": [
+      "components_servicecard",
+      "components_servicecard_var"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07597402597402597,
+    "1": 0.09871794871794871,
+    "2": 0.12987012987012986,
+    "3": 0.10526315789473684,
+    "4": 0.225,
+    "5": 0.13333333333333333,
+    "6": 0.32051282051282054,
+    "7": 0.35555555555555557,
+    "8": 0.2222222222222222,
+    "9": 0.2222222222222222,
+    "10": 0.2222222222222222,
+    "11": 0.6666666666666666,
+    "12": 1.0,
+    "13": 1.0
+  },
+  "gods": [
+    {
+      "id": "config_site",
+      "label": "@config/site",
+      "degree": 46
+    },
+    {
+      "id": "layouts_pagelayout",
+      "label": "@layouts/PageLayout.astro",
+      "degree": 19
+    },
+    {
+      "id": "src_content_articulos_reparar_o_reponer_un_mosquitero",
+      "label": "Reparar o reponer un mosquitero: c\u00f3mo lo decidimos",
+      "degree": 15
+    },
+    {
+      "id": "src_content_articulos_como_medir_ventana_mosquitero",
+      "label": "C\u00f3mo medir tu ventana para un mosquitero a medida",
+      "degree": 14
+    },
+    {
+      "id": "src_content_articulos_mantenimiento_limpieza_mosquiteros",
+      "label": "C\u00f3mo limpiar y mantener tus mosquiteros",
+      "degree": 14
+    },
+    {
+      "id": "src_content_articulos_que_preguntar_antes_de_contratar_mosquiteros",
+      "label": "Qu\u00e9 preguntar antes de contratar a alguien que te instale mosquiteros",
+      "degree": 14
+    },
+    {
+      "id": "src_content_articulos_como_trabajamos_de_la_medida_a_la_instalacion",
+      "label": "C\u00f3mo trabajamos: de la medida a la pieza instalada",
+      "degree": 14
+    },
+    {
+      "id": "layouts_baselayout",
+      "label": "./BaseLayout.astro",
+      "degree": 13
+    },
+    {
+      "id": "src_content_articulos_tipos_de_malla_mosquitero",
+      "label": "Tipos de malla para mosquitero: cu\u00e1l aguanta tu caso",
+      "degree": 13
+    },
+    {
+      "id": "mosquitero_a_medida",
+      "label": "Mosquitero a medida",
+      "degree": 12
+    }
+  ],
+  "surprises": [
+    {
+      "source": "GET()",
+      "target": "blogCategoryLabel()",
+      "source_files": [
+        "pages/rss.xml.ts",
+        "config/site.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; peripheral node `GET()` unexpectedly reaches hub `blogCategoryLabel()`"
+    },
+    {
+      "source": "Mosquitero magn\u00e9tico",
+      "target": "Mosquitero a medida",
+      "source_files": [
+        "src/content/articulos/tipos-de-mosquitero-cual-elegir.mdx",
+        "src/content/articulos/por-que-mosquiteros-a-medida.mdx"
+      ],
+      "confidence": "AMBIGUOUS",
+      "relation": "conceptually_related_to",
+      "why": "ambiguous connection - not explicitly stated in source; peripheral node `Mosquitero magn\u00e9tico` unexpectedly reaches hub `Mosquitero a medida`"
+    },
+    {
+      "source": "Mosquitero fijo",
+      "target": "Mosquitero a medida",
+      "source_files": [
+        "src/content/articulos/tipos-de-mosquitero-cual-elegir.mdx",
+        "src/content/articulos/por-que-mosquiteros-a-medida.mdx"
+      ],
+      "confidence": "AMBIGUOUS",
+      "relation": "conceptually_related_to",
+      "why": "ambiguous connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "Mosquitero de l\u00ednea / kit de ferreter\u00eda",
+      "target": "Marco fuera de plano / vencido",
+      "source_files": [
+        "src/content/articulos/por-que-mosquiteros-a-medida.mdx",
+        "src/content/articulos/reparar-o-reponer-un-mosquitero.mdx"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "Medici\u00f3n en tres puntos por lado",
+      "target": "Diagn\u00f3stico en tres revisiones",
+      "source_files": [
+        "src/content/articulos/como-medir-ventana-mosquitero.mdx",
+        "src/content/articulos/reparar-o-reponer-un-mosquitero.mdx"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities; semantically similar concepts with no structural link"
+    }
+  ],
+  "questions": [
+    {
+      "type": "ambiguous_edge",
+      "question": "What is the exact relationship between `Mosquitero magn\u00e9tico` and `Mosquitero a medida`?",
+      "why": "Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low."
+    },
+    {
+      "type": "ambiguous_edge",
+      "question": "What is the exact relationship between `Mosquitero fijo` and `Mosquitero a medida`?",
+      "why": "Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low."
+    },
+    {
+      "type": "ambiguous_edge",
+      "question": "What is the exact relationship between `Malla de aluminio (la firme)` and `Mosquitero a medida`?",
+      "why": "Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low."
+    },
+    {
+      "type": "ambiguous_edge",
+      "question": "What is the exact relationship between `Malla de sombra` and `Mosquitero a medida`?",
+      "why": "Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low."
+    },
+    {
+      "type": "ambiguous_edge",
+      "question": "What is the exact relationship between `Marco de aluminio del mosquitero` and `Reparaci\u00f3n`?",
+      "why": "Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low."
+    },
+    {
+      "type": "ambiguous_edge",
+      "question": "What is the exact relationship between `Esquinas del marco / escuadra interna` and `Reparaci\u00f3n`?",
+      "why": "Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low."
+    },
+    {
+      "type": "ambiguous_edge",
+      "question": "What is the exact relationship between `Esquinas del marco / escuadra interna` and `Reposici\u00f3n de la pieza`?",
+      "why": "Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low."
+    }
+  ]
+}

@@ -5,6 +5,7 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
+  "_comment_theme_color": "TODO: índigo del template, NO la marca real. El hex vive en 3 sitios que no se leen entre sí: (1) src/styles/tokens.css --c-primary + --c-primary-rgb, (2) AQUÍ theme_color, (3) src/config/site.ts SITE.themeColor. Cambia los tres. Contrato explicado en site.ts. (Las claves desconocidas las ignora el spec de Web App Manifest: este comentario es inerte.)",
   "theme_color": "#5b3df5",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }

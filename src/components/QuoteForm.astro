@@ -1,0 +1,352 @@
+---
+// QuoteForm.astro — Formulario de cotización que ARMA un mensaje de WhatsApp.
+// ============================================================================
+// POR QUÉ NO ENVÍA A UN SERVIDOR:
+// El sitio es SSG (output: 'static', sin adapter → sin endpoints). Un <form>
+// con action a un backend que no existe es un botón que miente. Y meter un
+// Formspree/Worker obligaría al cliente a abrir cuenta, mantener una API key y
+// revisar un buzón nuevo — cuando el negocio YA atiende por WhatsApp.
+//
+// Entonces el formulario no "envía": ORDENA. El cliente escribe suelto y se le
+// olvida la mitad; aquí las etiquetas le piden exactamente lo que hace falta
+// para cotizar (tipo, medidas, piezas, zona) y el submit abre WhatsApp con el
+// mensaje ya redactado. El lead llega completo y en el canal donde el negocio
+// ya contesta. Cero infraestructura nueva, cero dato inventado.
+//
+// CONTRATO:
+//   • El número SALE de CONTACT.whatsapp (regla D4). Cero wa.me a mano.
+//   • Las opciones del select SALEN de PRODUCT_CATEGORIES (site.ts). Agregar un
+//     tipo al catálogo lo agrega aquí solo: este archivo no se toca.
+//   • El texto base sale de WA_MESSAGES.cotizar — misma voz que el resto de CTAs.
+//
+// PROGRESSIVE ENHANCEMENT:
+//   Sin JS no hay armado de mensaje (el submit lo hace un listener). Por eso el
+//   <noscript> pinta un enlace directo a WhatsApp: sin JS el usuario no se queda
+//   viendo un botón muerto. NO se usa `method="get"` a wa.me como fallback: el
+//   navegador serializa los espacios como `+` y el mensaje llega con símbolos.
+// ============================================================================
+import { CONTACT, PRODUCT_CATEGORIES, WA_MESSAGES, waUrl } from '@config/site';
+
+interface Props {
+  /** Eyebrow del bloque. */
+  eyebrow?: string;
+  /** Título del formulario. Va como H3: cuelga del H2 de la sección. */
+  title?: string;
+  /** Bajada de una línea bajo el título. */
+  desc?: string;
+  /** Nivel del encabezado. Default h3 (la sección padre ya puso su H2). */
+  as?: 'h2' | 'h3';
+}
+const {
+  eyebrow = 'Cotización',
+  title = 'Pide tu cotización',
+  // TODO: validar la promesa con el cliente antes de publicar. Deliberadamente
+  // NO dice "respuesta en X minutos": no hay dato que lo sostenga.
+  desc = 'Llena lo que sepas y te devolvemos el precio por pieza. Si no tienes las medidas todavía, mándalo igual: te decimos cómo tomarlas.',
+  as: Tag = 'h3',
+} = Astro.props;
+
+// Opciones del select. Las categorías del catálogo + dos intenciones que NO son
+// categoría pero SÍ son motivo real de cotización (reparación, y el "no sé" —
+// que es el estado honesto de la mayoría de quien llega a esta página).
+const tipos: string[] = [
+  ...PRODUCT_CATEGORIES.filter((c) => c.slug !== 'accesorios').map((c) => c.label),
+  'Cambio de malla / reparación',
+  'Accesorios y refacciones',
+  'No sé cuál necesito',
+];
+
+const waFallback = waUrl(WA_MESSAGES.cotizar);
+---
+
+<div class="qform">
+  {/* data-wa: el número viaja por atributo, NO por define:vars. Así el <script>
+      se queda como módulo hoisteado y bundleado por Astro (un inline script por
+      instancia sería peor para CSP y para el cacheo). */}
+  <form class="qform__card" id="qform" data-wa={CONTACT.whatsapp} aria-labelledby="qform-title">
+    <header class="qform__head">
+      <p class="qform__eyebrow">{eyebrow}</p>
+      <Tag id="qform-title" class="qform__title">{title}</Tag>
+      <p class="qform__desc">{desc}</p>
+    </header>
+
+    <noscript>
+      <p class="qform__noscript">
+        Tu navegador tiene JavaScript desactivado, así que este formulario no puede armar el mensaje.
+        <a href={waFallback} target="_blank" rel="noopener noreferrer">Escríbenos directo por WhatsApp</a>.
+      </p>
+    </noscript>
+
+    <div class="qform__grid">
+      <p class="qform__field qform__field--full">
+        <label class="qform__label" for="qf-nombre">Nombre <span class="qform__req" aria-hidden="true">*</span></label>
+        <input class="qform__input" id="qf-nombre" type="text" required autocomplete="name" placeholder="Cómo te llamamos" />
+      </p>
+
+      <p class="qform__field qform__field--full">
+        <label class="qform__label" for="qf-tipo">Tipo de mosquitero <span class="qform__req" aria-hidden="true">*</span></label>
+        <select class="qform__input qform__select" id="qf-tipo" required>
+          <option value="" selected disabled>Elige una opción</option>
+          {tipos.map((t) => <option value={t}>{t}</option>)}
+        </select>
+        <span class="qform__hint">Si dudas, elige «No sé cuál necesito» y lo resolvemos nosotros.</span>
+      </p>
+
+      {/* Medidas OPCIONALES a propósito. Marcarlas `required` expulsaría a quien
+          entra desde el móvil sin flexómetro a la mano — que es justo el lead
+          que hay que capturar. El paso 1 del proceso es "nos escribes", no
+          "traes las medidas". */}
+      <p class="qform__field">
+        <label class="qform__label" for="qf-ancho">Ancho del vano <span class="qform__unit">cm</span></label>
+        <input class="qform__input" id="qf-ancho" type="number" min="1" max="600" step="0.5" inputmode="decimal" placeholder="120" />
+      </p>
+
+      <p class="qform__field">
+        <label class="qform__label" for="qf-alto">Alto del vano <span class="qform__unit">cm</span></label>
+        <input class="qform__input" id="qf-alto" type="number" min="1" max="600" step="0.5" inputmode="decimal" placeholder="150" />
+      </p>
+
+      <p class="qform__field">
+        <label class="qform__label" for="qf-piezas">Piezas</label>
+        <input class="qform__input" id="qf-piezas" type="number" min="1" max="99" step="1" inputmode="numeric" value="1" />
+      </p>
+
+      <p class="qform__field">
+        <label class="qform__label" for="qf-zona">Zona</label>
+        <input class="qform__input" id="qf-zona" type="text" autocomplete="address-level3" placeholder="Colonia y municipio" />
+      </p>
+
+      <p class="qform__field qform__field--full">
+        <label class="qform__label" for="qf-detalle">Detalle <span class="qform__unit">opcional</span></label>
+        <textarea class="qform__input qform__textarea" id="qf-detalle" rows="3" placeholder="Ventana corrediza de 2 hojas, hay mascotas, la malla actual está rota…"></textarea>
+      </p>
+    </div>
+
+    <button class="qform__submit" type="submit">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar por WhatsApp
+    </button>
+
+    {/* El botón NO envía nada: abre WhatsApp. Decirlo evita la sorpresa de que
+        salte otra app y el "¿ya se mandó?" que sigue. */}
+    <p class="qform__foot">
+      Se abre WhatsApp con tu mensaje ya escrito. Revísalo y dale enviar — nada sale sin que tú lo mandes.
+    </p>
+  </form>
+</div>
+
+<script>
+  // Armado del mensaje. Vive fuera del <form> del servidor a propósito: lo único
+  // que este script necesita del build es el número, y llega por data-wa.
+  const form = document.getElementById('qform') as HTMLFormElement | null;
+
+  if (form) {
+    const wa = form.dataset.wa ?? '';
+    const val = (id: string) =>
+      (document.getElementById(id) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null)?.value.trim() ?? '';
+
+    form.addEventListener('submit', (e) => {
+      // El navegador YA validó (no hay novalidate): si el submit dispara, los
+      // required están llenos. preventDefault porque no hay action: el destino
+      // no es una URL fija, se calcula aquí.
+      e.preventDefault();
+
+      const nombre = val('qf-nombre');
+      const tipo = val('qf-tipo');
+      const ancho = val('qf-ancho');
+      const alto = val('qf-alto');
+      const piezas = val('qf-piezas');
+      const zona = val('qf-zona');
+      const detalle = val('qf-detalle');
+
+      // Una línea por dato LLENO. Los vacíos NO se imprimen: un mensaje con
+      // "Medidas: —" obliga a quien contesta a leer ruido.
+      const lineas = [
+        `• Tipo: ${tipo}`,
+        ancho && alto ? `• Medidas del vano: ${ancho} × ${alto} cm` : ancho ? `• Ancho del vano: ${ancho} cm` : alto ? `• Alto del vano: ${alto} cm` : '',
+        piezas && piezas !== '1' ? `• Piezas: ${piezas}` : '',
+        zona ? `• Zona: ${zona}` : '',
+        `• Nombre: ${nombre}`,
+      ].filter(Boolean);
+
+      // Se arma por BLOQUES (saludo · datos · detalle) y se unen con línea en
+      // blanco. Un solo array plano con '' de separador no funciona: el filtro
+      // que quita el detalle vacío se lleva también la línea en blanco, y el
+      // mensaje llega como un párrafo apelmazado.
+      const texto = [
+        'Hola, quiero cotizar mosquiteros a medida.',
+        lineas.join('\n'),
+        detalle ? `Detalle: ${detalle}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n\n');
+
+      // encodeURIComponent, NO la serialización del navegador: un form GET
+      // codifica los espacios como '+' y WhatsApp los pinta literales.
+      const url = `https://wa.me/${wa}?text=${encodeURIComponent(texto)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+  }
+</script>
+
+<style>
+  /* ── La tarjeta ──────────────────────────────────────────────────────────
+     Mismo lenguaje que .servicio de la home (marco de perfil + hairline
+     interior), sin la trama: aquí el fondo compite con inputs y el texto que
+     hay que leer es el del usuario. */
+  .qform { height: 100%; }
+
+  .qform__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+    padding: var(--sp-5);
+    background: var(--c-white);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  /* La escuadra de ensamble: mismo tic visual que las tarjetas de servicio.
+     Es lo que amarra el formulario al resto de la página en vez de dejarlo
+     como un widget pegado de otra plantilla. */
+  .qform__card::after {
+    content: '';
+    position: absolute; top: var(--sp-2); left: var(--sp-2);
+    width: 18px; height: 18px;
+    border-top: 2px solid var(--c-primary);
+    border-left: 2px solid var(--c-primary);
+    pointer-events: none;
+  }
+
+  .qform__head { display: grid; gap: var(--sp-2); }
+  .qform__eyebrow {
+    display: flex; align-items: center; gap: var(--sp-2);
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-xs); font-weight: var(--weight-bold);
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--c-primary);
+  }
+  .qform__eyebrow::before {
+    content: ''; width: 22px; height: 2px;
+    background: var(--c-primary); flex-shrink: 0;
+  }
+  .qform__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl); font-weight: var(--weight-bold);
+    line-height: var(--leading-tight); letter-spacing: -.02em;
+    color: var(--c-ink); text-wrap: balance;
+  }
+  .qform__desc {
+    margin: 0;
+    font-size: var(--text-sm); line-height: var(--leading-normal);
+    color: var(--c-ink-2); text-wrap: pretty;
+  }
+
+  .qform__noscript {
+    margin: 0; padding: var(--sp-3);
+    font-size: var(--text-sm); line-height: var(--leading-normal);
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm); color: var(--c-ink-2);
+  }
+  .qform__noscript a { color: var(--c-primary); font-weight: var(--weight-semibold); }
+
+  /* ── Campos ──────────────────────────────────────────────────────────────
+     Retícula de 2 columnas desde el móvil SOLO para los pares que se leen
+     juntos (ancho/alto, piezas/zona). Ancho y alto separados en filas se leen
+     como dos preguntas distintas; juntos se leen como una medida. */
+  .qform__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-4) var(--sp-3); }
+  .qform__field { display: grid; gap: var(--sp-2); margin: 0; align-content: start; }
+  .qform__field--full { grid-column: 1 / -1; }
+
+  .qform__label {
+    display: flex; align-items: baseline; gap: var(--sp-2);
+    font-size: var(--text-sm); font-weight: var(--weight-semibold);
+    color: var(--c-ink);
+  }
+  .qform__req { color: var(--c-primary); }
+  .qform__unit {
+    font-size: var(--text-xs); font-weight: var(--weight-regular);
+    color: var(--c-muted);
+  }
+  .qform__hint {
+    font-size: var(--text-xs); line-height: var(--leading-normal);
+    color: var(--c-muted);
+  }
+
+  /* font-size: 16px NO es cosmético: por debajo, iOS Safari hace zoom al
+     enfocar el campo y descuadra el layout. Es la razón de no usar --text-sm. */
+  .qform__input {
+    width: 100%;
+    padding: .7rem .85rem;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: var(--leading-normal);
+    color: var(--c-ink);
+    background: var(--c-white);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm);
+
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .qform__input::placeholder { color: var(--c-muted); opacity: .75; }
+  .qform__input:hover { border-color: var(--c-muted); }
+  .qform__input:focus-visible {
+    outline: none;
+    border-color: var(--c-primary);
+    box-shadow: 0 0 0 3px rgba(var(--c-primary-rgb), .18);
+  }
+  .qform__textarea { resize: vertical; min-height: 84px; }
+
+  /* Chevron propio: appearance:none mata la flecha nativa del select. */
+  .qform__select {
+    padding-right: 2.4rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .7rem center;
+    cursor: pointer;
+  }
+  .qform__select:invalid { color: var(--c-muted); }
+
+  /* :user-invalid, no :invalid: `:invalid` pinta de rojo un campo vacío que el
+     usuario ni ha tocado. `:user-invalid` espera a que interactúe. */
+  .qform__input:user-invalid {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
+  }
+
+  /* ── Submit ── */
+  .qform__submit {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+    width: 100%;
+    /* min-height 48px: objetivo táctil cómodo (mínimo accesible 44px). */
+    min-height: 48px;
+    padding: .85rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-base); font-weight: var(--weight-bold);
+    color: #fff;
+    background: var(--c-primary);
+    border: 2px solid var(--c-primary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    /* Excepción del contrato: es el botón de envío. Solo color/fondo. */
+    transition: background-color var(--transition-btn), border-color var(--transition-btn);
+  }
+  .qform__submit:hover { background: var(--c-primary-dark); border-color: var(--c-primary-dark); }
+  .qform__submit:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 3px; }
+
+  .qform__foot {
+    margin: calc(var(--sp-5) * -1 + var(--sp-2)) 0 0;
+    font-size: var(--text-xs); line-height: var(--leading-normal);
+    color: var(--c-muted); text-align: center; text-wrap: pretty;
+  }
+
+  @media (min-width: 480px) {
+    .qform__card { padding: var(--sp-6) var(--sp-5) var(--sp-5); gap: var(--sp-5); }
+  }
+  /* Sin bloque `prefers-reduced-motion` propio: lo único que anima aquí es el
+     color del botón de envío, y de eso ya se encarga el global de tokens.css. */
+</style>

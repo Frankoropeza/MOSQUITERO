@@ -102,8 +102,21 @@ interface Props {
   align?: 'center' | 'left'
   /** true → texto claro sobre fondo oscuro. */
   dark?: boolean
-  /** Etiqueta semántica del encabezado de bloque. */
-  as?: 'h2' | 'h3'
+  /**
+   * Etiqueta semántica del encabezado.
+   *
+   * DEFAULT 'h2' — es lo correcto en una página con <Hero>: el Hero pone el H1 y
+   * cada sección abre en H2 (home, ficha de producto, ficha de servicio).
+   *
+   * 'h1' — SOLO en páginas SIN Hero, donde este encabezado ES el título de la
+   * página: los listados del blog (/blog, /blog/categoria/*, /blog/tag/*). Ahí
+   * el SectionHeading es lo primero que hay bajo las migas, así que dejarlo en
+   * H2 deja la página con CERO H1: el documento arranca su outline en el nivel 2
+   * y ni el lector de pantalla ni el rastreador saben de qué trata la página.
+   *
+   * NUNCA dos H1 en la misma página: si hay Hero, este componente va en h2.
+   */
+  as?: 'h1' | 'h2' | 'h3'
 }
 
 const {

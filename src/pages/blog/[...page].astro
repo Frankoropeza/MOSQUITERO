@@ -1,0 +1,280 @@
+---
+// ============================================================================
+// blog/[...page].astro — ÍNDICE DEL BLOG (L2). Rutas: /blog, /blog/2, /blog/3…
+// ----------------------------------------------------------------------------
+// POR QUÉ [...page] Y NO index.astro:
+// paginate() necesita un parámetro rest para emitir /blog (página 1) y /blog/N
+// (resto) desde UN solo archivo. Con index.astro habría que escribir la
+// paginación a mano o dejar el listado creciendo sin techo — y con el tiempo
+// /blog acaba sirviendo 60 artículos y 60 imágenes en una sola respuesta.
+// Hoy hay 4 artículos: paginate genera una única página (/blog) y ni siquiera
+// pinta la barra. Está puesto ANTES de que haga falta porque migrar de
+// index.astro a [...page] después obliga a un redirect de una URL ya indexada.
+//
+// CONVIVENCIA CON /blog/[slug].astro: no colisionan. Astro prioriza rutas
+// estáticas > dinámicas > rest, así que /blog/como-medir-una-ventana lo resuelve
+// [slug] y no [...page]. Además en SSG cada ruta solo emite los paths que
+// declara su getStaticPaths: los conjuntos son disjuntos por construcción.
+//
+// REGLAS:
+//   • Cero datos de negocio hardcodeados: todo sale de src/config/site.ts.
+//   • WhatsApp SIEMPRE vía waUrl() (regla D4).
+//   • Los drafts NUNCA salen: se filtran aquí y en BlogSidebar.
+// ============================================================================
+import type { GetStaticPaths, Page } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import BlogCard from "@components/BlogCard.astro";
+import BlogSidebar from "@components/BlogSidebar.astro";
+import CTABanner from "@components/CTABanner.astro";
+import { SITE, WA_MESSAGES, blogCategoryLabel, waUrl } from "@config/site";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  // draft !== true → un artículo sin el campo también se publica (default false).
+  //
+  // ORDEN: pubDate desc y, A IGUALDAD DE FECHA, `featured` primero y luego
+  // título alfabético. Los dos desempates existen por una razón concreta:
+  //   • `featured` estaba declarado en el schema y NADIE lo leía. Un campo que
+  //     el frontmatter pide y el sitio ignora es una mentira del contrato: el
+  //     editor lo marca, no pasa nada, y no hay error que se lo diga.
+  //   • Sin desempate por título, varios artículos publicados el MISMO día
+  //     salen en el orden en que el loader lea el disco. Eso hace que el
+  //     destacado de /blog cambie entre builds sin que nadie toque el contenido.
+  const posts = (await getCollection("articulos", ({ data }) => data.draft !== true)).sort(
+    (a, b) =>
+      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() ||
+      Number(b.data.featured) - Number(a.data.featured) ||
+      a.data.title.localeCompare(b.data.title, "es"),
+  );
+
+  // 9 por página: 3 filas de 3 en escritorio. La primera página muestra 1
+  // destacado + 8 en rejilla, así que la fila no queda coja.
+  return paginate(posts, { pageSize: 9 });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<CollectionEntry<"articulos">>;
+}
+const { page } = Astro.props;
+
+// La página 1 destaca el artículo más reciente a lo ancho; el resto va en grid.
+// De la página 2 en adelante no hay destacado: ya no es "lo último", es archivo.
+const esPrimera = page.currentPage === 1;
+const destacado = esPrimera ? page.data[0] : undefined;
+const rejilla = esPrimera ? page.data.slice(1) : page.data;
+
+// ── Metas ──────────────────────────────────────────────────────────────────
+// Solo la página 1 lleva las metas "buenas"; las siguientes declaran su número
+// y NO compiten por la misma query (evita canibalización entre /blog y /blog/2).
+const title = esPrimera
+  ? "Blog de mosquiteros | guías, mallas y mantenimiento"
+  : `Blog de mosquiteros — página ${page.currentPage}`;
+const description = esPrimera
+  ? "Guías para elegir, medir y mantener mosquiteros a medida: qué tipo va con cada ventana, qué malla conviene y cómo alargar la vida de la pieza."
+  : `Página ${page.currentPage} del blog de ${SITE.name}: guías, tipos de malla y mantenimiento de mosquiteros a medida.`;
+
+// schemaData → CollectionPage + ItemList (pageType 'directory'). Contrato EXACTO
+// de lib/seo.ts: list { name, description, path, items:[{ name, path, image?, description? }] }.
+const schemaData = {
+  list: {
+    name: "Blog de Mosquitero.mx",
+    description,
+    path: page.url.current,
+    items: page.data.map((post) => ({
+      name: post.data.title,
+      path: `/blog/${post.id}`,
+      image: post.data.heroImage,
+      description: post.data.description,
+    })),
+  },
+};
+
+const breadcrumbs = esPrimera
+  ? [{ label: "Blog" }]
+  : [{ label: "Blog", href: "/blog" }, { label: `Página ${page.currentPage}` }];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="directory"
+  schemaData={schemaData}
+  breadcrumbs={breadcrumbs}
+>
+  <section class="section">
+    <div class="container">
+      {/* SectionHeading en su layout CANÓNICO (duo, 2 párrafos): el índice del
+          blog es una SECCIÓN del sitio y abre igual que todas las demás.
+          as="h1" porque esta página NO tiene Hero: este encabezado es el título
+          del documento. Con el default (h2) la página se quedaba sin H1. */}
+      <SectionHeading
+        as="h1"
+        eyebrow="Blog"
+        title="Guías de mosquiteros"
+        body={[
+          "Casi todas las dudas que nos llegan por WhatsApp se repiten: cómo medir el vano, qué tipo de mosquitero va con cada ventana y qué malla aguanta un gato. Aquí las respondemos con calma y por escrito.",
+          "Lo que leas aquí es lo mismo que te diríamos por teléfono, sin letra chica. Si tu caso no encaja en ninguna guía, mándanos una foto de tu ventana y lo vemos contigo.",
+        ]}
+      />
+
+      <div class="blog">
+        <div class="blog__main">
+          {destacado && (
+            <BlogCard
+              title={destacado.data.title}
+              description={destacado.data.description}
+              href={`/blog/${destacado.id}`}
+              image={destacado.data.heroImage}
+              imageAlt={destacado.data.title}
+              category={destacado.data.category}
+              categoryLabel={blogCategoryLabel(destacado.data.category)}
+              pubDate={destacado.data.pubDate}
+              featured={true}
+              index={0}
+            />
+          )}
+
+          <div class="blog__grid">
+            {rejilla.map((post, i) => (
+              <BlogCard
+                title={post.data.title}
+                description={post.data.description}
+                href={`/blog/${post.id}`}
+                image={post.data.heroImage}
+                imageAlt={post.data.title}
+                category={post.data.category}
+                categoryLabel={blogCategoryLabel(post.data.category)}
+                pubDate={post.data.pubDate}
+                index={esPrimera ? i + 1 : i}
+              />
+            ))}
+          </div>
+
+          {/* Estado vacío: pasa si TODOS los artículos están en draft. Sin esto
+              el listado sale en blanco y parece un error del sitio. */}
+          {page.data.length === 0 && (
+            <p class="blog__empty">Todavía no hay artículos publicados. Vuelve pronto.</p>
+          )}
+
+          {/* Paginación: solo si hay más de una página. rel=prev/next ayuda al
+              rastreador a entender la serie. */}
+          {page.lastPage > 1 && (
+            <nav class="pager" aria-label="Paginación del blog">
+              {page.url.prev ? (
+                <a class="pager__btn" href={page.url.prev} rel="prev">← Anteriores</a>
+              ) : (
+                <span class="pager__btn is-off" aria-hidden="true">← Anteriores</span>
+              )}
+              <span class="pager__count">Página {page.currentPage} de {page.lastPage}</span>
+              {page.url.next ? (
+                <a class="pager__btn" href={page.url.next} rel="next">Siguientes →</a>
+              ) : (
+                <span class="pager__btn is-off" aria-hidden="true">Siguientes →</span>
+              )}
+            </nav>
+          )}
+        </div>
+
+        <BlogSidebar
+          ctaHeading="¿Prefieres preguntarnos?"
+          waMessage={WA_MESSAGES.blog}
+        />
+      </div>
+    </div>
+  </section>
+
+  <CTABanner
+    heading="¿Ya sabes qué mosquitero necesitas?"
+    desc="Mándanos las medidas de tus ventanas por WhatsApp y te pasamos el precio por pieza, con el tipo de mosquitero y la malla que te convienen."
+    btns={[
+      { label: "Cotizar por WhatsApp", href: waUrl(WA_MESSAGES.cotizar), icon: "wa", primary: true, external: true },
+    ]}
+    variant="dark"
+    centered={true}
+  />
+</PageLayout>
+
+<style>
+
+  /* ── Retícula: listado + sidebar. Misma que el artículo (texto + 20rem) para
+       que /blog y /blog/[slug] se sientan la misma pieza. ── */
+  .blog {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-8);
+  }
+  .blog__main { display: grid; gap: var(--sp-5); align-content: start; }
+
+  /* auto-fit + minmax: las tarjetas deciden cuántas caben. En la última fila
+     incompleta se estiran en vez de dejar un hueco — a diferencia de un
+     repeat(3,1fr) fijo, que en móvil obliga a media query por breakpoint. */
+  .blog__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
+
+  .blog__empty {
+    padding: var(--sp-8);
+    text-align: center;
+    color: var(--c-muted);
+    background: var(--c-surface);
+    border: 1px dashed var(--c-border);
+    border-radius: var(--radius-lg);
+  }
+
+  /* ── Paginación ── */
+  .pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--c-border);
+  }
+  .pager__btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;                 /* objetivo táctil mínimo (WCAG 2.5.8) */
+    padding: var(--sp-2) var(--sp-4);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    background: var(--c-white);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--c-ink);
+    text-decoration: none;
+    /* Excepción del contrato de movimiento: es un control pulsable. Solo color. */
+    transition: color var(--transition-btn), border-color var(--transition-btn);
+  }
+  .pager__btn:hover { border-color: var(--c-primary); color: var(--c-primary); }
+  .pager__btn:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+  /* Extremo de la serie: <span>, no <a> deshabilitado. Un enlace sin destino es
+     un enlace roto para el teclado y para el rastreador. */
+  .pager__btn.is-off { color: var(--c-border); border-style: dashed; }
+  .pager__count { font-size: var(--text-sm); color: var(--c-muted); }
+
+  @media (min-width: 640px) {
+    .blog__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 768px) {
+    .section { padding: var(--sp-10) 0; }
+  }
+  @media (min-width: 1024px) {
+    .blog { grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--sp-10); }
+    /* Con el sidebar a un lado, la columna de tarjetas se queda en 2 por fila:
+       3 en 1fr las dejaría demasiado estrechas para que el título respire. */
+    .blog__grid { grid-template-columns: repeat(2, 1fr); }
+    /* El sticky lo decide la PÁGINA, no el componente. :global() porque .bsb
+       pertenece a BlogSidebar y el scope de este <style> no la alcanza. */
+    .blog > :global(.bsb) {
+      position: sticky;
+      top: calc(var(--header-height) + var(--sp-4));
+    }
+  }
+  @media (min-width: 1400px) {
+    .blog__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

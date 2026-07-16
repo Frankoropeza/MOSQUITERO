@@ -1,0 +1,198 @@
+---
+// ============================================================================
+// cobertura/[zona].astro — ZONA (L4). Ruta: /cobertura/<slug>
+// ----------------------------------------------------------------------------
+// 🔴 PENDIENTE DE HOMOLOGAR contra la plantilla L4 canónica.
+//    Referencia: src/pages/mosquiteros/[categoria].astro
+//    Contrato:   docs/CONTRATO-L4.md  (§9 dice cómo migrarla)
+//
+//    ⚠️ ESTA TIENE UNA REGLA EXTRA QUE LAS OTRAS NO — léela antes de "mejorarla":
+//    homologar NO significa inflarla. Lo de abajo sigue vigente: nada de listar
+//    colonias. La L4 canónica es larga porque cada tipo de mosquitero tiene
+//    mecanismo propio que explicar; una zona NO tiene eso, y rellenarla con
+//    variantes geográficas es exactamente lo que Google penaliza.
+//    Se homologa la ESTRUCTURA (hero, franja, sidebar, módulo FAQ). El contenido
+//    solo crece si el cliente aporta datos reales de esa zona.
+// ----------------------------------------------------------------------------
+// Genera una página por cada entrada de COVERAGE_STATES (site.ts). NO hay un
+// array de zonas aquí: si añades una zona en site.ts, aparece su ruta, su tarjeta
+// en /cobertura, su enlace en el footer y su entrada en el areaServed del schema.
+// Una sola fuente.
+//
+// ⚠️ POR QUÉ ESTAS PÁGINAS SON TAN SOBRIAS — Y DEBEN SEGUIR SIÉNDOLO
+// La tentación en negocios locales es clonar esta plantilla por cada colonia
+// ("Mosquiteros en Coyoacán", "Mosquiteros en Polanco"…) cambiando el nombre.
+// Eso son DOORWAY PAGES y Google las penaliza explícitamente: páginas casi
+// idénticas cuyo único fin es capturar una variante geográfica. El sitio entero
+// puede caer por eso.
+// Una página de zona se gana su sitio SOLO si dice algo que las demás no pueden:
+// tiempos reales, condiciones de esa zona, trabajos hechos ahí. Nada de eso está
+// validado hoy, así que la página se queda corta y honesta a propósito.
+//
+// SCHEMA: `areaServed` sobrescribe el LocalBusiness del grafo base para esta
+// página (lib/seo.ts:413) — así la zona es la que declara, no la lista completa.
+// ============================================================================
+import type { GetStaticPaths } from "astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import { COVERAGE_STATES, SERVICES, CONTACT, WA_MESSAGES, waUrl } from "@config/site";
+
+export const getStaticPaths = (() =>
+  COVERAGE_STATES.map((z) => ({
+    params: { zona: z.slug },
+    props: { zona: z },
+  }))) satisfies GetStaticPaths;
+
+const { zona } = Astro.props;
+
+const title = `Mosquiteros en ${zona.label} | a medida e instalados`;
+const description =
+  `Fabricamos e instalamos mosquiteros a medida en ${zona.label}. Vamos a tu domicilio, tomamos las medidas del vano y colocamos la pieza. Cotiza por WhatsApp.`;
+
+// Copy por tipo de cobertura. Es la ÚNICA diferencia real entre zonas que el
+// negocio ha confirmado: 'operativo' vs 'comercial' ya venía en site.ts. No se
+// inventan tiempos, precios de visita ni colonias.
+const esOperativo = zona.type === "operativo";
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="page"
+  breadcrumbs={[
+    { label: "Inicio", href: "/" },
+    { label: "Cobertura", href: "/cobertura" },
+    { label: zona.label },
+  ]}
+  schemaData={{ areaServed: [zona.label] }}
+>
+  <section class="section">
+    <div class="container">
+      {/* as="h1": página sin <Hero>. */}
+      <SectionHeading
+        as="h1"
+        eyebrow="Cobertura"
+        title={`Mosquiteros en ${zona.label}`}
+        body={[
+          esOperativo
+            ? `Atendemos ${zona.label} completo: vamos a tu domicilio, medimos el vano, fabricamos la pieza a esas dimensiones exactas y volvemos a instalarla. No hay que llevar nada a ningún lado.`
+            : `Atendemos buena parte del ${zona.label}. Como es un área grande, confírmanos tu ubicación antes de cotizar: te decimos en el momento si llegamos, sin hacerte perder el tiempo.`,
+          "Trabajamos ventanas y puertas de cualquier tipo. Si ya tienes mosquiteros y solo se rompió la malla, también los reparamos: cuando el marco aguanta, se cambia solo la tela.",
+        ]}
+      />
+
+      <div class="zona-grid">
+        <div class="zona-col">
+          <h2 class="zona-h2">Qué hacemos en {zona.label}</h2>
+          <ul class="servicios">
+            {SERVICES.map((s) => (
+              <li class="servicio">
+                <span class="servicio__check" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="servicio__body">
+                  <strong class="servicio__label">{s.label}</strong>
+                  <span class="servicio__desc">{s.desc}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p class="zona-nota">
+            {esOperativo
+              ? `Si estás en ${zona.label}, mándanos las medidas o una foto de la ventana y te cotizamos por pieza.`
+              : `Dinos tu colonia o municipio junto con las medidas y te confirmamos cobertura y precio.`}
+          </p>
+          <a href={waUrl(WA_MESSAGES.cotizar)} class="zona-cta" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.2.2-.3.2-.5s0-.3-.1-.4l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.7 4.3 3.8.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>
+            Cotizar por WhatsApp
+          </a>
+          <p class="zona-tel">O llámanos al {CONTACT.phone} · {CONTACT.hours.display}</p>
+        </div>
+
+        <div class="zona-col">
+          <QuoteForm
+            as="h2"
+            eyebrow="Cotización"
+            title={`Cotiza tu mosquitero en ${zona.label}`}
+            desc="Déjanos tus datos y te contactamos con el precio por pieza."
+          />
+        </div>
+      </div>
+
+      <nav class="otras" aria-label="Otras zonas">
+        <h2 class="otras__titulo">Otras zonas que atendemos</h2>
+        <ul class="otras__list">
+          {COVERAGE_STATES.filter((z) => z.slug !== zona.slug).map((z) => (
+            <li><a href={`/cobertura/${z.slug}`} class="otras__link">Mosquiteros en {z.label}</a></li>
+          ))}
+          <li><a href="/cobertura" class="otras__link otras__link--all">Ver toda la cobertura</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+
+  .zona-grid {
+    display: grid; grid-template-columns: 1fr; gap: var(--sp-6);
+    margin-top: var(--sp-6);
+  }
+  .zona-h2 {
+    margin: 0 0 var(--sp-4); font-family: var(--font-heading);
+    font-size: var(--text-xl); font-weight: var(--weight-semibold); color: var(--c-ink);
+  }
+
+  .servicios { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+  .servicio { display: flex; align-items: flex-start; gap: var(--sp-3); }
+  .servicio__check {
+    flex-shrink: 0; display: grid; place-items: center;
+    width: 22px; height: 22px; margin-top: 2px;
+    border-radius: var(--radius-full);
+    background: rgba(var(--c-primary-rgb), .1); color: var(--c-primary);
+  }
+  .servicio__body { display: flex; flex-direction: column; gap: 1px; }
+  .servicio__label { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--c-ink); }
+  .servicio__desc { font-size: var(--text-sm); color: var(--c-ink-2); line-height: var(--leading-normal); }
+
+  .zona-nota {
+    margin: var(--sp-5) 0 var(--sp-4); font-size: var(--text-sm);
+    color: var(--c-ink-2); line-height: var(--leading-normal);
+  }
+  .zona-cta {
+    display: inline-flex; align-items: center; gap: var(--sp-2);
+    padding: .7em 1.3em; font-size: var(--text-sm); font-weight: var(--weight-semibold);
+    color: #fff; text-decoration: none; background: #25D366;
+    border-radius: var(--radius-md);
+    /* Excepción del contrato de movimiento: BOTÓN. Solo color. */
+    transition: background-color var(--transition-btn);
+  }
+  .zona-cta:hover { background: #1ebe57; }
+  .zona-cta:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 3px; }
+  .zona-tel { margin: var(--sp-3) 0 0; font-size: var(--text-sm); color: var(--c-muted); }
+
+  .otras {
+    margin-top: var(--sp-8); padding-top: var(--sp-6);
+    border-top: 1px solid var(--c-border);
+  }
+  .otras__titulo {
+    margin: 0 0 var(--sp-3); font-family: var(--font-heading);
+    font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--c-ink);
+  }
+  .otras__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .otras__link {
+    display: inline-block; padding: .35em .9em;
+    font-size: var(--text-sm); color: var(--c-ink-2); text-decoration: none;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--radius-full);
+  }
+  .otras__link:hover { border-color: var(--c-primary); color: var(--c-primary); }
+  .otras__link:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+  .otras__link--all { color: var(--c-primary); font-weight: var(--weight-semibold); }
+
+  @media (min-width: 768px) {
+    .section { padding: var(--sp-10) 0; }
+    .zona-grid { grid-template-columns: 1fr 1fr; gap: var(--sp-8); align-items: start; }
+  }
+</style>
