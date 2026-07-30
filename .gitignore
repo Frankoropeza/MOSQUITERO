@@ -82,3 +82,12 @@ Thumbs.db
 # worktrees: copias de trabajo, nunca se versionan
 .worktrees/
 .claude/worktrees/
+
+# Regla Frank 2026-07-30: nada de vaults ni documentacion en el remoto
+.obsidian/
+*-[Vv]ault/
+vault/
+docs/vault/
+obsidian-vault/
+graphify-out/
+*-graphify-out/
