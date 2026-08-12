@@ -88,7 +88,8 @@ const sitemapOptions = {
 export default defineConfig({
   site: 'https://mosquitero.mx', // URL canónica con protocolo, sin slash final. Debe = SITE.url en config/site.ts.
   output: 'static',
-  trailingSlash: 'never', // Canónico B5. Canonical normalizado sin slash final.
+  trailingSlash: 'always', // MEDIDO en producción 2026-08-12: mosquitero.mx redirige 308 sin-slash→con-slash. Debe = SITE.trailingSlash.
+  build: { format: 'directory' }, // Explícito: coincide con el trailingSlash:'always' medido (dist/ruta/index.html).
 
   integrations: [sitemap(sitemapOptions), mdx()],
 

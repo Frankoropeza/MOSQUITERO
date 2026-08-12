@@ -71,8 +71,11 @@ export const SITE = {
   // y servir noindex. Los dos juntos se anulan.
   noindexAll: true,
 
-  // Política de trailing slash. Debe coincidir con astro.config.mjs (canónico B5: 'never').
-  trailingSlash: 'never' as 'never' | 'always',
+  // Política de trailing slash. Debe coincidir con astro.config.mjs.
+  // MEDIDO en producción 2026-08-12: mosquitero.mx redirige 308 de sin-slash a
+  // con-slash en todas las rutas internas (Cloudflare fuerza 'always'). Antes
+  // decía 'never', desalineado con lo que el dominio realmente sirve.
+  trailingSlash: 'always' as 'never' | 'always',
   // searchUrl: si el sitio tiene buscador interno → WebSite SearchAction. Si no, undefined.
   searchUrl: undefined as string | undefined,
   // allowSelfReviews: gate de reseñas. DEFAULT false (Google penaliza self-serving).
