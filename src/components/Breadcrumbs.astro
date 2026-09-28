@@ -1,5 +1,5 @@
 ---
-// Breadcrumbs.astro — Migas de pan visuales con microdata schema.org BreadcrumbList. ORIGEN: PROYECTORED/src/components/ui/Breadcrumb.astro (componente único del ecosistema, microdata inline).
+// Breadcrumbs.astro — Migas de pan visuales (sin microdata: el único BreadcrumbList es el JSON-LD de seo.ts, 2026-09-28). ORIGEN: PROYECTORED/src/components/ui/Breadcrumb.astro (componente único del ecosistema, microdata inline).
 // IMPORTANTE: este componente NO emite el bloque JSON-LD <script type="application/ld+json">. El BreadcrumbList JSON-LD lo genera seo.ts/el Layout en UN SOLO lugar (anti-patrón B3: breadcrumb duplicado en BaseLayout y en Breadcrumbs). Aquí sólo microdata visible para no duplicar.
 interface BreadcrumbItem {
   label: string
@@ -13,15 +13,14 @@ const { items } = Astro.props
 
 <div class="breadcrumb-bar">
   <nav aria-label="Migas de pan" class="breadcrumb">
-    <ol class="breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <ol class="breadcrumb__list">
       {items.map((item, index) => (
-        <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <li class="breadcrumb__item">
           {item.href ? (
-            <a href={item.href} class="breadcrumb__link" itemprop="item"><span itemprop="name">{item.label}</span></a>
+            <a href={item.href} class="breadcrumb__link"><span>{item.label}</span></a>
           ) : (
-            <span class="breadcrumb__current" aria-current="page" itemprop="name">{item.label}</span>
+            <span class="breadcrumb__current" aria-current="page">{item.label}</span>
           )}
-          <meta itemprop="position" content={String(index + 1)} />
           {index < items.length - 1 && (
             <svg class="breadcrumb__sep" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
           )}

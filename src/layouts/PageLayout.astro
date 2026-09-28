@@ -51,13 +51,20 @@ const { breadcrumbs = [], ...baseProps } = Astro.props;
 // Las migas alimentan el BreadcrumbList del schema (lo emite buildSchema UNA
 // sola vez, B3 — el componente Breadcrumbs NO debe emitir su propio JSON-LD).
 // El componente visual usa { label, href }; el schema usa { name, path }.
+// Normalización del BreadcrumbList (corrige el schema de 47 páginas, 2026-09-28):
+//  - «Inicio» se antepone UNA vez: si la página ya lo trae como primera miga, se omite.
+//  - La miga actual (sin href) apunta a la URL de la propia página, no a la home.
+const currentPath = Astro.url.pathname;
+const schemaCrumbs = breadcrumbs.filter(
+  (b, i) => !(i === 0 && (b.href === "/" || b.href === "")),
+);
 const schemaData: SchemaData = {
   ...(baseProps.schemaData ?? {}),
   ...(breadcrumbs.length > 0
     ? {
         breadcrumbs: [
           { name: "Inicio", path: "/" },
-          ...breadcrumbs.map((b) => ({ name: b.label, path: b.href ?? "" })),
+          ...schemaCrumbs.map((b) => ({ name: b.label, path: b.href || currentPath })),
         ],
       }
     : {}),
