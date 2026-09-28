@@ -4,12 +4,12 @@ id: medicion
 blurb: Vamos a tu domicilio y tomamos las medidas nosotros. La vía segura cuando el vano no es cuadrado o hay varias ventanas.
 gallery:
   main:
-    src: /images/servicios/medicion-1.svg
+    src: /images/servicios/medicion-1.webp
     alt: Flexómetro midiendo el ancho del vano de una ventana
   thumbs:
-    - src: /images/servicios/medicion-2.svg
+    - src: /images/servicios/medicion-2.webp
       alt: Anotando las medidas de la ventana en el domicilio del cliente
-    - src: /images/servicios/medicion-3.svg
+    - src: /images/servicios/medicion-3.webp
       alt: Revisión del marco de la ventana para definir el tipo de mosquitero
 body:
   - Si prefieres no medir tú, vamos a tu domicilio y tomamos las medidas nosotros. Es la vía segura cuando el vano no es cuadrado —que es lo normal— o cuando hay varias ventanas y no quieres arriesgarte a equivocarte en una.

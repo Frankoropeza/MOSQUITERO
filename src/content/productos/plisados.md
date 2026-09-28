@@ -3,7 +3,7 @@ order: 3
 category: plisados
 label: Mosquiteros Plisados
 href: /mosquiteros/plisados/
-image: /images/placeholder.svg
+image: /images/showcase/plisados-1.webp
 imageAlt: Mosquitero plisado retráctil en vano amplio
 blurb: La malla se pliega como acordeón y casi desaparece. Resuelven vanos amplios y puertas de cristal donde otros mosquiteros no alcanzan.
 subcategories:
@@ -14,12 +14,12 @@ subcategories:
 ctaLabel: Ver plisados
 gallery:
   main:
-    src: /images/showcase/plisados-1.svg
+    src: /images/showcase/plisados-1.webp
     alt: Mosquitero plisado retráctil cubriendo un vano amplio
   thumbs:
-    - src: /images/showcase/plisados-2.svg
+    - src: /images/showcase/plisados-2.webp
       alt: Detalle de la malla plegada en acordeón dentro de su perfil
-    - src: /images/showcase/plisados-3.svg
+    - src: /images/showcase/plisados-3.webp
       alt: Mosquitero plisado en versión para puerta de cristal
 body:
   - El mosquitero plisado lleva la malla plegada en acordeón dentro de un perfil lateral. Al correrlo, la malla se despliega guiada por un riel; al recogerlo, se pliega sobre sí misma y se reduce a unos pocos centímetros contra el marco.

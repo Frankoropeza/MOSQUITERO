@@ -3,7 +3,7 @@ order: 0
 category: enrollables
 label: Mosquiteros Enrollables
 href: /mosquiteros/enrollables/
-image: /images/placeholder.svg
+image: /images/showcase/enrollables-1.webp
 imageAlt: Mosquitero enrollable instalado en ventana
 blurb: "El mosquitero se recoge solo cuando no lo usas: la malla queda oculta en el cajón y la ventana se ve libre. Ideal para ventanas de uso diario."
 subcategories:
@@ -14,12 +14,12 @@ subcategories:
 ctaLabel: Ver enrollables
 gallery:
   main:
-    src: /images/showcase/enrollables-1.svg
+    src: /images/showcase/enrollables-1.webp
     alt: Mosquitero enrollable instalado en una ventana, con la malla recogida en su cajón
   thumbs:
-    - src: /images/showcase/enrollables-2.svg
+    - src: /images/showcase/enrollables-2.webp
       alt: Detalle del cajón superior donde se enrolla la malla del mosquitero
-    - src: /images/showcase/enrollables-3.svg
+    - src: /images/showcase/enrollables-3.webp
       alt: Mosquitero enrollable en versión para puerta
 body:
   - "El mosquitero enrollable funciona como una persiana: la malla vive enrollada dentro de un cajón en la parte superior del vano y baja solo cuando la necesitas. Al soltarla, el mecanismo la recoge y la ventana vuelve a quedar despejada, sin bastidor a la vista."

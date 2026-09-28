@@ -125,18 +125,20 @@ const menuGuiasCta = {
 // vuelve a 5 pasos o a 6, y la retícula lo aguanta (ver .pasos en <style>).
 // El motivo de los 8 es de diseño, no de negocio. Ver docs/PROCEDENCIA.md §5.
 //
-// Cada paso declara su propia imagen y su alt: el alt vive AQUÍ, no en el SVG,
-// para que al sustituir el placeholder por la foto real (public/images/proceso/
-// paso-N.*) no se pierda la descripción. Mantener el 4:3 del placeholder.
+// Cada paso declara su propia imagen y su alt: el alt vive AQUÍ. Desde el
+// 2026-09-28 son imágenes ILUSTRATIVAS generadas (WebP 4:3, 1200×900), no fotos
+// de trabajos del cliente; los pasos 2, 6 y 7 reutilizan las de servicios.
+// Al llegar las fotos reales se sustituyen en la misma ruta. Procedencia en el
+// vault (bitácora de imágenes del 2026-09-28).
 const proceso: { paso: string; titulo: string; detalle: string; img: string; alt: string }[] = [
-  { paso: "1", titulo: "Nos escribes", detalle: "Mándanos por WhatsApp el tipo de ventana o puerta y, si las tienes, las medidas.", img: "/images/proceso/paso-1.svg", alt: "Cliente enviando las medidas de su ventana por WhatsApp" },
-  { paso: "2", titulo: "Medición", detalle: "Te decimos cómo medir o agendamos una visita para tomar las medidas exactas.", img: "/images/proceso/paso-2.svg", alt: "Flexómetro midiendo el ancho del vano de una ventana" },
-  { paso: "3", titulo: "Tipo de mosquitero", detalle: "Según cómo abre tu ventana y el uso que le das, te decimos qué tipo le queda: corredizo, enrollable, abatible o plisado.", img: "/images/proceso/paso-3.svg", alt: "Comparación de tipos de mosquitero según la apertura de la ventana" },
-  { paso: "4", titulo: "Malla", detalle: "Elegimos la malla con el mismo criterio: si hay mascotas, si pega el sol, si necesitas ver hacia afuera o frenar insectos más chicos.", img: "/images/proceso/paso-4.svg", alt: "Muestras de distintos tipos de malla para mosquitero" },
-  { paso: "5", titulo: "Cotización", detalle: "Recibes el precio por pieza, ya con el tipo y la malla que quedamos.", img: "/images/proceso/paso-5.svg", alt: "Cotización por pieza con el tipo de mosquitero y la malla acordados" },
-  { paso: "6", titulo: "Fabricación", detalle: "Armamos cada mosquitero a la medida de tu vano.", img: "/images/proceso/paso-6.svg", alt: "Armado del marco de aluminio del mosquitero en el taller" },
-  { paso: "7", titulo: "Instalación", detalle: "Lo colocamos en tu ventana o puerta, ajustado al vano.", img: "/images/proceso/paso-7.svg", alt: "Instalación del mosquitero en la ventana" },
-  { paso: "8", titulo: "Revisión y cuidado", detalle: "Verificamos que cierre y corra bien antes de irnos, y te decimos cómo limpiarlo para que dure.", img: "/images/proceso/paso-8.svg", alt: "Prueba de que la corredera del mosquitero cierre y corra bien" },
+  { paso: "1", titulo: "Nos escribes", detalle: "Mándanos por WhatsApp el tipo de ventana o puerta y, si las tienes, las medidas.", img: "/images/proceso/paso-1.webp", alt: "Cliente enviando las medidas de su ventana por WhatsApp" },
+  { paso: "2", titulo: "Medición", detalle: "Te decimos cómo medir o agendamos una visita para tomar las medidas exactas.", img: "/images/servicios/medicion-1.webp", alt: "Flexómetro midiendo el ancho del vano de una ventana" },
+  { paso: "3", titulo: "Tipo de mosquitero", detalle: "Según cómo abre tu ventana y el uso que le das, te decimos qué tipo le queda: corredizo, enrollable, abatible o plisado.", img: "/images/proceso/paso-3.webp", alt: "Comparación de tipos de mosquitero según la apertura de la ventana" },
+  { paso: "4", titulo: "Malla", detalle: "Elegimos la malla con el mismo criterio: si hay mascotas, si pega el sol, si necesitas ver hacia afuera o frenar insectos más chicos.", img: "/images/proceso/paso-4.webp", alt: "Muestras de distintos tipos de malla para mosquitero" },
+  { paso: "5", titulo: "Cotización", detalle: "Recibes el precio por pieza, ya con el tipo y la malla que quedamos.", img: "/images/proceso/paso-5.webp", alt: "Cotización por pieza con el tipo de mosquitero y la malla acordados" },
+  { paso: "6", titulo: "Fabricación", detalle: "Armamos cada mosquitero a la medida de tu vano.", img: "/images/servicios/fabricacion-1.webp", alt: "Armado del marco de aluminio del mosquitero en el taller" },
+  { paso: "7", titulo: "Instalación", detalle: "Lo colocamos en tu ventana o puerta, ajustado al vano.", img: "/images/servicios/instalacion-1.webp", alt: "Instalación del mosquitero en la ventana" },
+  { paso: "8", titulo: "Revisión y cuidado", detalle: "Verificamos que cierre y corra bien antes de irnos, y te decimos cómo limpiarlo para que dure.", img: "/images/proceso/paso-8.webp", alt: "Prueba de que la corredera del mosquitero cierre y corra bien" },
 ];
 
 // ── FAQ — preguntas reales de compra ─────────────────────────────────────────

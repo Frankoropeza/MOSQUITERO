@@ -4,12 +4,12 @@ id: edomex
 blurb: Atendemos buena parte del Estado de México. Como es un área grande, confírmanos tu municipio antes de agendar.
 gallery:
   main:
-    src: /images/zonas/edomex-1.svg
-    alt: Instalación de mosquiteros en una casa del Estado de México
+    src: /images/zonas/edomex-1.webp
+    alt: Casa de un fraccionamiento del Estado de México con mosquiteros en sus ventanas
   thumbs:
-    - src: /images/zonas/edomex-2.svg
+    - src: /images/zonas/edomex-2.webp
       alt: Puerta de patio con mosquitero instalado en Edomex
-    - src: /images/zonas/edomex-3.svg
+    - src: /images/zonas/edomex-3.webp
       alt: Medición a domicilio de una ventana en el Estado de México
 body:
   - "El Estado de México no es una zona: son 125 municipios repartidos en un área enorme, desde los que pegan con la ciudad hasta los que están a dos horas. Por eso aquí no decimos \"cubrimos Edomex\" y ya. Depende de dónde estés exactamente."

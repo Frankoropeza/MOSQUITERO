@@ -4,12 +4,12 @@ id: reparacion
 blurb: Si el bastidor aguanta, se cambia solo la malla y queda como nuevo. Y si no aguanta, lo vas a saber antes de que te cobremos.
 gallery:
   main:
-    src: /images/servicios/reparacion-1.svg
+    src: /images/servicios/reparacion-1.webp
     alt: Cambio de malla en un bastidor de mosquitero existente
   thumbs:
-    - src: /images/servicios/reparacion-2.svg
+    - src: /images/servicios/reparacion-2.webp
       alt: Malla de mosquitero rota antes de repararla
-    - src: /images/servicios/reparacion-3.svg
+    - src: /images/servicios/reparacion-3.webp
       alt: Rodamientos y herrajes de repuesto para mosquiteros
 body:
   - Si ya tienes mosquiteros y solo se rompió la malla, no siempre hay que reponer la pieza entera. Cuando el bastidor y los herrajes aguantan, se cambia solo la tela y el mosquitero queda como nuevo por una fracción de lo que cuesta uno nuevo.

@@ -3,7 +3,7 @@ order: 2
 category: abatibles
 label: Mosquiteros Abatibles
 href: /mosquiteros/abatibles/
-image: /images/placeholder.svg
+image: /images/showcase/abatibles-1.webp
 imageAlt: Mosquitero abatible con bisagras en puerta de acceso
 blurb: Se abren como puerta con bisagras y cierre automático. La opción práctica para accesos por donde entras y sales todo el día.
 subcategories:
@@ -14,12 +14,12 @@ subcategories:
 ctaLabel: Ver abatibles
 gallery:
   main:
-    src: /images/showcase/abatibles-1.svg
+    src: /images/showcase/abatibles-1.webp
     alt: Mosquitero abatible instalado en una puerta de acceso
   thumbs:
-    - src: /images/showcase/abatibles-2.svg
+    - src: /images/showcase/abatibles-2.webp
       alt: Detalle de las bisagras y el cierre automático del mosquitero abatible
-    - src: /images/showcase/abatibles-3.svg
+    - src: /images/showcase/abatibles-3.webp
       alt: Mosquitero abatible en versión para ventana
 body:
   - "El mosquitero abatible se abre como una puerta: va montado sobre bisagras en un costado del vano y gira para dejar pasar. El cierre lo hace el propio mecanismo, así que vuelve a su posición solo. No se queda abierto detrás de ti."

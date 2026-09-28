@@ -4,12 +4,12 @@ id: cdmx
 blurb: "Cobertura completa en las 16 alcaldías: vamos, medimos, fabricamos a esa medida y volvemos a instalar."
 gallery:
   main:
-    src: /images/zonas/cdmx-1.svg
-    alt: Instalación de mosquiteros en una casa de la Ciudad de México
+    src: /images/zonas/cdmx-1.webp
+    alt: Casa de la Ciudad de México con mosquiteros en sus ventanas
   thumbs:
-    - src: /images/zonas/cdmx-2.svg
+    - src: /images/zonas/cdmx-2.webp
       alt: Ventana de un edificio de CDMX con mosquitero instalado
-    - src: /images/zonas/cdmx-3.svg
+    - src: /images/zonas/cdmx-3.webp
       alt: Camioneta de trabajo llegando al domicilio del cliente
 body:
   - "La Ciudad de México es nuestra zona de trabajo diaria. Atendemos las 16 alcaldías sin distinguir: la misma visita para medir, la misma fabricación a medida y la misma instalación, estés donde estés dentro de la ciudad."

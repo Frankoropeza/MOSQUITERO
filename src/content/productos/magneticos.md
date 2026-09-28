@@ -3,7 +3,7 @@ order: 4
 category: magneticos
 label: Mosquiteros Magnéticos
 href: /mosquiteros/magneticos/
-image: /images/placeholder.svg
+image: /images/productos/magneticos-1.webp
 imageAlt: Mosquitero magnético instalado en el marco de una puerta
 blurb: "Cortina de malla con banda de imanes: pasas empujando y se vuelve a sellar solo. Para puertas por las que entras con las manos ocupadas."
 subcategories:
@@ -14,12 +14,12 @@ subcategories:
 ctaLabel: Ver magnéticos
 gallery:
   main:
-    src: /images/placeholder.svg
+    src: /images/productos/magneticos-1.webp
     alt: Mosquitero magnético instalado en el marco de una puerta
   thumbs:
-    - src: /images/placeholder.svg
+    - src: /images/productos/magneticos-2.webp
       alt: Detalle de la banda de imanes que cierra el mosquitero magnético
-    - src: /images/placeholder.svg
+    - src: /images/productos/magneticos-3.webp
       alt: Mosquitero magnético abriéndose al paso de una persona
 body:
   - El mosquitero magnético es una cortina de malla partida al centro, con una banda de imanes a lo largo de la unión. Pasas empujando con el cuerpo y, detrás de ti, los imanes vuelven a juntar las dos hojas sin que tengas que hacer nada.

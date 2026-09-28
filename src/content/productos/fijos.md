@@ -3,7 +3,7 @@ order: 5
 category: fijos
 label: Mosquiteros Fijos
 href: /mosquiteros/fijos/
-image: /images/placeholder.svg
+image: /images/productos/fijos-1.webp
 imageAlt: Mosquitero fijo montado en el marco de una ventana
 blurb: "Bastidor con la malla tensada que se monta y se queda. Sin mecanismo que falle: la opción más económica para ventanas de poco uso."
 subcategories:
@@ -14,12 +14,12 @@ subcategories:
 ctaLabel: Ver fijos
 gallery:
   main:
-    src: /images/placeholder.svg
+    src: /images/productos/fijos-1.webp
     alt: Mosquitero fijo montado en el marco de una ventana
   thumbs:
-    - src: /images/placeholder.svg
+    - src: /images/productos/fijos-2.webp
       alt: Detalle del bastidor de aluminio de un mosquitero fijo
-    - src: /images/placeholder.svg
+    - src: /images/productos/fijos-3.webp
       alt: Mosquitero fijo instalado en una ventana que no se abre
 body:
   - "El mosquitero fijo es un bastidor con la malla tensada que se monta al vano y se queda ahí. No corre, no se enrolla y no se abate: cubre la ventana de forma permanente."

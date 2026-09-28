@@ -4,12 +4,12 @@ id: instalacion
 blurb: "La colocamos y la dejamos funcionando: verificamos que cierre, que corra sin trabarse y ajustamos en sitio antes de irnos."
 gallery:
   main:
-    src: /images/servicios/instalacion-1.svg
+    src: /images/servicios/instalacion-1.webp
     alt: Colocación del mosquitero en la ventana
   thumbs:
-    - src: /images/servicios/instalacion-2.svg
+    - src: /images/servicios/instalacion-2.webp
       alt: Ajuste de los herrajes del mosquitero en sitio
-    - src: /images/servicios/instalacion-3.svg
+    - src: /images/servicios/instalacion-3.webp
       alt: Prueba de que el mosquitero cierra bien antes de entregar
 body:
   - "Colocamos la pieza en tu ventana o puerta y la dejamos funcionando. No basta con que entre: verificamos que cierre completo, que corra sin trabarse y que no roce, y ajustamos lo que haga falta antes de irnos."

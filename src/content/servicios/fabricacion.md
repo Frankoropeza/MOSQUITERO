@@ -4,12 +4,12 @@ id: fabricacion
 blurb: Cada pieza se arma a las dimensiones exactas de tu vano, no a una medida de línea. Es lo que hace que cierre completo, sin huecos.
 gallery:
   main:
-    src: /images/servicios/fabricacion-1.svg
+    src: /images/servicios/fabricacion-1.webp
     alt: Corte del perfil de aluminio a la medida del vano
   thumbs:
-    - src: /images/servicios/fabricacion-2.svg
+    - src: /images/servicios/fabricacion-2.webp
       alt: Malla tensada sobre el bastidor del mosquitero
-    - src: /images/servicios/fabricacion-3.svg
+    - src: /images/servicios/fabricacion-3.webp
       alt: Mosquitero terminado listo para instalar
 body:
   - Fabricamos cada mosquitero a la medida exacta del vano, no a una medida de línea. Tomamos el ancho y el alto de tu ventana —o los tomas tú y nos los mandas— y armamos el bastidor con esas dimensiones, para que la pieza cierre completa y no queden huecos por donde se cuele un mosquito.

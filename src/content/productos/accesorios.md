@@ -3,7 +3,7 @@ order: 6
 category: accesorios
 label: Accesorios y refacciones
 href: /mosquiteros/accesorios/
-image: /images/placeholder.svg
+image: /images/productos/accesorios-1.webp
 imageAlt: Rollos de malla y perfiles de aluminio para mosquiteros
 blurb: Malla por metro, perfiles, herrajes y rodamientos. Para quien repara por su cuenta. Y si prefieres, te lo cambiamos nosotros.
 subcategories:
@@ -14,12 +14,12 @@ subcategories:
 ctaLabel: Ver accesorios
 gallery:
   main:
-    src: /images/placeholder.svg
+    src: /images/productos/accesorios-1.webp
     alt: Rollos de malla y perfiles de aluminio para mosquiteros
   thumbs:
-    - src: /images/placeholder.svg
+    - src: /images/productos/accesorios-2.webp
       alt: Herrajes y rodamientos de repuesto para mosquiteros
-    - src: /images/placeholder.svg
+    - src: /images/productos/accesorios-3.webp
       alt: Detalle de un perfil de aluminio para bastidor de mosquitero
 body:
   - "Vendemos por separado lo que lleva un mosquitero: malla por metro, perfiles de aluminio, herrajes, rodamientos, felpa y el cordón que tensa la tela contra el bastidor."

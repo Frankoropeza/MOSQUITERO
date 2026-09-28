@@ -3,7 +3,7 @@ order: 1
 category: corredizos
 label: Mosquiteros Corredizos
 href: /mosquiteros/corredizos/
-image: /images/placeholder.svg
+image: /images/showcase/corredizos-1.webp
 imageAlt: Mosquitero corredizo de aluminio en ventana corrediza
 blurb: Corren sobre riel junto a tu ventana corrediza, sin obstruir el paso. Marco de aluminio a medida y malla que puedes cambiar cuando se dañe.
 subcategories:
@@ -14,12 +14,12 @@ subcategories:
 ctaLabel: Ver corredizos
 gallery:
   main:
-    src: /images/showcase/corredizos-1.svg
+    src: /images/showcase/corredizos-1.webp
     alt: Mosquitero corredizo de aluminio montado junto a una ventana corrediza
   thumbs:
-    - src: /images/showcase/corredizos-2.svg
+    - src: /images/showcase/corredizos-2.webp
       alt: Detalle del riel y el bastidor de aluminio del mosquitero corredizo
-    - src: /images/showcase/corredizos-3.svg
+    - src: /images/showcase/corredizos-3.webp
       alt: Mosquitero corredizo en versión para puerta corrediza
 body:
   - El mosquitero corredizo es un bastidor de aluminio con malla que corre sobre su propio riel, paralelo al de tu ventana. Se desliza a un lado cuando quieres abrir del todo y vuelve a su sitio sin desmontarse.
