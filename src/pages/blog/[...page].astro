@@ -83,7 +83,7 @@ const schemaData = {
     path: page.url.current,
     items: page.data.map((post) => ({
       name: post.data.title,
-      path: `/blog/${post.id}`,
+      path: `/blog/${post.id}/`,
       image: post.data.heroImage,
       description: post.data.description,
     })),
@@ -92,7 +92,7 @@ const schemaData = {
 
 const breadcrumbs = esPrimera
   ? [{ label: "Blog" }]
-  : [{ label: "Blog", href: "/blog" }, { label: `Página ${page.currentPage}` }];
+  : [{ label: "Blog", href: "/blog/" }, { label: `Página ${page.currentPage}` }];
 ---
 
 <PageLayout
@@ -124,7 +124,7 @@ const breadcrumbs = esPrimera
             <BlogCard
               title={destacado.data.title}
               description={destacado.data.description}
-              href={`/blog/${destacado.id}`}
+              href={`/blog/${destacado.id}/`}
               image={destacado.data.heroImage}
               imageAlt={destacado.data.title}
               category={destacado.data.category}
@@ -140,7 +140,7 @@ const breadcrumbs = esPrimera
               <BlogCard
                 title={post.data.title}
                 description={post.data.description}
-                href={`/blog/${post.id}`}
+                href={`/blog/${post.id}/`}
                 image={post.data.heroImage}
                 imageAlt={post.data.title}
                 category={post.data.category}

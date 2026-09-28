@@ -32,18 +32,18 @@ Servicios:
 
 ## Páginas clave
 - [Inicio](https://mosquitero.mx/): mosquiteros a medida para ventanas y puertas
-- [Catálogo de mosquiteros](https://mosquitero.mx/mosquiteros): los 7 tipos disponibles
-- [Enrollables](https://mosquitero.mx/mosquiteros/enrollables): mosquitero retráctil para uso frecuente
-- [Corredizos](https://mosquitero.mx/mosquiteros/corredizos): para ventanas y puertas corredizas
-- [Plisados](https://mosquitero.mx/mosquiteros/plisados): para vanos amplios y puertas de cristal
-- [Servicios](https://mosquitero.mx/servicios): fabricación, instalación, medición y reparación
-- [Cobertura](https://mosquitero.mx/cobertura): zonas de servicio
-- [Cobertura CDMX](https://mosquitero.mx/cobertura/cdmx): servicio a domicilio en Ciudad de México
-- [Cobertura Estado de México](https://mosquitero.mx/cobertura/edomex): servicio en Edomex
-- [Blog](https://mosquitero.mx/blog): guías para elegir, medir y mantener mosquiteros
-- [Cómo medir tu ventana](https://mosquitero.mx/blog/como-medir-ventana-mosquitero): guía de medición paso a paso
-- [Tipos de malla](https://mosquitero.mx/blog/tipos-de-malla-mosquitero): qué tela conviene en cada caso
-- [Contacto](https://mosquitero.mx/contacto): cotización con medidas por WhatsApp
+- [Catálogo de mosquiteros](https://mosquitero.mx/mosquiteros/): los 7 tipos disponibles
+- [Enrollables](https://mosquitero.mx/mosquiteros/enrollables/): mosquitero retráctil para uso frecuente
+- [Corredizos](https://mosquitero.mx/mosquiteros/corredizos/): para ventanas y puertas corredizas
+- [Plisados](https://mosquitero.mx/mosquiteros/plisados/): para vanos amplios y puertas de cristal
+- [Servicios](https://mosquitero.mx/servicios/): fabricación, instalación, medición y reparación
+- [Cobertura](https://mosquitero.mx/cobertura/): zonas de servicio
+- [Cobertura CDMX](https://mosquitero.mx/cobertura/cdmx/): servicio a domicilio en Ciudad de México
+- [Cobertura Estado de México](https://mosquitero.mx/cobertura/edomex/): servicio en Edomex
+- [Blog](https://mosquitero.mx/blog/): guías para elegir, medir y mantener mosquiteros
+- [Cómo medir tu ventana](https://mosquitero.mx/blog/como-medir-ventana-mosquitero/): guía de medición paso a paso
+- [Tipos de malla](https://mosquitero.mx/blog/tipos-de-malla-mosquitero/): qué tela conviene en cada caso
+- [Contacto](https://mosquitero.mx/contacto/): cotización con medidas por WhatsApp
 
 ## Contacto
 - Teléfono / WhatsApp: 55 1005 3463

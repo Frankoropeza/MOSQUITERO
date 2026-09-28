@@ -101,7 +101,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
       <nav class="footer__col" aria-label="Productos">
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Productos</h3>
         <ul class="footer__nav-list" role="list">
-          <li><a href="/mosquiteros" class="footer__nav-link footer__nav-link--all">Ver catálogo completo<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+          <li><a href="/mosquiteros/" class="footer__nav-link footer__nav-link--all">Ver catálogo completo<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
           {PRODUCT_CATEGORIES.map((cat) => (
             <li><a href={cat.href} class="footer__nav-link">{cat.label}{(cat as any).badge && <span class="footer__nav-badge">{(cat as any).badge}</span>}</a></li>
           ))}
@@ -111,7 +111,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
       <nav class="footer__col" aria-label="Servicios">
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Servicios</h3>
         <ul class="footer__nav-list" role="list">
-          {/* servicioHref, no `/servicios/${id}` a mano: esa ruta no existe y
+          {/* servicioHref, no `/servicios/${id}/` a mano: esa ruta no existe y
               este footer la enlazaba en las 35 páginas. Ver el interruptor en
               site.ts (productoHref/servicioHref). */}
           {SERVICES.map((svc) => (<li><a href={servicioHref(svc.id)} class="footer__nav-link">{svc.label}</a></li>))}
@@ -124,7 +124,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
           <>
             <h3 class="footer__col-heading footer__col-heading--mt"><span class="footer__col-heading-accent" aria-hidden="true"></span>Sectores</h3>
             <ul class="footer__nav-list" role="list">
-              {SECTORS.map((sec) => (<li><a href={`/sectores/${sec.slug}`} class="footer__nav-link">{sec.label}</a></li>))}
+              {SECTORS.map((sec) => (<li><a href={`/sectores/${sec.slug}/`} class="footer__nav-link">{sec.label}</a></li>))}
             </ul>
           </>
         )}
@@ -134,7 +134,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Cobertura</h3>
         <ul class="footer__nav-list footer__coverage-list" role="list">
           {COVERAGE_STATES.map((state) => (
-            <li><a href={`/cobertura/${state.slug}`} class="footer__nav-link">{state.label}
+            <li><a href={`/cobertura/${state.slug}/`} class="footer__nav-link">{state.label}
               {(state as any).type && <span class={`footer__coverage-badge footer__coverage-badge--${(state as any).type}`}>{(state as any).type === 'operativo' ? 'Operativo' : 'Comercial'}</span>}
             </a></li>
           ))}
@@ -147,10 +147,10 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
             roto. Cuando exista /nosotros, se vuelve a poner — no antes.
             (Y /nosotros necesita historia real del negocio: nadie la ha dado.) */}
         <ul class="footer__nav-list" role="list">
-          <li><a href="/servicios" class="footer__nav-link">Todos los servicios</a></li>
-          <li><a href="/mosquiteros" class="footer__nav-link">Catálogo de productos</a></li>
-          <li><a href="/blog" class="footer__nav-link">Blog</a></li>
-          <li><a href="/contacto" class="footer__nav-link">Contacto y cotización</a></li>
+          <li><a href="/servicios/" class="footer__nav-link">Todos los servicios</a></li>
+          <li><a href="/mosquiteros/" class="footer__nav-link">Catálogo de productos</a></li>
+          <li><a href="/blog/" class="footer__nav-link">Blog</a></li>
+          <li><a href="/contacto/" class="footer__nav-link">Contacto y cotización</a></li>
         </ul>
       </nav>
 

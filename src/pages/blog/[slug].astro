@@ -43,7 +43,7 @@ const relacionados = (
       if (!entry || entry.data.draft === true) return null;
       return {
         label: entry.data.title,
-        href: `/blog/${entry.id}`,
+        href: `/blog/${entry.id}/`,
         description: entry.data.description,
       };
     }),

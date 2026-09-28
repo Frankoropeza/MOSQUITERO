@@ -60,10 +60,10 @@ const description =
 // propia entrada sobra. Se enlazan las hermanas. Mismo criterio que la home
 // («el hero presenta, la franja convierte»): el último botón es el CTA.
 const menuSecciones = [
-  { label: "Servicios", href: "/servicios", sub: "Fabricación, instalación y reparación" },
-  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
-  { label: "Blog", href: "/blog", sub: "Guías y mantenimiento" },
+  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 const menuCta = {
   label: "Cotizar por WhatsApp",
@@ -77,14 +77,14 @@ const menuCta = {
 // los de intención de catálogo, no los mismos 4 de la home — un menú idéntico en
 // las dos páginas no aporta enlazado nuevo, solo repite.
 const menuGuias = [
-  { label: "Qué tipo elegir", href: "/blog/tipos-de-mosquitero-cual-elegir", sub: "Cuál va con tu ventana" },
-  { label: "Tipos de malla", href: "/blog/tipos-de-malla-mosquitero", sub: "Cuál aguanta tu caso" },
-  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero", sub: "Toma bien las medidas del vano" },
-  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero", sub: "Cuándo conviene cada uno" },
+  { label: "Qué tipo elegir", href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Cuál va con tu ventana" },
+  { label: "Tipos de malla", href: "/blog/tipos-de-malla-mosquitero/", sub: "Cuál aguanta tu caso" },
+  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Toma bien las medidas del vano" },
+  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Cuándo conviene cada uno" },
 ];
 const menuGuiasCta = {
   label: "Ver todas las guías",
-  href: "/blog",
+  href: "/blog/",
   sub: "Guías y mantenimiento",
   icon: "arrow" as const,
 };
@@ -152,7 +152,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Qué malla me conviene?",
     answer:
-      "Depende del caso, no del tipo de mosquitero: la <strong>misma pieza admite mallas distintas</strong>. Si hay mascotas conviene una malla reforzada que aguante el rasguño; si pega el sol, una que filtre; si el problema son insectos muy chicos, una de trama más cerrada. Cuéntanos qué te pasa en esa ventana y te decimos cuál corresponde. Lo explicamos a fondo en <a href=\"/blog/tipos-de-malla-mosquitero\">tipos de malla</a>.",
+      "Depende del caso, no del tipo de mosquitero: la <strong>misma pieza admite mallas distintas</strong>. Si hay mascotas conviene una malla reforzada que aguante el rasguño; si pega el sol, una que filtre; si el problema son insectos muy chicos, una de trama más cerrada. Cuéntanos qué te pasa en esa ventana y te decimos cuál corresponde. Lo explicamos a fondo en <a href=\"/blog/tipos-de-malla-mosquitero/\">tipos de malla</a>.",
   },
   {
     question: "¿Todos se fabrican a la medida?",
@@ -162,12 +162,12 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Solo se me rompió la malla, tengo que cambiar el mosquitero entero?",
     answer:
-      "Casi nunca. Si el <strong>bastidor y los herrajes aguantan</strong>, se cambia solo la tela y queda como nuevo por una fracción de lo que cuesta una pieza nueva. Cuando el marco está vencido o los rodamientos ya no corren, te lo decimos con franqueza — aunque signifique no vender la reparación. También vendemos <a href=\"/mosquiteros/accesorios\">malla y refacciones por separado</a> si reparas por tu cuenta.",
+      "Casi nunca. Si el <strong>bastidor y los herrajes aguantan</strong>, se cambia solo la tela y queda como nuevo por una fracción de lo que cuesta una pieza nueva. Cuando el marco está vencido o los rodamientos ya no corren, te lo decimos con franqueza — aunque signifique no vender la reparación. También vendemos <a href=\"/mosquiteros/accesorios/\">malla y refacciones por separado</a> si reparas por tu cuenta.",
   },
   {
     question: "¿Cuánto cuesta un mosquitero?",
     answer:
-      "Depende de tres cosas: las <strong>medidas del vano</strong>, el <strong>tipo</strong> y la <strong>malla</strong>. Por eso cotizamos por pieza y no publicamos una lista de precios que luego no se sostenga. Mándanos las medidas por WhatsApp y te pasamos el precio de tu caso. De qué depende, a fondo, en <a href=\"/blog/de-que-depende-el-precio-de-un-mosquitero\">esta guía</a>.",
+      "Depende de tres cosas: las <strong>medidas del vano</strong>, el <strong>tipo</strong> y la <strong>malla</strong>. Por eso cotizamos por pieza y no publicamos una lista de precios que luego no se sostenga. Mándanos las medidas por WhatsApp y te pasamos el precio de tu caso. De qué depende, a fondo, en <a href=\"/blog/de-que-depende-el-precio-de-un-mosquitero/\">esta guía</a>.",
   },
 ];
 ---
@@ -184,7 +184,7 @@ const faqs: { question: string; answer: string }[] = [
     list: {
       name: "Tipos de mosquitero — Mosquitero.mx",
       description,
-      path: "/mosquiteros",
+      path: "/mosquiteros/",
       items: PRODUCT_CATEGORIES.map((c) => ({
         name: c.label,
         path: c.href,
@@ -271,7 +271,7 @@ const faqs: { question: string; answer: string }[] = [
             {decision.map((d) => (
               <tr>
                 <th scope="row" class="tabla__tipo">
-                  <a href={`/mosquiteros/${d.slug}`}>{d.tipo}</a>
+                  <a href={`/mosquiteros/${d.slug}/`}>{d.tipo}</a>
                 </th>
                 <td>{d.vaCon}</td>
                 <td class="tabla__pero">{d.piensaloSi}</td>

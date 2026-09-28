@@ -95,7 +95,7 @@ if (guiasRotas.length > 0) {
   );
 }
 
-const menuGuias = GUIAS_MENU.map((g) => ({ label: g.label, href: `/blog/${g.slug}`, sub: g.sub }));
+const menuGuias = GUIAS_MENU.map((g) => ({ label: g.label, href: `/blog/${g.slug}/`, sub: g.sub }));
 // El botón destacado NO es de WhatsApp, a propósito: el CTA final de WhatsApp se
 // quitó de esta página (ver más abajo) porque la home ya pide la conversión en el
 // formulario y en el WhatsAppFloat. Reponerlo aquí sería devolverlo por la puerta
@@ -104,7 +104,7 @@ const menuGuias = GUIAS_MENU.map((g) => ({ label: g.label, href: `/blog/${g.slug
 // solo (por eso `icon: "arrow"`, ver MenuCta en SectionMenu.astro).
 const menuGuiasCta = {
   label: "Ver todas las guías",
-  href: "/blog",
+  href: "/blog/",
   sub: `${articulosPublicados.length} artículos`,
   icon: "arrow" as const,
 };

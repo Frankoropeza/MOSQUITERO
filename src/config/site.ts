@@ -251,12 +251,11 @@ export const CONTACT = {
 // Si mañana el cliente deja de ofrecer una línea: bórrala de TAXONOMY.categories
 // (o de .services). Su ficha deja de generarse Y su enlace desaparece de todas
 // partes. No hay que buscar hrefs a mano: por eso esto es una función.
-// ⚠️ SIN BARRA FINAL. `trailingSlash: 'never'` (astro.config.mjs + SITE.trailingSlash):
-// /productos es la URL canónica y /productos/ NO EXISTE — devuelve 404 en dev.
-// Cloudflare redirige en producción, así que el bug se veía solo en local... y en
-// las Search Console de cualquiera que rastreara. El 2026-07-14 el sitio emitía
-// ~50 hrefs con barra, incluido el PRIMER botón del menú ("Mosquiteros" →
-// /productos/): el menú llevaba a un 404.
+// ⚠️ CON BARRA FINAL. `trailingSlash: 'always'` (astro.config.mjs + SITE.trailingSlash),
+// medido en producción el 2026-08-12: Cloudflare redirige 308 /ruta → /ruta/.
+// Hasta el 2026-09-28 estas funciones emitían la ruta SIN barra y CADA clic
+// interno pasaba por un 308. Todo href interno a una página termina en «/»;
+// scripts/check-links.mjs lo verifica sobre dist/.
 // ⚠️ LA RUTA ES /mosquiteros, NO /productos (renombrada el 2026-07-14 por Frank).
 // La URL debe decir lo mismo que el botón que lleva a ella: el menú dice
 // "Mosquiteros", el H1 dice "Mosquiteros" y la keyword principal es "mosquiteros
@@ -267,12 +266,12 @@ export const CONTACT = {
 // PRODUCT_CATEGORIES, ProductCard, ProductLayout y el `pageType="product"` del
 // schema. Eso es taxonomía del código y no sale a la URL; renombrarlo sería
 // tocar media base sin que el usuario note nada.
-export const productoHref = (slug: string): string => `/mosquiteros/${slug}`;
-export const servicioHref = (id: string): string => `/servicios/${id}`;
-export const zonaHref = (slug: string): string => `/cobertura/${slug}`;
+export const productoHref = (slug: string): string => `/mosquiteros/${slug}/`;
+export const servicioHref = (id: string): string => `/servicios/${id}/`;
+export const zonaHref = (slug: string): string => `/cobertura/${slug}/`;
 
-// ROUTES — las rutas fijas del sitio, en un solo sitio y SIN barra final.
-// Existe porque '/mosquiteros' estaba escrito a mano en 14 archivos y cada uno
+// ROUTES — las rutas fijas del sitio, en un solo sitio y CON barra final.
+// Existe porque '/mosquiteros/' estaba escrito a mano en 14 archivos y cada uno
 // podía (y podía no) llevar la barra. Un literal repetido 14 veces no es una
 // ruta: es 14 oportunidades de divergir. Impórtalo en vez de escribir la cadena.
 export const ROUTES = {
@@ -280,11 +279,11 @@ export const ROUTES = {
   /** La L2 de catálogo. La URL dice `mosquiteros` porque eso dice el menú y eso
    *  es lo que se busca. La clave se llama `mosquiteros` a propósito: si se
    *  llamara `productos` volveríamos a tener dos vocabularios. */
-  mosquiteros: '/mosquiteros',
-  servicios: '/servicios',
-  cobertura: '/cobertura',
-  contacto: '/contacto',
-  blog: '/blog',
+  mosquiteros: '/mosquiteros/',
+  servicios: '/servicios/',
+  cobertura: '/cobertura/',
+  contacto: '/contacto/',
+  blog: '/blog/',
 } as const;
 
 // ── TAXONOMY — categorías/servicios/zonas cerradas (as const) ────────────────
@@ -415,7 +414,7 @@ export type NavItem = {
 export const NAV: readonly NavItem[] = [
   {
     label: 'Mosquiteros',
-    href: '/mosquiteros',
+    href: '/mosquiteros/',
     panel: 'mega',
     allLabel: 'Ver catálogo completo',
     intro: 'Elige por tipo de mosquitero. Todos se fabrican a la medida de tu ventana o puerta.',
@@ -423,35 +422,31 @@ export const NAV: readonly NavItem[] = [
   },
   {
     label: 'Servicios',
-    href: '/servicios',
+    href: '/servicios/',
     panel: 'dropdown',
     allLabel: 'Ver todos los servicios',
     items: SERVICES.map((s) => ({ label: s.label, href: servicioHref(s.id), desc: s.desc })),
   },
   {
     label: 'Cobertura',
-    href: '/cobertura',
+    href: '/cobertura/',
     panel: 'dropdown',
     allLabel: 'Ver toda la cobertura',
-    items: COVERAGE_STATES.map((s) => ({ label: s.label, href: `/cobertura/${s.slug}` })),
+    items: COVERAGE_STATES.map((s) => ({ label: s.label, href: `/cobertura/${s.slug}/` })),
   },
   // Sectores: aparece SOLO si hay datos en TAXONOMY.sectors (hoy vacío → oculto).
   ...(SECTORS.length > 0
     ? [{
         label: 'Sectores',
-        href: '/sectores',
+        href: '/sectores/',
         panel: 'dropdown' as const,
         allLabel: 'Ver todos los sectores',
-        items: SECTORS.map((s) => ({ label: s.label, href: `/sectores/${s.slug}` })),
+        items: SECTORS.map((s) => ({ label: s.label, href: `/sectores/${s.slug}/` })),
       }]
     : []),
-  // Blog: SIN slash final. `trailingSlash: 'never'` (astro.config.mjs + SITE.trailingSlash)
-  // significa que la URL canónica es /blog y que `astro dev` responde 404 a /blog/.
-  // El resto de las entradas de este NAV todavía llevan el slash heredado del
-  // scaffold: hoy no molesta porque esas rutas aún no existen, pero hay que
-  // quitárselo al construir cada sección (deuda registrada en README → hoja de ruta).
-  { label: 'Blog', href: '/blog' },
-  { label: 'Contacto', href: '/contacto' },
+  // Todas las entradas llevan barra final (política trailingSlash 'always').
+  { label: 'Blog', href: '/blog/' },
+  { label: 'Contacto', href: '/contacto/' },
 ];
 
 // ── SHOWCASE — vitrina de categorías de la home ──────────────────────────────
@@ -892,7 +887,7 @@ export const SERVICIOS_AFONDO: Record<string, ServicioAfondo> = {
       {
         question: '¿Qué pasa si las medidas que les di están mal?',
         answer:
-          'La pieza sale a la medida que nos diste, así que si el número está mal, la pieza está mal. Y en un producto a medida <strong>no hay devolución</strong>. Por eso pedimos las tres mediciones y la <strong>menor</strong> de cada terna: es la que garantiza que entre. Si te da inseguridad, pide <a href="/servicios/medicion">medición</a>: sale más barato que una pieza que no entra.',
+          'La pieza sale a la medida que nos diste, así que si el número está mal, la pieza está mal. Y en un producto a medida <strong>no hay devolución</strong>. Por eso pedimos las tres mediciones y la <strong>menor</strong> de cada terna: es la que garantiza que entre. Si te da inseguridad, pide <a href="/servicios/medicion/">medición</a>: sale más barato que una pieza que no entra.',
       },
       {
         question: '¿Puedo cambiar de tipo de mosquitero después de pedirlo?',
@@ -917,7 +912,7 @@ export const SERVICIOS_AFONDO: Record<string, ServicioAfondo> = {
       {
         question: '¿Fabrican para domos y tragaluces?',
         answer:
-          'Sí, y suele ser un <a href="/mosquiteros/fijos">fijo</a>: son vanos que nadie abre y donde lo último que quieres es un mecanismo al que darle mantenimiento en altura. Mándanos foto. En domos importa mucho cómo está el marco y si hay dónde anclar.',
+          'Sí, y suele ser un <a href="/mosquiteros/fijos/">fijo</a>: son vanos que nadie abre y donde lo último que quieres es un mecanismo al que darle mantenimiento en altura. Mándanos foto. En domos importa mucho cómo está el marco y si hay dónde anclar.',
       },
       {
         question: '¿Puedo darles las medidas de mi mosquitero viejo en vez del vano?',
@@ -927,7 +922,7 @@ export const SERVICIOS_AFONDO: Record<string, ServicioAfondo> = {
       {
         question: '¿Fabrican si vivo fuera de CDMX y Edomex?',
         answer:
-          'La fabricación ocurre en el taller, así que técnicamente sí. Lo que no podemos es medir ni instalar fuera de nuestra <a href="/cobertura">cobertura</a>. Y sin eso, si la medida falla, no hay quien lo resuelva. Escríbenos y lo hablamos: preferimos decirte que no de entrada a mandarte una pieza que quizá no entre.',
+          'La fabricación ocurre en el taller, así que técnicamente sí. Lo que no podemos es medir ni instalar fuera de nuestra <a href="/cobertura/">cobertura</a>. Y sin eso, si la medida falla, no hay quien lo resuelva. Escríbenos y lo hablamos: preferimos decirte que no de entrada a mandarte una pieza que quizá no entre.',
       },
     ],
   },
@@ -999,7 +994,7 @@ export const SERVICIOS_AFONDO: Record<string, ServicioAfondo> = {
       {
         question: '¿Me explican cómo usarlo antes de irse?',
         answer:
-          'Sí, y en algunos tipos importa más de lo que parece. Un <a href="/mosquiteros/enrollables">enrollable</a> que sueltas de golpe se enrolla torcido y luego se atora; un <a href="/mosquiteros/plisados">plisado</a> que corres desde una esquina se sale de guía. Son treinta segundos que te ahorran una llamada.',
+          'Sí, y en algunos tipos importa más de lo que parece. Un <a href="/mosquiteros/enrollables/">enrollable</a> que sueltas de golpe se enrolla torcido y luego se atora; un <a href="/mosquiteros/plisados/">plisado</a> que corres desde una esquina se sale de guía. Son treinta segundos que te ahorran una llamada.',
       },
       {
         question: '¿Recogen la basura y el mosquitero que quitaron?',
@@ -1014,7 +1009,7 @@ export const SERVICIOS_AFONDO: Record<string, ServicioAfondo> = {
       {
         question: '¿Puedo instalarlo yo si me lo fabrican?',
         answer:
-          'Sí, la instalación es un servicio aparte y no una obligación. Te diríamos que adelante sin reservas con el <a href="/mosquiteros/magneticos">magnético</a>. Con un enrollable o un abatible, píensalo: el anclaje sostiene una pieza que se usa a diario y un tornillo mal puesto se ve en un mes.',
+          'Sí, la instalación es un servicio aparte y no una obligación. Te diríamos que adelante sin reservas con el <a href="/mosquiteros/magneticos/">magnético</a>. Con un enrollable o un abatible, píensalo: el anclaje sostiene una pieza que se usa a diario y un tornillo mal puesto se ve en un mes.',
       },
     ],
   },
@@ -1167,12 +1162,12 @@ export const SERVICIOS_AFONDO: Record<string, ServicioAfondo> = {
       {
         question: '¿Qué tiene arreglo y qué no?',
         answer:
-          'Tiene arreglo casi todo lo que <strong>no</strong> sea el bastidor: malla, rodamientos, felpa, herrajes, cordón. No tiene arreglo un marco vencido, doblado o al que le falta un tramo. Se puede intentar, pero vuelve a fallar. Ese es el criterio completo, y lo contamos a fondo en <a href="/blog/reparar-o-reponer-un-mosquitero">reparar o reponer</a>.',
+          'Tiene arreglo casi todo lo que <strong>no</strong> sea el bastidor: malla, rodamientos, felpa, herrajes, cordón. No tiene arreglo un marco vencido, doblado o al que le falta un tramo. Se puede intentar, pero vuelve a fallar. Ese es el criterio completo, y lo contamos a fondo en <a href="/blog/reparar-o-reponer-un-mosquitero/">reparar o reponer</a>.',
       },
       {
         question: '¿La malla nueva queda igual que la original?',
         answer:
-          'Puede quedar mejor, y conviene aprovecharlo. Si la original se rasgó porque el perro la empujaba, ponerle la misma tela es repetir el problema en unos meses. Al cambiarla puedes pasar a una <strong>malla reforzada</strong> o a otra trama. Cuéntanos qué te pasó y elegimos con eso, no por defecto. Ver <a href="/blog/tipos-de-malla-mosquitero">tipos de malla</a>.',
+          'Puede quedar mejor, y conviene aprovecharlo. Si la original se rasgó porque el perro la empujaba, ponerle la misma tela es repetir el problema en unos meses. Al cambiarla puedes pasar a una <strong>malla reforzada</strong> o a otra trama. Cuéntanos qué te pasó y elegimos con eso, no por defecto. Ver <a href="/blog/tipos-de-malla-mosquitero/">tipos de malla</a>.',
       },
       {
         question: 'A mi mosquitero le falta una pieza del bastidor, ¿se puede?',
@@ -1306,7 +1301,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: 'Si se rompe la malla del enrollable, ¿hay que cambiar todo?',
         answer:
-          'No. La malla se cambia sin tocar el mecanismo ni el cajón, que es la parte cara. Es el mismo criterio que aplicamos con cualquier tipo: si la estructura aguanta, se repone solo la tela. Lo contamos a fondo en <a href="/blog/reparar-o-reponer-un-mosquitero">reparar o reponer</a>.',
+          'No. La malla se cambia sin tocar el mecanismo ni el cajón, que es la parte cara. Es el mismo criterio que aplicamos con cualquier tipo: si la estructura aguanta, se repone solo la tela. Lo contamos a fondo en <a href="/blog/reparar-o-reponer-un-mosquitero/">reparar o reponer</a>.',
       },
       {
         question: '¿El enrollable se instala por dentro o por fuera de la ventana?',
@@ -1378,7 +1373,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Puedo quitar el corredizo para lavarlo?',
         answer:
-          'Sí, se desmonta del riel. Es una de sus ventajas: puedes sacarlo, lavarlo con agua y jabón suave y volver a ponerlo. Lo explicamos con más detalle en <a href="/blog/mantenimiento-limpieza-mosquiteros">cómo limpiar y mantener tus mosquiteros</a>.',
+          'Sí, se desmonta del riel. Es una de sus ventajas: puedes sacarlo, lavarlo con agua y jabón suave y volver a ponerlo. Lo explicamos con más detalle en <a href="/blog/mantenimiento-limpieza-mosquiteros/">cómo limpiar y mantener tus mosquiteros</a>.',
       },
       {
         question: '¿Cuántas hojas de mosquitero necesito para mi ventana corrediza?',
@@ -1393,7 +1388,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Se ve el marco del mosquitero desde adentro?',
         answer:
-          'Sí, y es honesto decirlo: el corredizo lleva bastidor rígido, así que hay un perfil de aluminio recorriendo el borde de esa hoja. Se ve. Si lo que quieres es que la ventana quede completamente despejada, ese es el argumento a favor del <a href="/mosquiteros/enrollables">enrollable</a>, que esconde la malla en su cajón.',
+          'Sí, y es honesto decirlo: el corredizo lleva bastidor rígido, así que hay un perfil de aluminio recorriendo el borde de esa hoja. Se ve. Si lo que quieres es que la ventana quede completamente despejada, ese es el argumento a favor del <a href="/mosquiteros/enrollables/">enrollable</a>, que esconde la malla en su cajón.',
       },
       {
         question: '¿Qué pasa si mi riel está doblado?',
@@ -1451,7 +1446,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Aguanta que lo empujen los niños o el perro?',
         answer:
-          'El bastidor sí; la malla depende de cuál elijas. Si hay mascotas o niños que van a empujar la hoja con el cuerpo, conviene una <strong>malla reforzada</strong> en vez de la estándar. Dinos que es una puerta de paso diario y lo tomamos en cuenta al cotizar. Ver <a href="/blog/tipos-de-malla-mosquitero">tipos de malla</a>.',
+          'El bastidor sí; la malla depende de cuál elijas. Si hay mascotas o niños que van a empujar la hoja con el cuerpo, conviene una <strong>malla reforzada</strong> en vez de la estándar. Dinos que es una puerta de paso diario y lo tomamos en cuenta al cotizar. Ver <a href="/blog/tipos-de-malla-mosquitero/">tipos de malla</a>.',
       },
       {
         question: '¿Necesito perforar mi puerta para instalar el abatible?',
@@ -1461,7 +1456,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Qué pasa si el marco de mi puerta es muy delgado?',
         answer:
-          'Es la primera cosa que revisamos, porque de ahí cuelga todo el peso de la hoja. Un marco delgado puede necesitar un refuerzo o una configuración distinta. Es justo el tipo de cosa que no se ve en una foto y sí en la <a href="/servicios/medicion">medición a domicilio</a>: preferimos ir a ver que fabricar a ciegas una pieza que después se vence.',
+          'Es la primera cosa que revisamos, porque de ahí cuelga todo el peso de la hoja. Un marco delgado puede necesitar un refuerzo o una configuración distinta. Es justo el tipo de cosa que no se ve en una foto y sí en la <a href="/servicios/medicion/">medición a domicilio</a>: preferimos ir a ver que fabricar a ciegas una pieza que después se vence.',
       },
       {
         question: '¿El abatible lleva chapa o seguro?',
@@ -1471,7 +1466,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Puedo poner un abatible si mi puerta es de cristal?',
         answer:
-          'Depende de dónde ancle. Si la puerta de cristal tiene un marco perimetral donde morder, normalmente sí. Si es cristal templado a hueso, sin marco, no hay dónde poner las bisagras y ahí conviene un <a href="/mosquiteros/plisados">plisado</a>, que se monta al vano y no a la puerta. Mándanos foto del canto de la puerta.',
+          'Depende de dónde ancle. Si la puerta de cristal tiene un marco perimetral donde morder, normalmente sí. Si es cristal templado a hueso, sin marco, no hay dónde poner las bisagras y ahí conviene un <a href="/mosquiteros/plisados/">plisado</a>, que se monta al vano y no a la puerta. Mándanos foto del canto de la puerta.',
       },
       {
         question: '¿Hacia qué lado conviene que abra?',
@@ -1529,7 +1524,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿El plisado aguanta que lo abran y cierren todos los días?',
         answer:
-          'Sí, pero con una diferencia importante frente al abatible: el plisado <strong>no cierra solo</strong>. Hay que correrlo de vuelta. En una puerta por la que sales con las manos ocupadas, eso significa que la vas a dejar abierta. Y un mosquitero abierto no sirve de nada. Si ese es tu caso, mira el <a href="/mosquiteros/magneticos">magnético</a>: se cierra solo detrás de ti.',
+          'Sí, pero con una diferencia importante frente al abatible: el plisado <strong>no cierra solo</strong>. Hay que correrlo de vuelta. En una puerta por la que sales con las manos ocupadas, eso significa que la vas a dejar abierta. Y un mosquitero abierto no sirve de nada. Si ese es tu caso, mira el <a href="/mosquiteros/magneticos/">magnético</a>: se cierra solo detrás de ti.',
       },
       {
         question: 'Se me salió la malla de la guía, ¿tiene arreglo?',
@@ -1539,12 +1534,12 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Cómo se limpia una malla plegada?',
         answer:
-          'Extendida, no plegada: la corres, la dejas abierta y pasas un paño húmedo o la aspiradora a potencia baja. Lo que no conviene es meterle chorro de agua a presión. El pliegue guarda la humedad, y el mecanismo lateral no está para empaparse. Más detalle en <a href="/blog/mantenimiento-limpieza-mosquiteros">mantenimiento y limpieza</a>.',
+          'Extendida, no plegada: la corres, la dejas abierta y pasas un paño húmedo o la aspiradora a potencia baja. Lo que no conviene es meterle chorro de agua a presión. El pliegue guarda la humedad, y el mecanismo lateral no está para empaparse. Más detalle en <a href="/blog/mantenimiento-limpieza-mosquiteros/">mantenimiento y limpieza</a>.',
       },
       {
         question: '¿Puedo poner un plisado en una ventana normal?',
         answer:
-          'Se puede, pero rara vez conviene, y mejor decirlo de entrada. En un vano chico, un <a href="/mosquiteros/corredizos">corredizo</a> hace lo mismo con menos mecanismo y más barato. El plisado se gana su sitio cuando el vano es grande o es una puerta de cristal. Ahí no tiene rival. En una ventana de baño, es pagar de más.',
+          'Se puede, pero rara vez conviene, y mejor decirlo de entrada. En un vano chico, un <a href="/mosquiteros/corredizos/">corredizo</a> hace lo mismo con menos mecanismo y más barato. El plisado se gana su sitio cuando el vano es grande o es una puerta de cristal. Ahí no tiene rival. En una ventana de baño, es pagar de más.',
       },
       {
         question: '¿El riel de arriba se ve mucho?',
@@ -1670,7 +1665,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Por qué el fijo es más barato?',
         answer:
-          'Porque no lleva mecanismo: ni rodamientos, ni muelle, ni bisagras, ni cajón. Solo bastidor y malla. Eso baja el costo y de paso elimina casi todo lo que puede fallar con el tiempo. De qué depende el precio en general lo contamos en <a href="/blog/de-que-depende-el-precio-de-un-mosquitero">esta guía</a>.',
+          'Porque no lleva mecanismo: ni rodamientos, ni muelle, ni bisagras, ni cajón. Solo bastidor y malla. Eso baja el costo y de paso elimina casi todo lo que puede fallar con el tiempo. De qué depende el precio en general lo contamos en <a href="/blog/de-que-depende-el-precio-de-un-mosquitero/">esta guía</a>.',
       },
       {
         question: '¿Y si necesito abrir esa ventana en una emergencia?',
@@ -1742,7 +1737,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Venden la malla por metro?',
         answer:
-          'Sí, y en distintos tipos según lo que necesites aguantar: mascotas, sol o insectos más chicos. Dinos cuántos metros y para qué caso, que la elección de malla importa más que la cantidad. Ver <a href="/blog/tipos-de-malla-mosquitero">tipos de malla</a>.',
+          'Sí, y en distintos tipos según lo que necesites aguantar: mascotas, sol o insectos más chicos. Dinos cuántos metros y para qué caso, que la elección de malla importa más que la cantidad. Ver <a href="/blog/tipos-de-malla-mosquitero/">tipos de malla</a>.',
       },
       {
         question: '¿Me conviene repararlo yo o que lo hagan ustedes?',
@@ -1762,7 +1757,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Venden mosquiteros armados para instalarlos yo?',
         answer:
-          'Sí: la instalación es un servicio aparte, no una obligación. Si nos das las medidas y quieres solo la pieza, te la fabricamos y la recoges o te la llevamos. Ojo con lo obvio: si la medida está mal, la pieza no entra y ya está hecha a esa medida. Por eso insistimos en <a href="/blog/como-medir-ventana-mosquitero">cómo medir bien</a>.',
+          'Sí: la instalación es un servicio aparte, no una obligación. Si nos das las medidas y quieres solo la pieza, te la fabricamos y la recoges o te la llevamos. Ojo con lo obvio: si la medida está mal, la pieza no entra y ya está hecha a esa medida. Por eso insistimos en <a href="/blog/como-medir-ventana-mosquitero/">cómo medir bien</a>.',
       },
       {
         question: '¿Tienen refacciones para mosquiteros de otra marca?',
@@ -1772,7 +1767,7 @@ export const FICHAS: Record<string, FichaTipo> = {
       {
         question: '¿Cuánta malla necesito para mi ventana?',
         answer:
-          'La medida del vano más un margen para tensarla y rematarla. Si compras justo, no alcanza. Pásanos el ancho y el alto y sacamos cuánto pedir. Y aprovecha para contarnos el caso, sea el perro, el sol o los mosquitos chicos, porque acertar el <a href="/blog/tipos-de-malla-mosquitero">tipo de malla</a> importa más que la cantidad.',
+          'La medida del vano más un margen para tensarla y rematarla. Si compras justo, no alcanza. Pásanos el ancho y el alto y sacamos cuánto pedir. Y aprovecha para contarnos el caso, sea el perro, el sol o los mosquitos chicos, porque acertar el <a href="/blog/tipos-de-malla-mosquitero/">tipo de malla</a> importa más que la cantidad.',
       },
     ],
   },

@@ -69,10 +69,10 @@ const menuCta = {
   external: true,
 };
 const menuSecciones = [
-  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
-  { label: "Servicios", href: "/servicios", sub: "Fabricación, instalación y reparación" },
-  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
-  { label: "Blog", href: "/blog", sub: "Guías y mantenimiento" },
+  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
+  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 ---
 
@@ -153,7 +153,7 @@ const menuSecciones = [
           <ul class="zonas">
             {COVERAGE_STATES.map((z) => (
               <li class="zona">
-                <a href={`/cobertura/${z.slug}`} class="zona__link">{z.label}</a>
+                <a href={`/cobertura/${z.slug}/`} class="zona__link">{z.label}</a>
               </li>
             ))}
           </ul>

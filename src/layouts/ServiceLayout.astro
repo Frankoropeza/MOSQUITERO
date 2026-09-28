@@ -111,7 +111,7 @@ const waLink = waUrl(`Hola, me interesa el servicio ${title}. ¿Me dan más info
 
 // Breadcrumbs (también alimentan el BreadcrumbList vía PageLayout→buildSchema).
 const breadcrumbs = [
-  { label: "Servicios", href: "/servicios" },
+  { label: "Servicios", href: "/servicios/" },
   { label: title },
 ];
 
@@ -141,7 +141,7 @@ const schemaData = {
   service: {
     name: title,
     description,
-    path: `/servicios/${slug}`,
+    path: `/servicios/${slug}/`,
     serviceType: category,
     image,
   },
@@ -167,7 +167,7 @@ const schemaData = {
         <p class="svc-hero__lede">{heroLede ?? description}</p>
         <div class="svc-hero__actions">
           <a class="btn btn--primary" href={waLink}>Cotizar por WhatsApp</a>
-          <a class="btn btn--ghost" href="/contacto">Agendar</a>
+          <a class="btn btn--ghost" href="/contacto/">Agendar</a>
         </div>
       </div>
       {(duration || sessions || price) && (

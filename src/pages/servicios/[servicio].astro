@@ -185,10 +185,10 @@ const indice = [
 ];
 
 const menuSecciones = [
-  { label: "Todos los servicios", href: "/servicios", sub: "Qué hacemos" },
-  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
-  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
+  { label: "Todos los servicios", href: "/servicios/", sub: "Qué hacemos" },
+  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
+  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
 ];
 const menuCta = {
   label: "Cotizar por WhatsApp",
@@ -204,7 +204,7 @@ const menuCta = {
   pageType="service"
   breadcrumbs={[
     { label: "Inicio", href: "/" },
-    { label: "Servicios", href: "/servicios" },
+    { label: "Servicios", href: "/servicios/" },
     { label: svc.label },
   ]}
   schemaData={{
@@ -342,7 +342,7 @@ const menuCta = {
                 <span class="paso__n" aria-hidden="true">2</span>
                 <div>
                   <strong class="paso__t">Cuéntanos tu caso</strong>
-                  <span class="paso__d">Qué te pasa en esa ventana y qué zona eres. Ver <a href="/cobertura">cobertura</a>.</span>
+                  <span class="paso__d">Qué te pasa en esa ventana y qué zona eres. Ver <a href="/cobertura/">cobertura</a>.</span>
                 </div>
               </li>
               <li class="paso">
@@ -396,7 +396,7 @@ const menuCta = {
                 <ul class="enlaces">
                   {guias.map((g) => (
                     <li>
-                      <a href={`/blog/${g.id}`} class="enlace">
+                      <a href={`/blog/${g.id}/`} class="enlace">
                         <span class="enlace__icon" aria-hidden="true">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                         </span>
@@ -405,7 +405,7 @@ const menuCta = {
                     </li>
                   ))}
                   <li>
-                    <a href="/blog" class="enlace enlace--all">
+                    <a href="/blog/" class="enlace enlace--all">
                       Ver todas las guías
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
@@ -428,7 +428,7 @@ const menuCta = {
                   </li>
                 ))}
                 <li>
-                  <a href="/mosquiteros" class="enlace enlace--all">
+                  <a href="/mosquiteros/" class="enlace enlace--all">
                     Ver todos los tipos
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </a>
@@ -479,7 +479,7 @@ const menuCta = {
           ))}
         </ul>
         <p class="otros-l4__all">
-          <a href="/servicios">Ver todos los servicios</a> ·
+          <a href="/servicios/">Ver todos los servicios</a> ·
           Trabajamos en {COVERAGE_STATES.map((z, i) => (
             <>
               {i > 0 && (i === COVERAGE_STATES.length - 1 ? " y " : ", ")}

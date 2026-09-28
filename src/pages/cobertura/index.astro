@@ -71,10 +71,10 @@ if (sinAfondo.length > 0) {
 }
 
 const menuSecciones = [
-  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
-  { label: "Servicios", href: "/servicios", sub: "Fabricación, instalación y reparación" },
-  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
-  { label: "Blog", href: "/blog", sub: "Guías y mantenimiento" },
+  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
+  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 const menuCta = {
   label: "Preguntar por mi zona",
@@ -86,14 +86,14 @@ const menuCta = {
 // Guías de intención de COBERTURA: quien pregunta si llegamos ya va a agendar.
 // Distintas de las de /mosquiteros (elección de tipo) y /servicios (cómo trabajan).
 const menuGuias = [
-  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion", sub: "Qué pasa cuando vamos" },
-  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero", sub: "Si prefieres adelantarnos las medidas" },
-  { label: "Por qué a medida", href: "/blog/por-que-mosquiteros-a-medida", sub: "Y no de línea" },
-  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros", sub: "Antes de dejar entrar a alguien" },
+  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion/", sub: "Qué pasa cuando vamos" },
+  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Si prefieres adelantarnos las medidas" },
+  { label: "Por qué a medida", href: "/blog/por-que-mosquiteros-a-medida/", sub: "Y no de línea" },
+  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de dejar entrar a alguien" },
 ];
 const menuGuiasCta = {
   label: "Ver todas las guías",
-  href: "/blog",
+  href: "/blog/",
   sub: "Guías y mantenimiento",
   icon: "arrow" as const,
 };
@@ -156,7 +156,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Cuántas visitas hacen falta?",
     answer:
-      "Normalmente <strong>dos</strong>: una para medir y otra para instalar. Se puede reducir a una si nos mandas tú las medidas y son correctas — ahí llegamos directo con la pieza hecha. Por eso insistimos tanto en <a href=\"/blog/como-medir-ventana-mosquitero\">cómo medir bien</a>: una medida buena te ahorra una visita.",
+      "Normalmente <strong>dos</strong>: una para medir y otra para instalar. Se puede reducir a una si nos mandas tú las medidas y son correctas — ahí llegamos directo con la pieza hecha. Por eso insistimos tanto en <a href=\"/blog/como-medir-ventana-mosquitero/\">cómo medir bien</a>: una medida buena te ahorra una visita.",
   },
   {
     question: "¿Puedo agendar para un sábado?",
@@ -175,7 +175,7 @@ const faqs: { question: string; answer: string }[] = [
     list: {
       name: "Cobertura de Mosquitero.mx",
       description,
-      path: "/cobertura",
+      path: "/cobertura/",
       items: COVERAGE_STATES.map((z) => ({
         name: z.label,
         path: zonaHref(z.slug),

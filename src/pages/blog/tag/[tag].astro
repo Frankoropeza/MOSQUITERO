@@ -55,7 +55,7 @@ const description = `${posts.length === 1 ? "Artículo" : "Artículos"} del blog
 // pageType 'page', no 'directory': la página va noindex, así que emitir un
 // CollectionPage/ItemList sería pedirle a Google que entienda una página que le
 // estamos diciendo que ignore. Grafo base + breadcrumb y ya.
-const breadcrumbs = [{ label: "Blog", href: "/blog" }, { label: `#${tag}` }];
+const breadcrumbs = [{ label: "Blog", href: "/blog/" }, { label: `#${tag}` }];
 ---
 
 <PageLayout
@@ -85,7 +85,7 @@ const breadcrumbs = [{ label: "Blog", href: "/blog" }, { label: `#${tag}` }];
               <BlogCard
                 title={post.data.title}
                 description={post.data.description}
-                href={`/blog/${post.id}`}
+                href={`/blog/${post.id}/`}
                 image={post.data.heroImage}
                 imageAlt={post.data.title}
                 category={post.data.category}
@@ -97,7 +97,7 @@ const breadcrumbs = [{ label: "Blog", href: "/blog" }, { label: `#${tag}` }];
           </div>
 
           <p class="blog__back">
-            <a href="/blog">← Ver todos los artículos</a>
+            <a href="/blog/">← Ver todos los artículos</a>
           </p>
         </div>
 

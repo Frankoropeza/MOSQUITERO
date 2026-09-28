@@ -62,7 +62,7 @@ const esOperativo = zona.type === "operativo";
   pageType="page"
   breadcrumbs={[
     { label: "Inicio", href: "/" },
-    { label: "Cobertura", href: "/cobertura" },
+    { label: "Cobertura", href: "/cobertura/" },
     { label: zona.label },
   ]}
   schemaData={{ areaServed: [zona.label] }}
@@ -124,9 +124,9 @@ const esOperativo = zona.type === "operativo";
         <h2 class="otras__titulo">Otras zonas que atendemos</h2>
         <ul class="otras__list">
           {COVERAGE_STATES.filter((z) => z.slug !== zona.slug).map((z) => (
-            <li><a href={`/cobertura/${z.slug}`} class="otras__link">Mosquiteros en {z.label}</a></li>
+            <li><a href={`/cobertura/${z.slug}/`} class="otras__link">Mosquiteros en {z.label}</a></li>
           ))}
-          <li><a href="/cobertura" class="otras__link otras__link--all">Ver toda la cobertura</a></li>
+          <li><a href="/cobertura/" class="otras__link otras__link--all">Ver toda la cobertura</a></li>
         </ul>
       </nav>
     </div>

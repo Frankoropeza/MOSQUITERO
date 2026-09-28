@@ -85,9 +85,9 @@ const fmt = (d: Date) =>
 const categoryLabel = category ? blogCategoryLabel(category) : undefined;
 
 const breadcrumbs = [
-  { label: "Blog", href: "/blog" },
+  { label: "Blog", href: "/blog/" },
   ...(category && categoryLabel
-    ? [{ label: categoryLabel, href: `/blog/categoria/${category}` }]
+    ? [{ label: categoryLabel, href: `/blog/categoria/${category}/` }]
     : []),
   { label: title },
 ];
@@ -131,7 +131,7 @@ const waLink = waUrl(waMessage);
       <div class="container">
         <div class="post__header-inner">
           {category && categoryLabel && (
-            <a class="post__cat" href={`/blog/categoria/${category}`}>
+            <a class="post__cat" href={`/blog/categoria/${category}/`}>
               <span class="post__cat-bar" aria-hidden="true"></span>{categoryLabel}
             </a>
           )}
@@ -187,7 +187,7 @@ const waLink = waUrl(waMessage);
         <nav class="post__tags" aria-label="Temas del artículo">
           <span class="post__tags-label">Temas:</span>
           <ul role="list">
-            {tags.map((t) => <li><a href={`/blog/tag/${t}`}>#{t}</a></li>)}
+            {tags.map((t) => <li><a href={`/blog/tag/${t}/`}>#{t}</a></li>)}
           </ul>
         </nav>
       </div>

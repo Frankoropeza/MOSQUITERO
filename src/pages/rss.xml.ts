@@ -42,13 +42,13 @@ export async function GET(context: APIContext) {
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
-      // Sin slash final: política B5 (trailingSlash 'never'). El enlace del feed
+      // CON slash final: política trailingSlash 'always' (medida en producción). El enlace del feed
       // debe ser IDÉNTICO al canonical del artículo, o los agregadores duplican.
-      link: `/blog/${post.id}`,
+      link: `/blog/${post.id}/`,
       author: post.data.author,
       categories: [blogCategoryLabel(post.data.category), ...(post.data.tags ?? [])],
     })),
     customData: `<language>${SITE.lang}</language>`,
-    trailingSlash: false,
+    trailingSlash: true,
   });
 }

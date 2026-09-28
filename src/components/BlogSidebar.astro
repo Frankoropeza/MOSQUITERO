@@ -97,7 +97,7 @@ const fmtCorta = (d: Date) => d.toLocaleDateString('es-MX', { day: 'numeric', mo
           <li>
             <a
               class:list={['bsb__cat', { 'is-active': c.slug === currentCategory }]}
-              href={`/blog/categoria/${c.slug}`}
+              href={`/blog/categoria/${c.slug}/`}
               aria-current={c.slug === currentCategory ? 'page' : undefined}
             >
               <span class="bsb__cat-label">{c.label}</span>
@@ -116,7 +116,7 @@ const fmtCorta = (d: Date) => d.toLocaleDateString('es-MX', { day: 'numeric', mo
       <ul class="bsb__list bsb__list--posts" role="list">
         {recientes.map((post) => (
           <li>
-            <a class="bsb__post" href={`/blog/${post.id}`}>
+            <a class="bsb__post" href={`/blog/${post.id}/`}>
               <img
                 class="bsb__thumb"
                 src={post.data.heroImage}
@@ -161,7 +161,7 @@ const fmtCorta = (d: Date) => d.toLocaleDateString('es-MX', { day: 'numeric', mo
           <li>
             <a
               class:list={['bsb__tag', { 'is-active': currentTags.includes(tag) }]}
-              href={`/blog/tag/${tag}`}
+              href={`/blog/tag/${tag}/`}
             >#{tag}</a>
           </li>
         ))}

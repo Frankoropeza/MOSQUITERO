@@ -66,10 +66,10 @@ if (sinAfondo.length > 0) {
 }
 
 const menuSecciones = [
-  { label: "Mosquiteros", href: "/mosquiteros", sub: "Tipos y catálogo" },
-  { label: "Cobertura", href: "/cobertura", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto", sub: "Teléfono, WhatsApp y correo" },
-  { label: "Blog", href: "/blog", sub: "Guías y mantenimiento" },
+  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
+  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 const menuCta = {
   label: "Cotizar por WhatsApp",
@@ -82,14 +82,14 @@ const menuCta = {
 // elección de tipo). Un menú idéntico en las dos páginas no aporta enlazado
 // nuevo, solo repite.
 const menuGuias = [
-  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero", sub: "Si prefieres medir tú" },
-  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion", sub: "De la medida a la pieza instalada" },
-  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero", sub: "Cómo lo decidimos" },
-  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros", sub: "Antes de contratar a alguien" },
+  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Si prefieres medir tú" },
+  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion/", sub: "De la medida a la pieza instalada" },
+  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Cómo lo decidimos" },
+  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de contratar a alguien" },
 ];
 const menuGuiasCta = {
   label: "Ver todas las guías",
-  href: "/blog",
+  href: "/blog/",
   sub: "Guías y mantenimiento",
   icon: "arrow" as const,
 };
@@ -145,7 +145,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Puedo medir yo y ahorrarme la visita?",
     answer:
-      "Sí, y mucha gente lo hace. Necesitamos el <strong>ancho</strong> y el <strong>alto</strong> del vano medidos por dentro, en tres puntos cada uno, quedándote con la <strong>medida menor</strong> — los vanos casi nunca son cuadrados y una pieza hecha sobre la medida mayor no entra. Está explicado paso a paso en <a href=\"/blog/como-medir-ventana-mosquitero\">cómo medir tu ventana</a>. Si te da inseguridad, vamos nosotros: prefiero una visita a una pieza que no cierra.",
+      "Sí, y mucha gente lo hace. Necesitamos el <strong>ancho</strong> y el <strong>alto</strong> del vano medidos por dentro, en tres puntos cada uno, quedándote con la <strong>medida menor</strong> — los vanos casi nunca son cuadrados y una pieza hecha sobre la medida mayor no entra. Está explicado paso a paso en <a href=\"/blog/como-medir-ventana-mosquitero/\">cómo medir tu ventana</a>. Si te da inseguridad, vamos nosotros: prefiero una visita a una pieza que no cierra.",
   },
   {
     question: "¿Instalan mosquiteros que no fabricaron ustedes?",
@@ -155,7 +155,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Cómo sé si conviene reparar o cambiar el mosquitero?",
     answer:
-      "La regla que usamos: si el <strong>bastidor y los herrajes aguantan</strong>, se cambia solo la malla y queda como nuevo. Si el marco está vencido, deformado o los rodamientos ya no corren, reparar sale casi lo mismo que reponer y encima dura menos. Mándanos una foto y te lo decimos <strong>antes</strong> de ir — aunque signifique no vender la reparación. El criterio completo, en <a href=\"/blog/reparar-o-reponer-un-mosquitero\">reparar o reponer</a>.",
+      "La regla que usamos: si el <strong>bastidor y los herrajes aguantan</strong>, se cambia solo la malla y queda como nuevo. Si el marco está vencido, deformado o los rodamientos ya no corren, reparar sale casi lo mismo que reponer y encima dura menos. Mándanos una foto y te lo decimos <strong>antes</strong> de ir — aunque signifique no vender la reparación. El criterio completo, en <a href=\"/blog/reparar-o-reponer-un-mosquitero/\">reparar o reponer</a>.",
   },
   {
     question: "¿Trabajan puertas y domos, o solo ventanas?",
@@ -165,7 +165,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Atienden en mi zona?",
     answer:
-      "Trabajamos <a href=\"/cobertura/cdmx\">Ciudad de México</a> y <a href=\"/cobertura/edomex\">Estado de México</a>. Como el Edomex es un área grande, si estás ahí confírmanos tu municipio antes de agendar — te decimos en el momento si llegamos, en vez de hacerte esperar una visita que no va a pasar.",
+      "Trabajamos <a href=\"/cobertura/cdmx/\">Ciudad de México</a> y <a href=\"/cobertura/edomex/\">Estado de México</a>. Como el Edomex es un área grande, si estás ahí confírmanos tu municipio antes de agendar — te decimos en el momento si llegamos, en vez de hacerte esperar una visita que no va a pasar.",
   },
 ];
 ---
@@ -179,7 +179,7 @@ const faqs: { question: string; answer: string }[] = [
     list: {
       name: "Servicios de Mosquitero.mx",
       description,
-      path: "/servicios",
+      path: "/servicios/",
       items: SERVICES.map((s) => ({
         name: s.label,
         path: servicioHref(s.id),
