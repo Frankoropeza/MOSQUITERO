@@ -2,14 +2,15 @@
 // ============================================================================
 // servicios/index.astro — SERVICIOS (L2). Ruta: /servicios
 // ----------------------------------------------------------------------------
-// HOMOLOGADA CON /mosquiteros Y CON LA HOME. Mismo ritmo, mismos componentes:
+// HOMOLOGADA CON /mosquiteros. Mismo ritmo, mismos componentes:
 //     1) Hero            → H1 único
 //     2) SectionMenu     → barra full-width bajo el hero
 //     3) Vitrina         → CategoryCard, uno por servicio
 //     4) Cuál necesitas  → tabla de decisión (lo que esta L2 aporta)
 //     5) A fondo         → CategoryDetail por servicio (as="h3")
-//     6) FAQ + QuoteForm → dos columnas
-//     7) SectionMenu     → menú de guías antes del footer
+//     6) Compromisos     → cuatro constantes de la visita
+//     7) FAQ + QuoteForm → dos columnas
+//     8) SectionMenu     → menú de guías antes del footer
 // Si cambias el patrón aquí, revisa mosquiteros/index.astro e index.astro.
 //
 // TEXTO PROPIO — NADA COPIADO DE /mosquiteros:
@@ -20,8 +21,8 @@
 // por la misma búsqueda y Google descartaría una.
 //
 // SEO:
-//   • kw3 "instalación de mosquiteros" es la de esta página — no kw1, que es de
-//     /mosquiteros. Dos páginas peleando por la misma keyword se canibalizan.
+//   • Esta L2 va por "mosquiteros a domicilio". "instalación de mosquiteros"
+//     pertenece a /servicios/instalacion/, para no canibalizar esa ficha.
 //   • Un solo H1 (el Hero). Secciones en H2, "a fondo" en H3.
 //   • FAQ propia, SIN solapar con la home (8) ni con /mosquiteros (6): éstas son
 //     de intención de servicio — cómo trabajan, si hay que estar, quién mide.
@@ -37,6 +38,7 @@ import SectionMenu from "@components/SectionMenu.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import CategoryCard from "@components/CategoryCard.astro";
 import CategoryDetail from "@components/CategoryDetail.astro";
+import MarcadoresGrid from "@components/MarcadoresGrid.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
@@ -46,13 +48,39 @@ import {
   waUrl,
   servicioHref,
 } from "@config/site";
+import {
+  NOTA_PRECIOS_REFERENCIA,
+  PRECIOS_REFERENCIA,
+  TAMANO_REFERENCIA,
+  formatearPrecio,
+  precioMasBajo,
+} from "@config/precios";
 
 const servicioEntries = (await getCollection("servicios")).sort((a, b) => a.data.order - b.data.order);
 const serviciosPorId = new Map(servicioEntries.map((entry) => [entry.data.id, entry.data]));
 
-const title = "Servicios | instalación de mosquiteros a medida";
+const title = "Servicios de mosquiteros a domicilio | CDMX y Edomex";
 const description =
-  "Instalación de mosquiteros a medida, fabricación, medición a domicilio y reparación. Del vano a la pieza instalada en CDMX y Edomex. Cotiza por WhatsApp.";
+  `Mosquiteros a domicilio en CDMX y Edomex: fabricación, instalación, medición y reparación; instalación incluida desde ${formatearPrecio(precioMasBajo("ventana"))} en ventanas y puertas a medida.`;
+
+const precioVentana = formatearPrecio(precioMasBajo("ventana"));
+const precioPuerta = formatearPrecio(precioMasBajo("puerta"));
+const precioCambioVentana = formatearPrecio(PRECIOS_REFERENCIA.cambioDeMalla.ventana);
+const precioCambioPuerta = formatearPrecio(PRECIOS_REFERENCIA.cambioDeMalla.puerta);
+
+const precioPorServicio: Record<(typeof SERVICES)[number]["id"], string | undefined> = {
+  fabricacion: `Ventana desde ${precioVentana} · Puerta desde ${precioPuerta}`,
+  instalacion: "Incluida al fabricar con nosotros",
+  medicion: undefined,
+  reparacion: `Cambio de malla desde ${precioCambioVentana} por hoja`,
+};
+
+const ctaPorServicio: Record<(typeof SERVICES)[number]["id"], string> = {
+  fabricacion: "Ver fabricación",
+  instalacion: "Ver instalación",
+  medicion: "Ver medición",
+  reparacion: "Ver reparación",
+};
 
 // Guarda: mismo criterio que la ficha [servicio].astro. Si un servicio no tiene
 // entrada en SERVICIOS_AFONDO, esta página lo pintaría sin cuerpo ni galería.
@@ -99,38 +127,49 @@ const menuGuiasCta = {
 // ── Tabla de decisión — el bloque que justifica esta L2 ──────────────────────
 // /mosquiteros ordena por TIPO DE VENTANA. Ésta ordena por EN QUÉ PUNTO ESTÁS:
 // es la pregunta real de quien busca un servicio, no un producto.
-// 🟠 Oficio general. No dice precios, plazos ni si la visita se cobra.
-const decision: { situacion: string; servicio: string; id: string; nota: string }[] = [
+const decision: { situacion: string; servicio: string; id: (typeof SERVICES)[number]["id"]; nota: string; referencia: string }[] = [
   {
     situacion: "No tengo mosquiteros y no sé medir",
     servicio: "Medición a domicilio",
     id: "medicion",
     nota: "Vamos, medimos y de paso te decimos qué tipo corresponde a tu marco.",
+    referencia: "Se confirma al agendar",
   },
   {
     situacion: "Ya tengo las medidas del vano",
     servicio: "Fabricación a medida",
     id: "fabricacion",
     nota: "Con las medidas y una foto cotizamos por pieza, sin visita previa.",
+    referencia: `Desde ${precioVentana} ventana · ${precioPuerta} puerta, instalado`,
   },
   {
     situacion: "Ya tengo la pieza y falta ponerla",
     servicio: "Instalación",
     id: "instalacion",
     nota: "La colocamos, la ajustamos y verificamos que cierre antes de irnos.",
+    referencia: "Según la pieza y el anclaje",
   },
   {
     situacion: "Se rompió la malla, el marco está bien",
     servicio: "Reparación",
     id: "reparacion",
     nota: "Se cambia solo la tela: cuesta una fracción de una pieza nueva.",
+    referencia: `Desde ${precioCambioVentana} ventana · ${precioCambioPuerta} puerta, por hoja`,
   },
   {
     situacion: "El marco está vencido o no corre",
     servicio: "Te decimos cuál conviene",
     id: "reparacion",
     nota: "A veces reparar sale casi lo mismo que reponer. Te lo decimos de frente.",
+    referencia: "Según el caso",
   },
+];
+
+const compromisos = [
+  { titulo: "Un solo equipo", texto: "Quien mide es quien fabrica e instala. Si algo no cierra, no hay a quién pasarle el problema." },
+  { titulo: "Instalación incluida", texto: "Al fabricar con nosotros, la instalación va en el precio; no es un extra que se cotiza después." },
+  { titulo: "Revisión antes de irnos", texto: "Comprobamos que cierre completo, que corra sin trabarse y que no roce." },
+  { titulo: "Reparar solo si conviene", texto: "Si el marco ya no aguanta, lo sabrás antes de pagar una reparación." },
 ];
 
 // ── FAQ de servicio ─────────────────────────────────────────────────────────
@@ -147,7 +186,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Puedo medir yo y ahorrarme la visita?",
     answer:
-      "Sí, y mucha gente lo hace. Necesitamos el <strong>ancho</strong> y el <strong>alto</strong> del vano medidos por dentro, en tres puntos cada uno, quedándote con la <strong>medida menor</strong> — los vanos casi nunca son cuadrados y una pieza hecha sobre la medida mayor no entra. Está explicado paso a paso en <a href=\"/blog/como-medir-ventana-mosquitero/\">cómo medir tu ventana</a>. Si te da inseguridad, vamos nosotros: prefiero una visita a una pieza que no cierra.",
+      "Sí, y mucha gente lo hace. Necesitamos el <strong>ancho</strong> y el <strong>alto</strong> del vano medidos por dentro, en tres puntos cada uno, quedándote con la <strong>medida menor</strong> — los vanos casi nunca son cuadrados y una pieza hecha sobre la medida mayor no entra. Está explicado paso a paso en <a href=\"/blog/como-medir-ventana-mosquitero/\">cómo medir tu ventana</a>. Si te da inseguridad, vamos nosotros: preferimos una visita a una pieza que no cierra.",
   },
   {
     question: "¿Instalan mosquiteros que no fabricaron ustedes?",
@@ -162,12 +201,22 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Trabajan puertas y domos, o solo ventanas?",
     answer:
-      "Ventanas, puertas y domos. El tipo de pieza cambia según el vano —una puerta de acceso diario pide un abatible o un magnético, un domo pide otra solución— pero el servicio es el mismo: medimos, fabricamos a esa medida e instalamos. Si tienes un vano raro, mándanos la foto: casi siempre hay forma.",
+      "Ventanas, puertas y domos. El tipo de pieza cambia según el vano —una puerta de acceso diario pide un abatible o un magnético, un domo pide otra solución— pero el servicio es el mismo: medimos, fabricamos a esa medida e instalamos. Si tienes un vano raro, con una foto vemos la forma de resolverlo.",
   },
   {
     question: "¿Atienden en mi zona?",
     answer:
       "Trabajamos <a href=\"/cobertura/cdmx/\">Ciudad de México</a> y <a href=\"/cobertura/edomex/\">Estado de México</a>. Como el Edomex es un área grande, si estás ahí confírmanos tu municipio antes de agendar — te decimos en el momento si llegamos, en vez de hacerte esperar una visita que no va a pasar.",
+  },
+  {
+    question: "¿Cuánto cuesta el servicio completo?",
+    answer:
+      `Si fabricamos la pieza, la instalación va incluida: una ventana va desde <strong>${precioVentana}</strong> y una puerta desde <strong>${precioPuerta}</strong>, ya puestas en CDMX y Edomex. El cambio de malla va desde <strong>${precioCambioVentana}</strong> por hoja de ventana. Si la pieza ya la tienes, el precio depende de qué hay que anclar y de cuántas piezas son; con una foto del vano y de la pieza lo cotizamos antes de ir.`,
+  },
+  {
+    question: "¿Cómo se coloca un mosquitero en una ventana?",
+    answer:
+      "Depende del tipo: el corredizo entra a su propio riel, el abatible se atornilla al marco con bisagras y el enrollable fija su cajón arriba del vano. Antes de anclar comprobamos que el marco esté como lo medimos, porque un vano se mueve con el tiempo; al final verificamos que cierre completo y corra sin trabarse. El detalle, en <a href=\"/servicios/instalacion/\">instalación de mosquiteros</a>.",
   },
 ];
 ---
@@ -193,9 +242,9 @@ const faqs: { question: string; answer: string }[] = [
 >
   {/* ═══ 1) HERO — H1 único. ═══ */}
   <Hero
-    title="Del vano a la pieza instalada, sin"
+    title="Mosquiteros a domicilio, sin"
     accent="intermediarios"
-    subtitle="Medimos, fabricamos, instalamos y reparamos. Todo lo hace el mismo equipo, así que no hay a quién echarle la culpa si algo no cierra."
+    subtitle={`Medimos, fabricamos, instalamos y reparamos. Todo lo hace el mismo equipo, y la instalación va incluida en el precio: una ventana desde ${precioVentana} y una puerta desde ${precioPuerta}, ya puestas en CDMX y Edomex.`}
     descRight={[
       "La mayoría de los problemas con un mosquitero no vienen de la pieza: vienen de una medida mal tomada o de una instalación a medias. Por eso cubrimos el trabajo completo — tomamos la medida en tu ventana, armamos la pieza con esas dimensiones y volvemos a colocarla nosotros.",
       "Y si ya tienes mosquiteros, no siempre hay que reponerlos. Cuando el bastidor aguanta, se cambia solo la malla. Cuando no, te lo decimos de frente aunque eso signifique no vender la reparación.",
@@ -206,11 +255,11 @@ const faqs: { question: string; answer: string }[] = [
   <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
 
   {/* ═══ 2) VITRINA — un servicio por tarjeta ═══ */}
-  <section class="section section--surface">
+  <section class="section">
     <div class="container">
       <SectionHeading
         eyebrow="Servicios"
-        title="Qué hacemos"
+        title="Cuatro servicios, un solo equipo"
         body={[
           "Cuatro servicios que suelen ir juntos pero se pueden pedir sueltos: medir, fabricar, instalar y reparar. Puedes contratarnos el trabajo completo o solo la parte que te falta.",
           "No hay que llevar nada a ningún taller ni esperar a que pases a recoger. Nosotros vamos, tomamos lo que haga falta y volvemos con la pieza puesta.",
@@ -226,7 +275,8 @@ const faqs: { question: string; answer: string }[] = [
             image={afondo.gallery.main.src}
             imageAlt={afondo.gallery.main.alt}
             blurb={afondo.blurb}
-            ctaLabel={`Ver ${s.label.toLowerCase()}`}
+            precio={precioPorServicio[s.id]}
+            ctaLabel={ctaPorServicio[s.id]}
             index={i}
           />
           );
@@ -253,12 +303,13 @@ const faqs: { question: string; answer: string }[] = [
 
       <div class="tabla-wrap">
         <table class="tabla">
-          <caption class="tabla__caption">Qué servicio corresponde a cada situación</caption>
+          <caption class="tabla__caption">Qué servicio corresponde a cada situación y su precio de referencia</caption>
           <thead>
             <tr>
               <th scope="col">Si tu caso es…</th>
               <th scope="col">Lo que necesitas</th>
               <th scope="col">Por qué</th>
+              <th scope="col" class="tabla__precio-col">Referencia</th>
             </tr>
           </thead>
           <tbody>
@@ -267,11 +318,14 @@ const faqs: { question: string; answer: string }[] = [
                 <th scope="row" class="tabla__caso">{d.situacion}</th>
                 <td class="tabla__svc"><a href={servicioHref(d.id)}>{d.servicio}</a></td>
                 <td class="tabla__nota-col">{d.nota}</td>
+                <td class="tabla__precio">{d.referencia}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <p class="tabla__nota">{TAMANO_REFERENCIA}</p>
+      <p class="tabla__nota">{NOTA_PRECIOS_REFERENCIA}</p>
     </div>
   </section>
 
@@ -280,7 +334,7 @@ const faqs: { question: string; answer: string }[] = [
       SERVICIOS_AFONDO[id]. as="h3" NO es opcional — estos bloques cuelgan del H2
       de esta sección. Regla: H2 sección padre → H3 sub-bloque.
       ═══════════════════════════════════════════════════════════════════════ */}
-  <section class="section section--surface">
+  <section class="section seccion-afondo">
     <div class="container">
       <SectionHeading
         eyebrow="A fondo"
@@ -290,7 +344,7 @@ const faqs: { question: string; answer: string }[] = [
           "Si quieres el detalle completo de uno, entra a su ficha desde el botón del bloque.",
         ]}
       />
-      <div class="afondo">
+      <div class="afondo bandas-alternas">
         {SERVICES.map((s) => {
           const afondo = serviciosPorId.get(s.id)!;
           return (
@@ -302,7 +356,7 @@ const faqs: { question: string; answer: string }[] = [
             body={afondo.body}
             points={afondo.points}
             gallery={afondo.gallery}
-            cta={{ label: `Ver ${s.label.toLowerCase()}`, href: servicioHref(s.id) }}
+            cta={{ label: ctaPorServicio[s.id], href: servicioHref(s.id) }}
           />
           );
         })}
@@ -310,7 +364,19 @@ const faqs: { question: string; answer: string }[] = [
     </div>
   </section>
 
-  {/* ═══ 5) FAQ + COTIZACIÓN — misma estructura que la home y /mosquiteros ═══
+  <section class="section section--mint">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Compromisos"
+        title="Cómo trabajamos en tu casa"
+        layout="simple"
+        desc="Sea una medición, una pieza nueva o un cambio de malla, la visita se hace igual."
+      />
+      <MarcadoresGrid items={compromisos} />
+    </div>
+  </section>
+
+  {/* ═══ 6) FAQ + COTIZACIÓN — misma estructura que la home y /mosquiteros ═══
       El JSON-LD FAQPage lo emite lib/seo.ts vía schemaData → <FAQAccordion> va
       SIN `emitSchema` (anti-patrón B3: doble FAQPage). `flush` hace que herede
       el .container en vez de crear el suyo. ══════════════════════════════════ */}
@@ -338,59 +404,179 @@ const faqs: { question: string; answer: string }[] = [
 </PageLayout>
 
 <style>
+  .showcase {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
 
-  /* Vitrina — 4 servicios = una fila limpia de 4 en escritorio. */
-  .showcase { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
-  @media (min-width: 640px) { .showcase { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .showcase { grid-template-columns: repeat(4, 1fr); } }
-
-  /* ── Tabla de decisión ──
-     Scroll horizontal en móvil, igual que en /mosquiteros: una tabla de
-     comparación apilada deja de ser comparación. */
   .tabla-wrap {
     margin-top: var(--sp-6);
     overflow-x: auto;
     border: 1px solid var(--c-border);
-    border-radius: var(--radius-lg);
-    background: var(--c-white);
+    border-radius: 0;
+    background: var(--c-bg);
   }
-  .tabla { width: 100%; border-collapse: collapse; min-width: 680px; }
+  .tabla {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+  }
   .tabla__caption {
-    padding: var(--sp-4) var(--sp-5) 0;
-    font-size: var(--text-sm); color: var(--c-muted); text-align: left;
-  }
-  .tabla th, .tabla td {
     padding: var(--sp-4) var(--sp-5);
-    text-align: left; vertical-align: top;
-    font-size: var(--text-sm); line-height: var(--leading-normal);
+    color: var(--c-muted);
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+  .tabla th,
+  .tabla td {
+    padding: var(--sp-4) var(--sp-5);
     border-bottom: 1px solid var(--c-border);
+    color: var(--c-ink-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    text-align: left;
+    vertical-align: top;
   }
   .tabla thead th {
+    background: var(--c-primary);
+    border-bottom: 1px solid var(--c-primary);
+    color: var(--c-on-dark);
     font-family: var(--font-heading);
-    font-size: var(--text-xs); font-weight: var(--weight-bold);
-    letter-spacing: .04em; text-transform: uppercase;
-    color: var(--c-muted); background: var(--c-surface);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: .04em;
+    text-transform: uppercase;
   }
-  .tabla tbody tr:last-child th, .tabla tbody tr:last-child td { border-bottom: 0; }
+  .tabla tbody tr {
+    background: var(--c-bg);
+  }
+  .tabla tbody tr:last-child th,
+  .tabla tbody tr:last-child td {
+    border-bottom: 0;
+  }
   .tabla__caso {
-    font-weight: var(--weight-semibold); color: var(--c-ink);
+    color: var(--c-ink);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    letter-spacing: .02em;
     max-width: 30ch;
+    text-transform: uppercase;
   }
-  .tabla__svc { white-space: nowrap; }
+  .tabla__svc {
+    white-space: nowrap;
+  }
   .tabla__svc a {
-    font-family: var(--font-heading); font-weight: var(--weight-semibold);
-    color: var(--c-primary); text-decoration: none;
+    color: inherit;
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
   }
-  .tabla__svc a:hover { text-decoration: underline; }
-  .tabla__svc a:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
-  .tabla__nota-col { color: var(--c-muted); }
-
-  /* Pila de bloques "a fondo" — mismo gap generoso que /mosquiteros y la home. */
-  .afondo { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin-top: var(--sp-8); }
-
-  .faq-bloque { margin-top: var(--sp-6); }
+  .tabla__svc a:hover {
+    text-decoration: underline;
+  }
+  .tabla__svc a:focus-visible {
+    outline: 2px solid var(--c-primary);
+    outline-offset: 2px;
+  }
+  .tabla__nota-col,
+  .tabla__nota {
+    color: var(--c-muted);
+  }
+  .tabla td.tabla__precio,
+  .tabla thead th.tabla__precio-col {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .tabla td.tabla__precio {
+    color: var(--c-ink);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+  }
+  .tabla__nota {
+    max-width: 66ch;
+    margin: var(--sp-4) 0 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+  .seccion-afondo {
+    padding-bottom: 0;
+  }
+  .faq-bloque {
+    margin-top: var(--sp-6);
+  }
+  :global(.servicios) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-4);
+  }
+  :global(.servicio) {
+    padding: var(--sp-4);
+    text-align: center;
+  }
+  :global(.servicio__contenido) {
+    display: grid;
+    justify-items: center;
+  }
+  :global(.servicio__marca) {
+    display: block;
+    width: 28px;
+    height: 28px;
+    margin-bottom: var(--sp-4);
+    background: var(--c-primary);
+  }
+  :global(.servicio__marca--2) {
+    border-radius: var(--radius-full);
+  }
+  :global(.servicio__marca--3) {
+    transform: rotate(45deg);
+  }
+  :global(.servicio__marca--4) {
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  }
+  :global(.servicio__titulo) {
+    margin: 0 0 var(--sp-3);
+    color: var(--c-ink);
+    font-family: var(--font-heading);
+    font-size: var(--text-card);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+  }
+  :global(.servicio__desc) {
+    margin: 0;
+    color: var(--c-ink-2);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+  }
 
   @media (min-width: 768px) {
-    .section { padding: var(--sp-10) 0; }
+    .section {
+      padding: var(--sp-10) 0;
+    }
+    :global(.servicios) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 640px) {
+    .showcase {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .showcase {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    :global(.servicios) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @media (max-width: 767px) {
+    .tabla tbody .tabla__caso {
+      position: sticky;
+      left: 0;
+      background: var(--c-bg);
+    }
   }
 </style>
