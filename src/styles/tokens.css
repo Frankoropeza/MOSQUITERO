@@ -4,6 +4,24 @@
    El bloque "PUENTE DE ALIAS" mapea nombres heredados (MESECI --color-*, --space-*) al canónico
    para que los componentes extraídos rendericen sin reescritura. Migrar a nombres canónicos es deuda de roadmap. */
 
+/* ── Fuentes self-hosted (variables, subset latin) — 2026-09-28 ─────────────── */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/outfit-latin-wght.woff2') format('woff2-variations'), url('/fonts/outfit-latin-wght.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-wght.woff2') format('woff2-variations'), url('/fonts/inter-latin-wght.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   /* ---------- COLOR (marca) ---------- */
   /* TODO: color de marca real de mosquitero.mx. Es el índigo heredado del template.

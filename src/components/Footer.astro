@@ -22,7 +22,7 @@ const cfgBranches: Branch[] = BRANCHES ?? []
 const {
   certifications = [],
   branches = cfgBranches,
-  logo = (SITE as any).logo ?? '/images/brand/logo.svg',
+  logo = (SITE as any).logo ?? '/images/brand/logo-light.svg', // versión clara: el footer es oscuro
   seoTagline = SITE.tagline,
 } = Astro.props
 
@@ -41,7 +41,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
 
       <div class="footer__brand">
         <a href="/" class="footer__logo-link" aria-label={`${SITE.name} — Ir al inicio`}>
-          <img src={logo} alt={SITE.name} width="203" height="48" loading="lazy" decoding="async" class="footer__logo-img" />
+          <img src={logo} alt={SITE.name} width="280" height="48" loading="lazy" decoding="async" class="footer__logo-img" />
         </a>
         <p class="footer__brand-desc">{SITE.description}</p>
 

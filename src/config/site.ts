@@ -29,7 +29,7 @@ export const SITE = {
   locale: 'es-MX',
   description:
     'Mosquiteros a medida para ventanas y puertas: fabricación, instalación y reparación. Cotiza tu mosquitero por WhatsApp con medidas y tiempo de entrega.', // 140–160 chars · abre con kw1, teje las 3 keywords.
-  defaultImage: '/images/og/default.svg', // TODO: reemplazar por OG real 1200×630.
+  defaultImage: '/images/og/default.png', // OG raster 1200×630 (WhatsApp/Facebook/X no aceptan SVG). Wordmark provisional 2026-09-28.
 
   // ── COLOR DE MARCA — fuente única del HEX ────────────────────────────────
   // TODO: color de marca real de mosquitero.mx. Hoy es el índigo heredado del
@@ -49,27 +49,14 @@ export const SITE = {
 
   // ── GATE DE LANZAMIENTO ─────────────────────────────────────────────────
   // noindexAll: true → TODA página emite `robots: noindex, nofollow`.
-  // ⚠️ CORREGIDO 2026-07-14: este comentario decía que el sitio "se despliega en
-  // mosquitero.pages.dev". Era FALSO — nadie lo había comprobado. `mosquitero.mx`
-  // resuelve (Cloudflare) y SIRVE ESTE SITIO: es público ahora mismo. O sea que
-  // esto no es una precaución sobre un staging, es lo único que separa a Google
-  // de 29 páginas que muestran `TODO: 55 0000 0000` (203 veces), 8 enlaces a un
-  // wa.me inventado por página, y un `geo: 0,0` (Null Island, frente a África)
-  // en el JSON-LD de LocalBusiness. Que Google indexe eso es peor que no tener
-  // sitio: contenido placeholder posicionado bajo la marca real, y una entidad
-  // de negocio local anclada a una coordenada del Golfo de Guinea.
-  //
-  // ⚠️ PONER EN false SOLO CUANDO: (1) no quede ningún `TODO:` vivo en este
-  // archivo, y (2) el cliente haya validado el contenido marcado 🟠 en
-  // docs/PROCEDENCIA.md. La antigua condición (3) «el dominio real apunta al
-  // sitio» YA ESTÁ CUMPLIDA — era la que la gente asumía pendiente.
-  // Checklist accionable con lo que falta: docs/GATE-LANZAMIENTO.md
-  //
-  // NOTA: NO se bloquea con `Disallow: /` en robots.txt a propósito. Bloquear el
-  // rastreo impide que Google LEA la etiqueta noindex, y la URL puede acabar
-  // indexada igual si alguien la enlaza. Para no indexar hay que DEJAR rastrear
-  // y servir noindex. Los dos juntos se anulan.
-  noindexAll: true,
+  // 2026-09-28: LEVANTADO por decisión de Frank ("todo tiene que ser index y
+  // follow, que lo vean Google y los motores de IA"). El sitio se indexa completo.
+  // Pendientes que siguen abiertos con el sitio ya público: fotos reales (hoy SVG
+  // marcadores), logo definitivo y validación del contenido 🟠 con el cliente.
+  // Ver OBSIDIAN/OrigenLab/Proyectos/MOSQUITERO/MOSQUITERO-Auditoria-2026-09-28.md.
+  // No bloquear con `Disallow: /` en robots.txt: para desindexar hay que DEJAR
+  // rastrear y servir noindex.
+  noindexAll: false as boolean,
 
   // Política de trailing slash. Debe coincidir con astro.config.mjs.
   // MEDIDO en producción 2026-08-12: mosquitero.mx redirige 308 de sin-slash a
@@ -86,7 +73,7 @@ export const SITE = {
     title: 'Mosquiteros a medida | mosquiteros para ventanas', // ≤60 chars. Fallback; la home lo genera con buildKeywordTitle(KEYWORDS).
     description:
       'Mosquiteros a medida para ventanas y puertas: fabricación, instalación y reparación. Cotiza tu mosquitero por WhatsApp con medidas y tiempo de entrega.',
-    image: '/images/og/default.svg',
+    image: '/images/og/default.png',
     titleMaxLength: 60,
     descriptionMaxLength: 160,
     appendBrand: false, // Regla OrigenLab: title sin marca.
@@ -106,7 +93,7 @@ export const SITE = {
   organization: {
     name: 'Mosquitero.mx',
     legalName: 'Mosquitero.mx', // TODO: razón social legal real.
-    logo: '/images/brand/logo.svg', // TODO: logo real cuadrado para schema.
+    logo: '/images/brand/logo-512.png', // PNG cuadrado 512 para schema (Google exige raster ≥112 px). Wordmark provisional 2026-09-28.
     foundingDate: undefined as string | undefined, // TODO: 'YYYY' real o dejar undefined.
     sameAs: [] as string[], // Solo perfiles oficiales verificables.
   },

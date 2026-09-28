@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Ejemplos.mx">
-  <rect width="64" height="64" rx="14" fill="#d32f2f"/>
-  <text x="32" y="44" text-anchor="middle" font-size="38" font-family="system-ui, sans-serif" font-weight="800" fill="#fff">O</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Mosquitero.mx"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c66f7"/><stop offset="1" stop-color="#3f28c2"/></linearGradient></defs><rect x="0" y="0" width="64" height="64" rx="16" fill="url(#g)"/><path d="M17.00096 46.12608V17.873920000000002H22.754559999999998L33.26976 33.269760000000005H30.76992L41.24544 17.873920000000002H46.999039999999994V46.12608H39.142399999999995V30.88896L40.29312 31.206400000000002L34.539519999999996 39.45984H29.460479999999997L23.74656 31.206400000000002L24.857599999999998 30.88896V46.12608Z" fill="#fff"/></svg>

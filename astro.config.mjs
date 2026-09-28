@@ -39,8 +39,7 @@ const sitemapOptions = {
   filter: (page) =>
     !page.includes('/404') &&
     !page.includes('/_') &&
-    !page.includes('/admin') &&
-    !page.includes('/blog/tag/'),
+    !page.includes('/admin'),
 
   // Prioridades por tipo de página: home y categorías empujan más que fichas.
   serialize(item) {

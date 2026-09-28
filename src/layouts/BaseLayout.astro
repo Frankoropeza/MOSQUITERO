@@ -151,16 +151,10 @@ const jsonLd = buildSchema(pageType, schemaData);
         sale de SITE.themeColor, que documenta los 3 sitios donde vive. */}
     <meta name="theme-color" content={SITE.themeColor} />
 
-    {/*
-      ── Fuentes self-hosted anti-CLS (C3) ──
-      Esta PLANTILLA usa la pila system-ui de tokens.css (sin woff2 propios), por
-      eso los preload van comentados: descomentándolos sin el archivo real darían
-      404. Al elegir tipografía propia, coloca los woff2 en /public/fonts, ajusta
-      --font-body / --font-heading en src/styles/tokens.css y descomenta:
-        <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
-        <link rel="preload" href="/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin />
-      Self-host + font-display:swap + preload. NO Google Fonts CDN.
-    */}
+    {/* ── Fuentes self-hosted (C3): Outfit + Inter variables, subset latin (incluye
+         acentos y ñ). @font-face en tokens.css. Sin Google Fonts CDN. */}
+    <link rel="preload" href="/fonts/outfit-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
 
     {/*
       ── Preconnect CDN de imágenes (E3) — opcional ──
