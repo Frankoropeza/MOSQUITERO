@@ -1,5 +1,5 @@
 ---
-// Hero.astro — Hero oscuro reutilizable: gradiente + glow radial, badge con punto, H1 con acento de marca, columna derecha y CTAs opcionales. ORIGEN: PROYECTORED/src/components/sections/Hero.astro (estructura 2 columnas + CTAs) fusionado con el fondo canónico de MESECI/HeroBase (gradiente 155deg + radial rojo).
+// Hero.astro — Hero claro reutilizable con título editorial, acento menta, columna derecha y CTAs opcionales.
 // CTAs OPCIONALES: el patrón canónico MESECI (REGLA HeroBase) recomienda "el hero presenta, NavRapida/QuickLinks convierte". Pásalos sólo en L1/L2 si el negocio lo requiere. waUrl() desde config para el CTA de WhatsApp.
 interface HeroCTA {
   text: string
@@ -27,14 +27,14 @@ const WA_PATH = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.
   <div class="hero__inner">
     <div class="hero__left">
       {badge && <span class="hero__badge"><span class="hero__badge-dot" aria-hidden="true"></span>{badge}</span>}
-      <h1 class="hero__title">{title}{accent && <span class="hero__accent"> {accent}</span>}</h1>
+      <h1 class="hero__title">{title}{accent && <>{" "}<span class="hero__accent">{accent}</span></>}</h1>
       {subtitle && <p class="hero__subtitle">{subtitle}</p>}
       {ctas.length > 0 && (
         <div class="hero__ctas">
           {ctas.map((cta) => (
             <a
               href={cta.href}
-              class:list={['hero__btn', cta.variant === 'outline' ? 'hero__btn--outline' : 'hero__btn--primary']}
+              class:list={['hero__btn', 'btn', cta.variant === 'outline' ? 'hero__btn--outline btn--ghost' : 'hero__btn--primary btn--primary']}
               target={cta.whatsapp || cta.href.startsWith('http') ? '_blank' : undefined}
               rel={cta.whatsapp || cta.href.startsWith('http') ? 'noopener noreferrer' : undefined}
             >
@@ -57,17 +57,14 @@ const WA_PATH = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.
   .hero {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(155deg, #0C0C0C 0%, #180A0D 55%, #0C0C0C 100%);
+    background: var(--c-bg);
     padding-block: clamp(3rem, 6vw, 5rem);
   }
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(ellipse 60% 70% at 75% 40%, color-mix(in srgb, var(--color-red, #C41E24) 22%, transparent) 0%, transparent 60%),
-      linear-gradient(transparent 59px, rgba(255,255,255,.025) 60px) 0 0 / 60px 60px,
-      linear-gradient(90deg, transparent 59px, rgba(255,255,255,.025) 60px) 0 0 / 60px 60px;
+    background: transparent;
     pointer-events: none;
   }
   .hero__inner {
@@ -84,32 +81,44 @@ const WA_PATH = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.
   .hero__badge {
     display: inline-flex; align-items: center; gap: var(--sp-2, .5rem);
     padding: var(--sp-2, .5rem) var(--sp-4, 1rem);
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: var(--radius-full, 9999px);
-    font-size: var(--text-sm, .875rem);
+    background: transparent;
+    border: 1px solid var(--c-line);
+    border-radius: 0;
+    font-family: var(--font-ui);
+    font-size: .8125rem;
     font-weight: var(--weight-medium, 500);
-    color: rgba(255,255,255,.9);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
     margin-bottom: var(--sp-5, 1.25rem);
   }
   .hero__badge-dot {
-    width: 6px; height: 6px; background: var(--color-red-light, #E8213F); border-radius: 50%; flex-shrink: 0;
+    width: 6px; height: 6px; background: var(--c-accent); border-radius: 50%; flex-shrink: 0;
 
   }
   /* Aquí latía el punto del badge (@keyframes hero-pulse). Se fue con el
      CONTRATO DE MOVIMIENTO: el sitio no anima. El punto sigue ahí, fijo. */
+  /* Título display en MAYÚSCULAS (rediseño 2026-09-28). Tamaño, peso,
+     interlineado y tracking salen de los tokens de título de tokens.css. */
   .hero__title {
-    font-size: var(--text-4xl, clamp(2.5rem, 4.5vw, 3.75rem));
-    font-weight: var(--weight-black, 800);
-    line-height: var(--leading-tight, 1.2);
-    color: #fff;
+    font-size: var(--text-display);
+    font-weight: var(--heading-weight);
+    line-height: var(--heading-leading);
+    color: var(--c-ink);
     margin-bottom: var(--sp-5, 1.25rem);
-    letter-spacing: -.02em;
+    letter-spacing: var(--heading-tracking);
   }
-  .hero__accent { color: var(--color-red-light, #E8213F); }
+  /* La palabra acento se RESALTA con fondo menta, no con color de texto. */
+  .hero__accent {
+    background: var(--c-accent);
+    color: var(--c-ink);
+    padding: 0 .1em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
   .hero__subtitle {
     font-size: var(--text-base, 1.0625rem);
-    color: rgba(255,255,255,.75);
+    color: var(--c-ink-2);
     line-height: var(--leading-relaxed, 1.7);
     max-width: 52ch;
     margin-bottom: var(--sp-8, 2rem);
@@ -124,13 +133,20 @@ const WA_PATH = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.
        arrastraría transform, box-shadow y hasta el tamaño. */
     transition: background-color var(--transition-btn), color var(--transition-btn), border-color var(--transition-btn);
   }
-  .hero__btn--primary { background: var(--color-red, #C41E24); color: #fff; border: 2px solid var(--color-red, #C41E24); }
-  .hero__btn--primary:hover { background: var(--color-red-dark, #A01820); border-color: var(--color-red-dark, #A01820); }
-  .hero__btn--outline { background: transparent; color: rgba(255,255,255,.9); border: 2px solid rgba(255,255,255,.35); }
-  .hero__btn--outline:hover { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.08); color: #fff; }
-  .hero__btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-  .hero__right { display: flex; flex-direction: column; gap: var(--sp-5, 1.25rem); }
-  .hero__desc { font-size: var(--text-base, 1.0625rem); color: rgba(255,255,255,.75); line-height: var(--leading-relaxed, 1.7); margin: 0; }
+  .hero__btn--primary { background: var(--c-primary); color: var(--c-bg); border: 1px solid var(--c-primary); }
+  .hero__btn--primary:hover { background: var(--c-accent); color: var(--c-primary); border-color: var(--c-accent); }
+  .hero__btn--outline { background: transparent; color: var(--c-ink); border: 1px solid var(--c-ink); }
+  .hero__btn--outline:hover { background: var(--c-ink); color: var(--c-bg); border-color: var(--c-ink); }
+  .hero__btn:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  /* Columna editorial: filete de 1 px en tinta sobre los párrafos (referencia). */
+  .hero__right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5, 1.25rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--c-ink);
+  }
+  .hero__desc { font-family: var(--font-body); font-size: 1.0625rem; color: var(--c-ink-2); line-height: var(--leading-relaxed, 1.7); margin: 0; }
   @media (max-width: 768px) {
     .hero__inner { grid-template-columns: 1fr; }
     /* La columna derecha lleva los 2 párrafos PRINCIPALES de la empresa:

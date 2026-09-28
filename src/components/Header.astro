@@ -242,9 +242,9 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: var(--c-white);
+    background: var(--c-bg);
     border-bottom: 1px solid var(--c-border);
-    box-shadow: var(--shadow-header);
+    box-shadow: none;
   }
   /* HISTÓRICO — aquí vivía `.is-scrolled`: al hacer scroll el header pasaba a
      --header-height-sm, encogía el logo y levantaba la sombra, animando la
@@ -280,14 +280,14 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     place-items: center;
     width: 38px;
     height: 38px;
-    border-radius: 11px;
-    background: linear-gradient(135deg, var(--c-primary-light), var(--c-primary-dark));
-    color: #fff;
+    border-radius: 0;
+    background: var(--c-primary);
+    color: var(--c-accent);
     font-family: var(--font-heading);
     font-weight: var(--weight-black);
     font-size: 1.2rem;
     line-height: 1;
-    box-shadow: 0 2px 10px rgba(var(--c-primary-rgb), .32);
+    box-shadow: none;
   }
   .hdr-logo__word {
     font-family: var(--font-heading);
@@ -315,14 +315,15 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     align-items: center;
     gap: .3rem;
     padding: .5rem .75rem;
-    font-size: var(--text-sm);
+    font-family: var(--font-body);
+    font-size: 16px;
     font-weight: var(--weight-medium);
     color: var(--c-ink-2);
     border-radius: var(--radius-sm);
     white-space: nowrap;
     text-decoration: none;
   }
-  .hdr-nav__link:hover { color: var(--c-primary); background: rgba(var(--c-primary-rgb), .07); }
+  .hdr-nav__link:hover { color: var(--c-ink); background: transparent; text-decoration: underline; text-decoration-thickness: 1px; }
   .hdr-nav__link:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
   /* Subrayado de sección activa: se dibuja con scaleX para que no dependa de
      paddings escritos a mano (antes: left/right .875rem hardcodeados). */
@@ -338,7 +339,7 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     background: var(--c-primary);
   }
   .hdr-chevron { flex-shrink: 0; opacity: .5; }
-  .hdr-nav__item.is-open > .hdr-nav__link { color: var(--c-primary); background: rgba(var(--c-primary-rgb), .07); }
+  .hdr-nav__item.is-open > .hdr-nav__link { color: var(--c-ink); background: transparent; text-decoration: underline; }
   .hdr-nav__item.is-open .hdr-chevron { transform: rotate(180deg); opacity: 1; }
 
   /* ══════════════════════════════════════════════════════════════════════════
@@ -437,7 +438,7 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     right: 0;
     top: 100%;
     z-index: var(--z-panel);
-    background: var(--c-white);
+    background: var(--c-bg);
     border-top: 1px solid var(--c-border);
     border-bottom: 1px solid var(--c-border);
     box-shadow: var(--shadow-panel);
@@ -492,9 +493,9 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     top: 100%;
     left: 0;
     z-index: var(--z-panel);
-    background: var(--c-white);
+    background: var(--c-bg);
     border: 1px solid var(--c-border);
-    border-radius: var(--radius-lg);
+    border-radius: 0;
     box-shadow: var(--shadow-panel);
     width: max-content;
     min-width: 280px;
@@ -510,7 +511,7 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     position: fixed;
     inset: 0;
     z-index: var(--z-overlay);
-    background: rgba(20, 24, 31, .38);
+    background: rgba(21, 35, 27, .38);
     backdrop-filter: blur(2px);
     opacity: 0;
   }
@@ -537,19 +538,21 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     gap: .45rem;
     padding: .6rem 1.15rem;
     background: var(--c-primary);
-    color: #fff;
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
-    border-radius: var(--radius-sm);
+    color: var(--c-bg);
+    font-family: var(--font-ui);
+    font-size: .875rem;
+    font-weight: var(--weight-medium);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    border-radius: 0;
     white-space: nowrap;
     text-decoration: none;
-    box-shadow: 0 2px 10px rgba(var(--c-primary-rgb), .3);
     /* Botón: solo color. Sin transform ni box-shadow — eso era movimiento. */
     transition: background-color var(--transition-btn), color var(--transition-btn);
   }
   .hdr-cta:hover {
-    background: var(--c-primary-dark);
-    color: #fff;
+    background: var(--c-accent);
+    color: var(--c-primary);
   }
   .hdr-cta:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 3px; }
 
@@ -763,15 +766,17 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
     min-height: 50px;
     padding: .875rem var(--sp-5);
     background: var(--c-primary);
-    color: #fff;
+    color: var(--c-bg);
+    font-family: var(--font-ui);
     font-size: var(--text-base);
-    font-weight: var(--weight-bold);
-    border-radius: var(--radius-sm);
+    font-weight: var(--weight-medium);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    border-radius: 0;
     text-decoration: none;
-    box-shadow: 0 2px 12px rgba(var(--c-primary-rgb), .32);
     transition: background-color var(--transition-btn);
   }
-  .drawer__cta:hover { background: var(--c-primary-dark); color: #fff; }
+  .drawer__cta:hover { background: var(--c-accent); color: var(--c-primary); }
   .drawer__cta:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 3px; }
   .drawer__phone {
     display: flex;

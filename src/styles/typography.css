@@ -26,8 +26,8 @@
 .prose {
   font-family: var(--font-body);
   font-size: var(--text-lg);
-  line-height: var(--leading-relaxed);
-  color: var(--c-ink-2);
+  line-height: 1.65;
+  color: var(--c-ink);
   /* text-wrap: pretty → evita la palabra viuda al final del párrafo. */
   text-wrap: pretty;
 }
@@ -60,7 +60,7 @@
 }
 
 .prose h2 {
-  font-size: var(--text-fluid-3xl);
+  font-size: 1.75rem;
   font-weight: var(--weight-black);
   margin-top: var(--sp-8);
   margin-bottom: var(--sp-3);
@@ -72,7 +72,7 @@
 .prose > h2:first-child { padding-top: 0; border-top: 0; }
 
 .prose h3 {
-  font-size: var(--text-xl);
+  font-size: 1.25rem;
   font-weight: var(--weight-bold);
   margin-top: var(--sp-6);
   margin-bottom: var(--sp-2);
@@ -103,9 +103,9 @@
 .prose a {
   color: var(--c-primary);
   text-decoration: underline;
-  text-decoration-thickness: 1px;
+  text-decoration-thickness: .14em;
   text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, var(--c-primary) 40%, transparent);
+  text-decoration-color: var(--c-accent-strong);
 }
 .prose a:hover {
   color: var(--c-primary-dark);
@@ -146,7 +146,7 @@
 .prose blockquote {
   margin: var(--sp-6) 0;
   padding: var(--sp-1) 0 var(--sp-1) var(--sp-5);
-  border-left: 3px solid var(--c-primary);
+  border-left: 4px solid var(--c-accent);
   color: var(--c-ink);
   font-style: italic;
 }

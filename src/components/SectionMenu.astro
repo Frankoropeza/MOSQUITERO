@@ -115,9 +115,9 @@ const {
      igual del total, sin caja ni margen propios. */
   .secmenu {
     width: 100%;
-    background: var(--c-white);
-    border-top: 1px solid var(--c-border);
-    border-bottom: 1px solid var(--c-border);
+    background: var(--c-bg);
+    border-top: 1px solid var(--c-ink);
+    border-bottom: 1px solid var(--c-ink);
   }
   .secmenu__inner { width: 100%; }
 
@@ -128,7 +128,7 @@ const {
   }
   .secmenu__cell {
     display: flex;
-    border-bottom: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-line);
   }
   .secmenu__cell:last-child { border-bottom: none; }
 
@@ -139,7 +139,7 @@ const {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 2px; text-align: center;
     padding: var(--sp-4);
-    background: var(--c-white);
+    background: transparent;
     text-decoration: none;
     /* Excepción del contrato de movimiento (tokens.css): es un BOTÓN.
        Solo color/fondo — nunca transform, el botón no se levanta. */
@@ -151,26 +151,28 @@ const {
   .secbtn__top { display: flex; align-items: center; gap: var(--sp-2); }
   .secbtn__icon { display: inline-flex; color: var(--c-primary); flex: none; }
   .secbtn__label {
-    font-family: var(--font-heading);
+    font-family: var(--font-ui);
     font-weight: var(--weight-semibold);
-    font-size: var(--text-base);
+    font-size: 15px;
     color: var(--c-ink);
+    text-transform: uppercase;
     line-height: var(--leading-snug);
   }
   .secbtn:hover .secbtn__label { color: var(--c-primary-dark); }
   .secbtn__sub {
-    font-size: var(--text-xs);
+    font-family: var(--font-body);
+    font-size: 14px;
     color: var(--c-muted);
     line-height: var(--leading-snug);
   }
 
   /* CTA de conversión: relleno en color de marca para que destaque del resto. */
-  .secbtn--cta { background: var(--c-primary); }
-  .secbtn--cta .secbtn__icon { color: #fff; }
-  .secbtn--cta .secbtn__label { color: #fff; }
-  .secbtn--cta .secbtn__sub { color: rgba(255, 255, 255, .85); }
-  .secbtn--cta:hover { background: var(--c-primary-dark); }
-  .secbtn--cta:hover .secbtn__label { color: #fff; }
+  .secbtn--cta { background: var(--c-accent); }
+  .secbtn--cta .secbtn__icon { color: var(--c-primary); }
+  .secbtn--cta .secbtn__label { color: var(--c-primary); }
+  .secbtn--cta .secbtn__sub { color: var(--c-ink-2); }
+  .secbtn--cta:hover { background: var(--c-accent-strong); }
+  .secbtn--cta:hover .secbtn__label { color: var(--c-primary); }
 
   /* ≥768px: UNA sola fila; las celdas se reparten el 100% del ancho por igual
      (flex:1 1 0 → cada una el mismo %) y se separan con divisores verticales. */

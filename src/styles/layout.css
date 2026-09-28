@@ -1,44 +1,196 @@
 /* ============================================================================
    layout.css — el contenedor y el ritmo de sección del sitio.
-   ----------------------------------------------------------------------------
-   POR QUÉ EXISTE (creado 2026-07-14):
-   `.container` y `.section` estaban COPIADOS en 9 archivos de páginas, dentro de
-   sus <style> scoped. Nueve definiciones idénticas del ancho del sitio: nueve
-   oportunidades de que una diverja y una página quede más ancha que el resto,
-   sin que nadie sepa por qué.
-
-   Aquí hay UNA. Lo importa BaseLayout, así que aplica a todo el sitio sin que
-   cada página tenga que acordarse.
-
-   ⚠️ NO redeclares `.container` ni `.section` en el <style> de una página. Si
-   necesitas otro ancho, es un caso nuevo: dale su propia clase y documenta por
-   qué. El ancho del sitio se decide aquí y en `--container-max` (tokens.css).
-
-   Ojo con la cascada: al ser global, cualquier `.container` en un <style>
-   scoped de página GANA (el atributo [data-astro-cid] suma especificidad). Ese
-   es justo el accidente que esto viene a evitar.
+   Rediseño 2026-09-28: centraliza bandas, controles y contexto de tokens.
    ============================================================================ */
 
+:root {
+  --btn-bg: var(--c-primary);
+  --btn-fg: var(--c-bg);
+  --btn-bg-hover: var(--c-accent);
+  --btn-fg-hover: var(--c-primary);
+}
+
+/* El ancho y gutters son únicos para todas las páginas. */
 .container {
   max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: var(--container-px);
 }
 
-/* Ritmo vertical del sitio. Mobile-first: más aire en escritorio. */
+/* Las secciones se distinguen por banda, no por sombras. */
 .section {
   padding: var(--sp-8) 0;
+  background: var(--c-bg);
+  color: var(--c-ink);
 }
 
-/* Fondo alterno. Marca el cambio de sección sin una línea ni un título extra. */
 .section--surface {
   background: var(--c-surface);
 }
 
-/* El módulo FAQ + cotización cierra las páginas y usa el mismo fondo: es el
-   bloque de conversión y conviene que se lea como una unidad aparte. */
-.section--faq {
-  background: var(--c-surface);
+/* Las bandas redefinen contexto para que sus componentes se adapten solos. */
+.section--ink,
+.section--faq,
+.tone-dark {
+  background: var(--c-primary);
+  --c-ink: var(--c-on-dark);
+  --c-ink-2: #d9d2c4;
+  --c-muted: var(--c-on-dark-muted);
+  --c-line: var(--c-line-on-dark);
+  --c-border: var(--c-line-on-dark);
+  --btn-bg: var(--c-accent);
+  --btn-fg: var(--c-primary);
+  --btn-bg-hover: var(--c-on-dark);
+  --btn-fg-hover: var(--c-primary);
+  color: var(--c-ink);
+}
+
+.section--mint,
+.tone-mint {
+  background: var(--c-accent);
+  --c-muted: var(--c-ink-2);
+  --c-line: rgba(21, 35, 27, .22);
+  color: var(--c-ink);
+}
+
+/* REENLACE DE ALIAS. Los alias heredados de tokens.css (--text-muted,
+   --color-border…) se resuelven UNA vez en :root: si una banda cambia
+   --c-muted, el alias seguiría apuntando al valor claro. Se re-declaran en cada
+   contexto de color para que resuelvan con los tokens de ESE contexto. */
+.section,
+.tone-dark,
+.tone-mint,
+.tone-light {
+  --text-muted: var(--c-muted);
+  --color-text-muted: var(--c-muted);
+  --color-border: var(--c-border);
+  --border: 1px solid var(--c-border);
+}
+
+/* Una tarjeta clara dentro de tinta debe recuperar todos sus tokens. */
+.tone-light {
+  background: var(--c-bg);
+  --c-ink: #15231b;
+  --c-ink-2: #3b4a41;
+  --c-muted: #56655c;
+  --c-line: rgba(21, 35, 27, .18);
+  --c-border: #d8cfbe;
+  --btn-bg: var(--c-primary);
+  --btn-fg: var(--c-bg);
+  --btn-bg-hover: var(--c-accent);
+  --btn-fg-hover: var(--c-primary);
+  color: var(--c-ink);
+}
+
+/* Extiende una banda desde un contenedor sin provocar scroll horizontal. */
+.band-bleed {
+  background: var(--band-bg, var(--c-bg));
+  box-shadow: 0 0 0 100vmax var(--band-bg, var(--c-bg));
+  clip-path: inset(0 -100vmax);
+}
+
+/* Botones rectos: sólo su color/fondo conservan transición. */
+.btn,
+.btn--primary,
+.btn--ghost,
+.btn--accent {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 44px;
+  padding: .8rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-size: .9375rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+  line-height: 1.1;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--transition-btn), color var(--transition-btn), border-color var(--transition-btn);
+}
+
+.btn,
+.btn--primary {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+
+.btn:hover,
+.btn--primary:hover {
+  background: var(--btn-bg-hover);
+  color: var(--btn-fg-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: currentColor;
+  color: var(--c-ink);
+}
+
+.btn--ghost:hover {
+  background: var(--c-ink);
+  color: var(--c-bg);
+}
+
+.btn--accent {
+  background: var(--c-accent);
+  color: var(--c-primary);
+}
+
+.btn--accent:hover {
+  background: var(--c-accent-strong);
+}
+
+.btn--sm {
+  min-height: 0;
+  padding: .45rem .8rem;
+  font-size: .8125rem;
+}
+
+.btn--block {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* Títulos editoriales fuera de la prosa MDX. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  line-height: var(--heading-leading);
+  letter-spacing: var(--heading-tracking);
+  text-transform: var(--heading-transform);
+  text-wrap: balance;
+}
+
+a {
+  color: var(--c-ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+::selection {
+  background: var(--c-accent);
+  color: var(--c-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-ink);
+  outline-offset: 2px;
 }
 
 @media (min-width: 768px) {

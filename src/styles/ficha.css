@@ -49,7 +49,7 @@
   display: block;
   background: var(--c-surface);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
 }
 .galeria__thumbs {
   display: grid;
@@ -63,7 +63,7 @@
   display: block;
   background: var(--c-surface);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius-md);
+  border-radius: 0;
 }
 
 /* ══ Bloques del cuerpo ════════════════════════════════════════════════════ */
@@ -321,7 +321,7 @@
   /* Excepción del CONTRATO DE MOVIMIENTO (tokens.css): es un BOTÓN. Solo color. */
   transition: background-color var(--transition-btn), border-color var(--transition-btn), color var(--transition-btn);
 }
-.widget__btn--wa { color: #fff; background: #25D366; }
+.widget__btn--wa { color: var(--c-primary); background: #25D366; }
 .widget__btn--wa:hover { background: #1ebe57; }
 .widget__btn--ghost {
   margin-top: var(--sp-2);

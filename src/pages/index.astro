@@ -225,7 +225,7 @@ const faqs: { question: string; answer: string }[] = [
   <SectionMenu items={menuSecciones} cta={menuCta} />
 
   {/* ═══ 2) TIPOS DE MOSQUITERO — vitrina de categorías (data-driven desde SHOWCASE_HOME: los 4 principales) ═══ */}
-  <section class="section section--surface">
+  <section class="section">
     <div class="container">
       <SectionHeading
         eyebrow="Catálogo"
@@ -261,7 +261,8 @@ const faqs: { question: string; answer: string }[] = [
           agregar categorías al catálogo nunca rompe esta sección.
 
           Regla canónica: TODOS idénticos —info a la IZQUIERDA, galería a la
-          DERECHA (1 grande + 2 chicas debajo)—, sin alternar lados ni fondos.
+          DERECHA (1 grande + 2 chicas debajo)—, sin alternar lados; los fondos
+          alternan tinta/menta/tinta/lino (rediseño 2026-09-28).
           La galería no es opcional en el diseño: es la mitad del módulo.
           Las fotos aún son placeholders que declaran qué toma va en cada hueco;
           se sustituyen en AFONDO (site.ts) sin tocar este archivo.
@@ -289,7 +290,7 @@ const faqs: { question: string; answer: string }[] = [
   </section>
 
   {/* ═══ 3) SERVICIOS — data-driven desde TAXONOMY.services ═══ */}
-  <section class="section">
+  <section class="section section--mint">
     <div class="container">
       <SectionHeading
         eyebrow="Servicios"
@@ -303,6 +304,7 @@ const faqs: { question: string; answer: string }[] = [
         {SERVICES.map((s) => (
           <article class="servicio">
             <div class="servicio__contenido">
+              <span class:list={['servicio__marca', `servicio__marca--${SERVICES.indexOf(s) + 1}`]} aria-hidden="true"></span>
               <h3 class="servicio__titulo">{s.label}</h3>
               <p class="servicio__desc">{s.desc}</p>
             </div>
@@ -313,7 +315,7 @@ const faqs: { question: string; answer: string }[] = [
   </section>
 
   {/* ═══ 4) PROCESO — cómo se pide un mosquitero ═══ */}
-  <section class="section section--surface">
+  <section class="section">
     <div class="container">
       <SectionHeading
         eyebrow="Proceso"
@@ -408,11 +410,10 @@ const faqs: { question: string; answer: string }[] = [
   @media (min-width: 640px) { .showcase { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .showcase { grid-template-columns: repeat(4, 1fr); } }
 
-  /* Pila de bloques "a fondo". El gap es GRANDE y uniforme a propósito: cada
-     bloque es una unidad de lectura completa y necesita respirar para no leerse
-     como una lista. Regla canónica: gap parejo, sin alternar lados ni fondos.
-     El separador superior marca el corte entre "catálogo de un vistazo"
-     (tarjetas) y "cada tipo explicado" (estos bloques).
+  /* Pila de bloques "a fondo". Desde el rediseño del 2026-09-28 cada bloque es
+     una BANDA de color a sangre (tinta / menta / tinta / lino) y las bandas se
+     tocan (gap 0): el cambio de color separa, no el aire. Regla canónica: los
+     lados NO se alternan (info izquierda, galería derecha, siempre).
 
      SIN max-width: estos bloques ocupan el MISMO ancho que la vitrina de
      tarjetas y que el resto de la home (el .container, --container-max: 90%).
@@ -422,15 +423,47 @@ const faqs: { question: string; answer: string }[] = [
      estrechándolo (ver la nota de .cdetail__gallery en CategoryDetail.astro). */
   .afondo {
     display: grid;
-    gap: clamp(2.5rem, 6vw, 5rem);
-    margin-top: var(--sp-8);
-    padding-top: var(--sp-8);
-    border-top: 1px solid var(--c-border);
+    gap: 0;
+    margin-top: var(--sp-10);
   }
-  /* Con 4+ bloques apilados, el clamp de escritorio se siente excesivo en
-     pantallas chicas: comprime sin llegar a sentirse apretado. */
+  /* BANDAS A SANGRE (rediseño 2026-09-28): cada bloque pinta su fondo al 100 %
+     del viewport con box-shadow + clip-path (sin scroll horizontal) y el
+     contenido conserva el ancho del .container. Los hijos son la raíz de
+     <CategoryDetail>, que no lleva el atributo de scope de esta página: por eso
+     el selector del hijo va en :global(). Los tokens se redeclaran por banda y
+     el componente se adapta solo (texto, eyebrow, botón). */
+  .afondo > :global(*) {
+    --text-muted: var(--c-muted);
+    --color-border: var(--c-border);
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    background: var(--band-bg);
+    box-shadow: 0 0 0 100vmax var(--band-bg);
+    clip-path: inset(0 -100vmax);
+    color: var(--c-ink);
+  }
+  .afondo > :global(*:nth-child(4n+1)),
+  .afondo > :global(*:nth-child(4n+3)) {
+    --band-bg: var(--c-primary);
+    --c-ink: var(--c-on-dark);
+    --c-ink-2: #d9d2c4;
+    --c-muted: var(--c-on-dark-muted);
+    --c-line: var(--c-line-on-dark);
+    --c-border: var(--c-line-on-dark);
+    --btn-bg: var(--c-accent);
+    --btn-fg: var(--c-primary);
+    --btn-bg-hover: var(--c-on-dark);
+    --btn-fg-hover: var(--c-primary);
+  }
+  .afondo > :global(*:nth-child(4n+2)) {
+    --band-bg: var(--c-accent);
+    --c-muted: var(--c-ink-2);
+    --c-line: rgba(21, 35, 27, .22);
+  }
+  .afondo > :global(*:nth-child(4n)) {
+    --band-bg: var(--c-bg);
+  }
   @media (max-width: 480px) {
-    .afondo { gap: var(--sp-6); margin-top: var(--sp-6); padding-top: var(--sp-6); }
+    .afondo { margin-top: var(--sp-8); }
   }
 
   /* ── Servicios ────────────────────────────────────────────────────────────
@@ -451,23 +484,19 @@ const faqs: { question: string; answer: string }[] = [
     position: relative;
     /* Top a --sp-6 (32px): deja respirar la escuadra, que llega hasta los 26px
        (inset 8 + 18 de trazo). Con --sp-5 el título se le montaba. */
-    padding: var(--sp-6) var(--sp-5) var(--sp-5);
-    background: var(--c-white);
-    border: 1px solid var(--c-border);
-    border-radius: var(--radius-sm);
+    padding: var(--sp-4);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    text-align: center;
   }
 
-  /* El panel de tela: hairline de junta + trama. La malla real es cuadrícula
-     fina, no un patrón diagonal: dos repeating-linear-gradient a 5px de paso
-     con alfa muy baja (.045) — se lee como textura de papel, no como reja, y no
-     estorba al texto que va encima (z-index). */
+  /* Sin textura: el bloque respira con fondo de banda y tipografía. */
   .servicio::before {
-    content: "";
+    display: none;
     position: absolute; inset: var(--sp-2); z-index: 0;
-    border: 1px solid var(--c-border);
-    background-image:
-      repeating-linear-gradient(0deg,  rgba(20, 24, 31, .045) 0 1px, transparent 1px 5px),
-      repeating-linear-gradient(90deg, rgba(20, 24, 31, .045) 0 1px, transparent 1px 5px);
+    border: 0;
+    background: transparent;
     pointer-events: none;
   }
 
@@ -475,7 +504,7 @@ const faqs: { question: string; answer: string }[] = [
      izquierda. Es el único punto de color de la tarjeta — marca el inicio de
      lectura sin robarle peso al título. */
   .servicio::after {
-    content: "";
+    display: none;
     position: absolute; z-index: 1;
     top: var(--sp-2); left: var(--sp-2);
     width: 18px; height: 18px;
@@ -484,24 +513,28 @@ const faqs: { question: string; answer: string }[] = [
     pointer-events: none;
   }
 
-  .servicio__contenido { position: relative; z-index: 1; }
+  .servicio__contenido { position: relative; z-index: 1; display: grid; justify-items: center; }
+  .servicio__marca { display: block; width: 28px; height: 28px; margin-bottom: var(--sp-4); background: var(--c-primary); }
+  .servicio__marca--2 { border-radius: var(--radius-full); }
+  .servicio__marca--3 { transform: rotate(45deg); }
+  .servicio__marca--4 { clip-path: polygon(50% 0, 0 100%, 100% 100%); }
 
   /* El título sube a --text-lg y a font-heading: sin ícono, la jerarquía la
      tiene que llevar la tipografía sola. */
   .servicio__titulo {
     margin: 0 0 var(--sp-3);
-    font-family: var(--font-heading); font-size: var(--text-lg);
+    font-family: var(--font-heading); font-size: var(--text-card);
     font-weight: var(--weight-semibold); line-height: var(--leading-tight);
     color: var(--c-ink); text-wrap: balance;
   }
   /* Filete corto bajo el título: separa sin meter una línea de borde completa. */
   .servicio__titulo::after {
-    content: ""; display: block;
+    display: none;
     width: 28px; height: 2px; margin-top: var(--sp-3);
     background: var(--c-primary);
   }
   .servicio__desc {
-    margin: 0; font-size: var(--text-sm); color: var(--c-ink-2);
+    margin: 0; font-family: var(--font-body); font-size: var(--text-body); color: var(--c-ink-2);
     line-height: var(--leading-normal); text-wrap: pretty;
   }
 
@@ -526,33 +559,34 @@ const faqs: { question: string; answer: string }[] = [
   .paso {
     position: relative; isolation: isolate; overflow: hidden;
     display: flex; flex-direction: column;
-    background: var(--c-white); border: 1px solid var(--c-border);
-    border-radius: var(--radius-lg);
+    background: transparent; border: 0;
+    border-radius: 0;
   }
   .paso::before {
     content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; z-index: 2;
-    background: linear-gradient(90deg, var(--c-primary), var(--c-primary-light));
+    background: var(--c-ink);
   }
 
   .paso__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--c-surface); }
   .paso__img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* Velo inferior: asienta el badge cuando llegue la foto real (contraste). */
-  .paso__velo { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,.16) 100%); }
+  .paso__velo { display: none; }
 
   .paso__num {
     position: absolute; top: var(--sp-3); left: var(--sp-3);
     display: grid; place-items: center; width: 34px; height: 34px;
-    border-radius: var(--radius-full); background: var(--c-primary); color: #fff;
+    width: 40px; height: 40px; top: 0; left: 0;
+    border-radius: 0; background: var(--c-primary); color: var(--c-on-dark);
     font-family: var(--font-heading); font-size: var(--text-sm); font-weight: var(--weight-bold);
-    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    box-shadow: none;
   }
 
-  .paso__body { display: flex; flex-direction: column; gap: var(--sp-2); flex-grow: 1; padding: var(--sp-5); }
+  .paso__body { display: flex; flex-direction: column; gap: var(--sp-2); flex-grow: 1; padding: var(--sp-5) 0; }
   .paso__titulo {
-    margin: 0; font-family: var(--font-heading); font-size: var(--text-base);
+    margin: 0; font-family: var(--font-heading); font-size: var(--text-card);
     font-weight: var(--weight-semibold); line-height: var(--leading-snug); color: var(--c-ink);
   }
-  .paso__detalle { margin: 0; font-size: var(--text-sm); color: var(--c-ink-2); line-height: var(--leading-normal); }
+  .paso__detalle { margin: 0; font-family: var(--font-body); font-size: var(--text-body); color: var(--c-ink-2); line-height: var(--leading-normal); }
 
   /* ── FAQ + cotización ─────────────────────────────────────────────────────
      El separador NO es decoración: marca que el bloque cambia de registro —de
