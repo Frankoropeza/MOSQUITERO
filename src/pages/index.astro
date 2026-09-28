@@ -27,7 +27,7 @@ import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
 import { NAV, SERVICES, WA_MESSAGES, waUrl } from "@config/site";
-import { PRECIOS_REFERENCIA, formatearPrecio } from "@config/precios";
+import { MEDICION_CONDICION, PRECIOS_REFERENCIA, formatearPrecio } from "@config/precios";
 
 const title = "Mosquiteros para ventanas y puertas a medida | CDMX";
 const description = `Mosquitero para ventana y puerta a medida, en aluminio y con instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)} por pieza. Cotiza por WhatsApp.`;
@@ -207,10 +207,11 @@ const faqs: { question: string; answer: string }[] = [
   },
   {
     question: "¿Hacen medición a domicilio?",
-    // TODO: confirmar si la visita tiene costo, si se acredita a la compra y en
-    // qué zonas aplica. Hasta entonces la respuesta NO promete gratuidad.
+    // 2026-09-28: medición sin costo y sin compromiso, como la ofrece la
+    // competencia (Frank: «maneja los costos que tiene la competencia»).
+    // Fuente única del texto: MEDICION_CONDICION en config/precios.ts.
     answer:
-      "Sí, sobre todo cuando el vano es complicado o son <strong>varias piezas</strong> y un error de medición se multiplica. Escríbenos con tu zona y te confirmamos disponibilidad y condiciones de la visita antes de agendar nada. Si tu caso es simple, te ahorramos el paso: te decimos cómo medir y listo.",
+      `Sí, y es <strong>${MEDICION_CONDICION.toLowerCase()}</strong>. Conviene sobre todo cuando el vano es complicado o son <strong>varias piezas</strong> y un error de medición se multiplica. Escríbenos con tu zona y agendamos. Si tu caso es simple, te ahorramos el paso: te decimos cómo medir y listo.`,
   },
   {
     question: "¿Cuánto tardan en entregar e instalar?",

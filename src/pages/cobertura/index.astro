@@ -57,6 +57,7 @@ import {
   zonaHref,
 } from "@config/site";
 import {
+  MEDICION_CONDICION,
   NOTA_PRECIOS_REFERENCIA,
   formatearPrecio,
   precioMasBajo,
@@ -81,7 +82,7 @@ if (sinAfondo.length > 0) {
       `${sinAfondo.map((z) => z.slug).join(", ")}.\n` +
       `  → La vitrina y los bloques "a fondo" salen de ahí: sin entrada, tarjeta vacía.\n` +
       `  → Escríbela en site.ts o quita la zona de TAXONOMY.coverageStates.\n` +
-      `  → Al escribirla: NADA de tiempos de llegada, costos de visita ni listas de\n` +
+      `  → Al escribirla: NADA de tiempos de llegada ni listas de\n` +
       `    colonias (doorway pages). Ver la cabecera de este archivo.`,
   );
 }
@@ -164,12 +165,13 @@ const pasosAgenda = [
 // ── FAQ de cobertura ────────────────────────────────────────────────────────
 // SIN SOLAPAR con la home (8), /mosquiteros (6) ni /servicios (6). Éstas son de
 // intención geográfica: llegan a mi casa, qué pasa si estoy lejos, cuánto cobran
-// por ir. 🟠 Sin validar. Cero tiempos, costos de visita y garantías.
+// por ir. Medición: MEDICION_CONDICION (precios.ts, decisión 2026-09-28 con base
+// en la competencia). Cero tiempos de llegada; la garantía vive en /servicios/.
 const faqs: { question: string; answer: string }[] = [
   {
     question: "¿Cobran por ir a mi casa?",
     answer:
-      "Depende del trabajo y de dónde estés, así que lo confirmamos <strong>antes</strong> de agendar — nunca al llegar. Escríbenos con tu zona y qué necesitas, y te decimos las condiciones de tu caso por adelantado. Preferimos que lo sepas por WhatsApp que en la puerta de tu casa.",
+      `No. La medición a domicilio es <strong>${MEDICION_CONDICION.toLowerCase()}</strong> en la CDMX y en los municipios del Estado de México que atendemos; por eso en el Edomex te pedimos confirmar el municipio antes de agendar. Lo que se cotiza es el mosquitero, con la instalación incluida.`,
   },
   {
     question: "¿Tienen local al que pueda ir?",

@@ -26,7 +26,20 @@ export const ETIQUETAS_PRECIO: Record<PrecioSlug, string> = {
 };
 
 export const TAMANO_REFERENCIA = "Ventana hasta 1.00 × 1.20 m · puerta hasta 0.90 × 2.10 m";
-export const NOTA_PRECIOS_REFERENCIA = "Precios de referencia 2026. La cotización final depende de la medida, la malla y el acceso.";
+export const NOTA_PRECIOS_REFERENCIA = "Precios de referencia 2026 con IVA incluido. La cotización final depende de la medida, la malla y el acceso.";
+
+// ── Condiciones de servicio (Frank, 2026-09-28: «maneja los costos que tiene la
+// competencia»). Fijadas contra lo que publica el mercado; fuente y cifras en el
+// vault: MOSQUITERO-Precios-de-referencia-2026-09-28.md §Condiciones.
+//   · Medición/visita: la competencia la ofrece «sin costo» / «sin compromiso»
+//     (Innova, Aluminglas, Net Pro; plataformas con cotización gratis). Nadie la cobra.
+//   · Garantía: 3 meses Net Pro (defectos de fabricación) · 13 meses Alumicasa
+//     (general) · 5 años Innova (retráctil premium). Se fija 12 meses, tramo medio.
+//   · IVA: ninguno lo publica; la Ley Federal de Protección al Consumidor exige
+//     anunciar el precio total con impuestos, así que el «desde» es con IVA.
+export const MEDICION_CONDICION = "Sin costo y sin compromiso";
+export const GARANTIA_TEXTO = "12 meses por defectos de fabricación e instalación";
+export const GARANTIA_EXCLUYE = "No cubre roturas por golpes, mascotas o mal uso";
 export const ALCANCE_PRECIOS_REFERENCIA = "Fabricación a medida + instalación en CDMX y Edomex.";
 
 export const formatearPrecio = (precio: number) =>

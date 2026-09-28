@@ -49,6 +49,9 @@ import {
   servicioHref,
 } from "@config/site";
 import {
+  GARANTIA_EXCLUYE,
+  GARANTIA_TEXTO,
+  MEDICION_CONDICION,
   NOTA_PRECIOS_REFERENCIA,
   PRECIOS_REFERENCIA,
   TAMANO_REFERENCIA,
@@ -71,7 +74,7 @@ const precioCambioPuerta = formatearPrecio(PRECIOS_REFERENCIA.cambioDeMalla.puer
 const precioPorServicio: Record<(typeof SERVICES)[number]["id"], string | undefined> = {
   fabricacion: `Ventana desde ${precioVentana} · Puerta desde ${precioPuerta}`,
   instalacion: "Incluida al fabricar con nosotros",
-  medicion: undefined,
+  medicion: `Medición ${MEDICION_CONDICION.toLowerCase()}`,
   reparacion: `Cambio de malla desde ${precioCambioVentana} por hoja`,
 };
 
@@ -133,7 +136,7 @@ const decision: { situacion: string; servicio: string; id: (typeof SERVICES)[num
     servicio: "Medición a domicilio",
     id: "medicion",
     nota: "Vamos, medimos y de paso te decimos qué tipo corresponde a tu marco.",
-    referencia: "Se confirma al agendar",
+    referencia: MEDICION_CONDICION,
   },
   {
     situacion: "Ya tengo las medidas del vano",
@@ -217,6 +220,16 @@ const faqs: { question: string; answer: string }[] = [
     question: "¿Cómo se coloca un mosquitero en una ventana?",
     answer:
       "Depende del tipo: el corredizo entra a su propio riel, el abatible se atornilla al marco con bisagras y el enrollable fija su cajón arriba del vano. Antes de anclar comprobamos que el marco esté como lo medimos, porque un vano se mueve con el tiempo; al final verificamos que cierre completo y corra sin trabarse. El detalle, en <a href=\"/servicios/instalacion/\">instalación de mosquiteros</a>.",
+  },
+  {
+    question: "¿Tienen garantía?",
+    answer:
+      `Sí: <strong>${GARANTIA_TEXTO}</strong>. Si algo que fabricamos o instalamos falla en ese plazo, lo corregimos sin costo. ${GARANTIA_EXCLUYE}; esos casos se resuelven como una reparación normal, con el cambio de malla desde ${precioCambioVentana} por hoja.`,
+  },
+  {
+    question: "¿Los precios incluyen IVA?",
+    answer:
+      `Sí. Todos los precios de referencia de este sitio ya llevan <strong>IVA incluido</strong> y la instalación; la medición a domicilio es ${MEDICION_CONDICION.toLowerCase()}. Lo único que mueve la cotización final es la medida, el tipo de malla y el acceso al vano.`,
   },
 ];
 ---

@@ -19,7 +19,7 @@ points:
   - Útil cuando el vano no es cuadrado o hay varias ventanas
   - Vemos tu marco y sabrás qué tipo corresponde
   - "También puedes medir tú: te explicamos cómo"
-limite: Agenda la visita por WhatsApp y te confirmamos las condiciones antes de ir.
+limite: Agenda la visita por WhatsApp; la medición es sin costo y sin compromiso.
 guias:
   - como-medir-ventana-mosquitero
   - tipos-de-mosquitero-cual-elegir
@@ -58,7 +58,7 @@ faqs:
   - question: ¿Me dan el precio ahí mismo?
     answer: "Con las medidas en la mano y el tipo definido, sí: eso es todo lo que hace falta para cotizar por pieza. Si el caso tiene algo raro —un vano irregular, algo que revisar del marco— preferimos decírtelo ahí y pasarte el número después, en vez de improvisar una cifra que luego cambie."
   - question: ¿Y si después de medir decido no comprar?
-    answer: Es tu derecho y no pasa nada. Las condiciones de la visita te las confirmamos <strong>antes</strong> de ir, precisamente para que no haya sorpresas si decides que no. Preferimos que te vayas con la información y decidas tranquilo.
+    answer: Es tu derecho y no pasa nada. La medición es <strong>sin costo y sin compromiso</strong>, precisamente para que no haya sorpresas si decides que no. Preferimos que te vayas con la información y decidas tranquilo.
   - question: ¿Tengo que preparar algo antes de que lleguen?
     answer: "Que se pueda llegar a la ventana: quitar lo que esté delante y recoger la cortina. Nada más. Y si tienes claro qué te molesta —mosquitos chicos, el sol, el perro que rasga— dilo, porque eso decide la malla tanto como la medida decide la pieza."
   - question: Mi ventana tiene reja, ¿pueden medir igual?
