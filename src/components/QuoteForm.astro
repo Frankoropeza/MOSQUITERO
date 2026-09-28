@@ -132,6 +132,7 @@ const waFallback = waUrl(WA_MESSAGES.cotizar);
     <p class="qform__foot">
       Se abre WhatsApp con tu mensaje ya escrito. Revísalo y dale enviar — nada sale sin que tú lo mandes.
     </p>
+    <p class="qform__privacy">Al enviar, usamos tus datos sólo para cotizar. <a href="/aviso-de-privacidad/">Aviso de privacidad</a>.</p>
   </form>
 </div>
 
@@ -252,6 +253,8 @@ const waFallback = waUrl(WA_MESSAGES.cotizar);
     border-radius: var(--radius-sm); color: var(--c-ink-2);
   }
   .qform__noscript a { color: var(--c-primary); font-weight: var(--weight-semibold); }
+  .qform__privacy { margin: calc(var(--sp-3) * -1) 0 0; font-size: var(--text-xs); line-height: var(--leading-normal); color: var(--c-muted); }
+  .qform__privacy a { color: var(--c-primary); }
 
   /* ── Campos ──────────────────────────────────────────────────────────────
      Retícula de 2 columnas desde el móvil SOLO para los pares que se leen

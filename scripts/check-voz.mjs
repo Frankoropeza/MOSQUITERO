@@ -32,7 +32,7 @@
 // Sale con 0 siempre; lee los números y decide.
 // ============================================================================
 
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 
 const TOP = Number(process.argv[process.argv.indexOf("--top") + 1]) || 12;
 const src = readFileSync(new URL("../src/config/site.ts", import.meta.url), "utf8");
@@ -55,6 +55,23 @@ const textos = [
   ...sinComentarios.matchAll(/'((?:[^'\\\n]|\\.){60,})'/g),
   ...sinComentarios.matchAll(/"((?:[^"\\\n]|\\.){60,})"/g),
 ].map((m) => m[1]);
+
+// Desde 2026-09-28 la prosa del catálogo, servicios y zonas vive en Content
+// Collections (src/content/{productos,servicios,zonas}/*.md, todo en frontmatter
+// YAML). Se extraen los valores escalares de prosa (≥60 caracteres) de cada línea
+// `clave: valor` o `- valor`, sin comillas envolventes.
+for (const dir of ["productos", "servicios", "zonas"]) {
+  const base = new URL(`../src/content/${dir}/`, import.meta.url);
+  let files = [];
+  try { files = readdirSync(base).filter((f) => f.endsWith(".md")); } catch { continue; }
+  for (const f of files) {
+    for (const line of readFileSync(new URL(f, base), "utf8").split("\n")) {
+      const m = line.match(/^\s*(?:-\s+)?(?:[A-Za-z]+:\s+)?(.*)$/);
+      if (!m || m[1].length < 60) continue;
+      textos.push(m[1].trim().replace(/^(["'])(.*)\1$/, "$2").replace(/\\"/g, '"'));
+    }
+  }
+}
 
 const corpus = textos.join(" ").replace(/<[^>]+>/g, "");
 const palabras = corpus.split(/\s+/).filter(Boolean);

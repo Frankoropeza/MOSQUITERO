@@ -115,6 +115,7 @@ export const getStaticPaths = (async () => {
 const { cat, ficha } = Astro.props;
 const afondo = ficha;
 const esAccesorios = cat.slug === "accesorios";
+const tieneVersionParaPuerta = ["enrollables", "corredizos", "abatibles", "plisados", "magneticos"].includes(cat.slug);
 const h1 = esAccesorios ? "Accesorios y refacciones" : "Mosquiteros " + cat.label.toLowerCase();
 const title = esAccesorios
   ? "Accesorios y refacciones para mosquiteros | CDMX"
@@ -388,6 +389,19 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
                     <a href="/blog/" class="enlace enlace--all">
                       Ver todas las guías
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            )}
+
+            {tieneVersionParaPuerta && (
+              <nav class="widget" aria-labelledby="puertas-h">
+                <h2 class="widget__h2 widget__h2--label" id="puertas-h">Para tu puerta</h2>
+                <ul class="enlaces">
+                  <li>
+                    <a href="/mosquiteros/para-puertas/" class="enlace">
+                      <span class="enlace__txt">Compara opciones para puertas</span>
                     </a>
                   </li>
                 </ul>

@@ -33,6 +33,7 @@ Servicios:
 ## Páginas clave
 - [Inicio](https://mosquitero.mx/): mosquiteros a medida para ventanas y puertas
 - [Catálogo de mosquiteros](https://mosquitero.mx/mosquiteros/): los 7 tipos disponibles
+- [Mosquiteros para puertas](https://mosquitero.mx/mosquiteros/para-puertas/): opciones según el tipo de acceso
 - [Enrollables](https://mosquitero.mx/mosquiteros/enrollables/): mosquitero retráctil para uso frecuente
 - [Corredizos](https://mosquitero.mx/mosquiteros/corredizos/): para ventanas y puertas corredizas
 - [Plisados](https://mosquitero.mx/mosquiteros/plisados/): para vanos amplios y puertas de cristal

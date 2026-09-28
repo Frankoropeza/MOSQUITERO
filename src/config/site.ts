@@ -28,7 +28,7 @@ export const SITE = {
   lang: 'es-MX',
   locale: 'es-MX',
   description:
-    'Mosquiteros a medida para ventanas y puertas: fabricación, instalación y reparación. Cotiza tu mosquitero por WhatsApp con medidas y tiempo de entrega.', // 140–160 chars · abre con kw1, teje las 3 keywords.
+    'Mosquiteros para ventanas y puertas a medida: fabricación, instalación y reparación en CDMX y Edomex. Cotiza por WhatsApp con tus medidas.', // 140–160 chars · abre con kw1, teje las 3 keywords.
   defaultImage: '/images/og/default.png', // OG raster 1200×630 (WhatsApp/Facebook/X no aceptan SVG). Wordmark provisional 2026-09-28.
 
   // ── COLOR DE MARCA — fuente única del HEX ────────────────────────────────
@@ -70,9 +70,9 @@ export const SITE = {
 
   // seo: defaults para <head>. Los consume lib/seo.ts (buildMeta/formatTitle/truncate).
   seo: {
-    title: 'Mosquiteros a medida | mosquiteros para ventanas', // ≤60 chars. Fallback; la home lo genera con buildKeywordTitle(KEYWORDS).
+    title: 'Mosquiteros para ventanas | mosquiteros a medida', // ≤60 chars. Fallback; la home lo genera con buildKeywordTitle(KEYWORDS).
     description:
-      'Mosquiteros a medida para ventanas y puertas: fabricación, instalación y reparación. Cotiza tu mosquitero por WhatsApp con medidas y tiempo de entrega.',
+      'Mosquiteros para ventanas y puertas a medida: fabricación, instalación y reparación en CDMX y Edomex. Cotiza por WhatsApp con tus medidas.',
     image: '/images/og/default.png',
     titleMaxLength: 60,
     descriptionMaxLength: 160,
@@ -168,16 +168,16 @@ export const SITE = {
 // kw1 = principal (va primero, sobrevive el truncado) · kw2 = secundaria ·
 // kw3 = variante/long-tail. Title: "kw1 | kw2 | kw3" ≤60, sin marca ni relleno.
 // Description: abre con kw1, teje kw2/kw3 natural, 140–160 chars.
-// TODO: validar la tripleta contra volumen/intención real antes de escalar contenido.
+// Tripleta validada con Ahrefs (México) el 2026-09-28: ver OBSIDIAN/OrigenLab/Proyectos/MOSQUITERO.
 export const KEYWORDS = [
-  'mosquiteros a medida', // kw1 · principal
-  'mosquiteros para ventanas', // kw2 · secundaria
-  'instalación de mosquiteros', // kw3 · variante / long-tail
+  'mosquiteros para ventanas', // kw1 · principal — 2,700/mes + «mosquitero para ventana» 3,800 (Ahrefs MX, 2026-09-28)
+  'mosquiteros a medida', // kw2 · diferenciador del negocio (volumen bajo, intención de compra)
+  'mosquiteros para puertas', // kw3 · 1,300 + «mosquitero para puerta» 2,600; página propia /mosquiteros/para-puertas/
 ] as const;
 
 // ── CONTACT — NAP (Name, Address, Phone) + geo + horario ─────────────────────
-// ⚠️ TODOS los valores de abajo son PLACEHOLDERS. Reemplázalos por los datos
-// reales del cliente. El sitio NO debe publicarse con un `TODO:` vivo.
+// Datos confirmados por Frank el 2026-07-14 (ver cada campo). Si cambian, se
+// cambian AQUÍ: footer, TopBar, JSON-LD, llms.txt y WhatsApp salen de este objeto.
 export const CONTACT = {
   // Datos dados por Frank el 2026-07-14. 🟢 Verificados como "lo que dijo el
   // cliente"; NADIE los ha comprobado marcando el número ni yendo al domicilio.
@@ -362,7 +362,7 @@ export const TAXONOMY = {
   // sectors: segmentos atendidos (residencial/comercial). Tipado explícito para
   // que Header/Footer puedan .map() sin que TS infiera `never` con `[]`.
   sectors: [] as readonly { slug: string; label: string }[], // TODO: definir si aplica.
-  // coverageStates: cobertura geográfica. TODO: reemplazar por la cobertura real.
+  // coverageStates: cobertura geográfica. 🟢 Confirmada por Frank (CDMX + Edomex).
   coverageStates: [
     { slug: 'cdmx', label: 'CDMX', type: 'operativo' as 'operativo' | 'comercial' },
     { slug: 'edomex', label: 'Estado de México', type: 'comercial' as 'operativo' | 'comercial' },
@@ -418,7 +418,10 @@ export const NAV: readonly NavItem[] = [
     panel: 'mega',
     allLabel: 'Ver catálogo completo',
     intro: 'Elige por tipo de mosquitero. Todos se fabrican a la medida de tu ventana o puerta.',
-    items: PRODUCT_CATEGORIES.map((c) => ({ label: c.label, href: c.href, desc: c.desc })),
+    items: [
+      ...PRODUCT_CATEGORIES.map((c) => ({ label: c.label, href: c.href, desc: c.desc })),
+      { label: 'Para puertas', href: '/mosquiteros/para-puertas/', desc: 'Opciones para accesos, patios y puertas corredizas.' },
+    ],
   },
   {
     label: 'Servicios',

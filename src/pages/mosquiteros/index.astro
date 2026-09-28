@@ -21,7 +21,9 @@
 // con más tarjetas: contenido duplicado compitiendo consigo mismo.
 //
 // SEO — keyword-first (regla del portafolio):
-//   • kw1 "mosquiteros a medida" abre el title y la description.
+//   • "tipos de mosquiteros" abre el title y la description (la home se queda
+//     con "mosquiteros para ventanas" y /para-puertas/ con "mosquiteros para
+//     puertas": una intención por URL, sin canibalizarse).
 //   • Un solo H1 (el Hero). Las secciones abren en H2; los "a fondo" en H3.
 //   • FAQ propia de catálogo, DISTINTA de la home: repetir sus 5 preguntas aquí
 //     sería el mismo FAQPage dos veces, y Google elige una y descarta la otra.
@@ -53,9 +55,9 @@ const showcase = (await getCollection("productos"))
   .sort((a, b) => a.data.order - b.data.order)
   .map((entry) => entry.data);
 
-const title = "Mosquiteros a medida | tipos para ventanas y puertas";
+const title = "Tipos de mosquiteros a medida para ventanas y puertas";
 const description =
-  "Mosquiteros a medida: enrollables, corredizos, abatibles, plisados, magnéticos y fijos. Te decimos cuál va con tu ventana y lo instalamos. Cotiza por WhatsApp.";
+  "Tipos de mosquiteros a medida: enrollables, corredizos, abatibles, plisados, magnéticos y fijos. Te decimos cuál va con tu ventana y lo instalamos.";
 
 // ── Barra bajo el hero ───────────────────────────────────────────────────────
 // NO se copia el menú de la home: ésta es la sección Mosquiteros, así que su
@@ -287,6 +289,9 @@ const faqs: { question: string; answer: string }[] = [
         ¿Sigues sin verlo claro? Es lo más normal — casi nadie llega sabiendo si
         su ventana pide un corredizo o un enrollable. Mándanos una foto de la
         ventana completa y te lo decimos nosotros.
+      </p>
+      <p class="tabla__nota">
+        ¿Es para una puerta? Revisa <a href="/mosquiteros/para-puertas/">qué mosquitero corresponde a cada tipo de puerta</a>.
       </p>
     </div>
   </section>

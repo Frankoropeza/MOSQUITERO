@@ -1,0 +1,210 @@
+---
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Hero from "@components/Hero.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import CategoryCard from "@components/CategoryCard.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import { WA_MESSAGES, waUrl } from "@config/site";
+
+const doorSlugs = ["enrollables", "corredizos", "abatibles", "plisados", "magneticos"];
+const productOrder = new Map(doorSlugs.map((slug, index) => [slug, index]));
+const productos = (await getCollection("productos"))
+  .filter((entry) => doorSlugs.includes(entry.data.category))
+  .sort((a, b) => productOrder.get(a.data.category)! - productOrder.get(b.data.category)!);
+
+const doorCopy: Record<string, string> = {
+  enrollables: "Para una puerta donde quieres recoger la malla cuando no la usas; necesita espacio para su cajón y guía.",
+  corredizos: "Para una puerta que ya se desliza sobre riel; acompaña el mismo movimiento sin invadir el paso.",
+  abatibles: "Para una entrada que usas todos los días; abre con bisagras y vuelve a cerrar al pasar.",
+  plisados: "Para puertas de cristal y vanos amplios; la malla se pliega a un lado cuando quieres dejar libre la abertura.",
+  magneticos: "Para patio o cocina cuando pasas seguido; se atraviesa y los imanes vuelven a juntar la abertura.",
+};
+
+const title = "Mosquiteros para puertas a medida | CDMX y Edomex";
+const description = "Mosquiteros para puertas a medida para accesos, patios y corredizas. Elige el tipo según tu puerta y pide tu cotización por WhatsApp hoy mismo.";
+
+const menuSecciones = [
+  { label: "Todos los tipos", href: "/mosquiteros/", sub: "Catálogo completo" },
+  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+];
+const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(WA_MESSAGES.cotizar), sub: "Cuéntanos sobre tu puerta", external: true };
+const menuGuias = [
+  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Toma las medidas del vano" },
+  { label: "Tipos de malla", href: "/blog/tipos-de-malla-mosquitero/", sub: "Elige según el uso" },
+  { label: "Qué tipo elegir", href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Compara tus opciones" },
+  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Decide qué conviene" },
+];
+const menuGuiasCta = { label: "Ver todas las guías", href: "/blog/", sub: "Guías y mantenimiento", icon: "arrow" as const };
+
+const decision = [
+  { puerta: "Puerta de acceso con bisagras", tipo: "Abatible", href: "/mosquiteros/abatibles/", porque: "Abre como puerta y tiene cierre automático para el paso frecuente.", no: "Si no hay espacio para que la hoja gire." },
+  { puerta: "Puerta corrediza de cristal", tipo: "Corredizo", href: "/mosquiteros/corredizos/", porque: "Corre sobre riel junto con una puerta que ya se desliza.", no: "Si la puerta no tiene riel donde montarlo." },
+  { puerta: "Puerta de patio o cocina de paso constante", tipo: "Magnético", href: "/mosquiteros/magneticos/", porque: "Se atraviesa con el cuerpo y vuelve a cerrar con imanes.", no: "Si buscas una pieza rígida." },
+  { puerta: "Ventanal o puerta muy ancha", tipo: "Plisado", href: "/mosquiteros/plisados/", porque: "Cubre accesos amplios y se recoge contra el marco.", no: "Si el riel inferior estorba al pasar." },
+  { puerta: "Puerta sin espacio libre arriba del marco", tipo: "Corredizo", href: "/mosquiteros/corredizos/", porque: "No necesita el cajón superior de un enrollable.", no: "Si no es una puerta corrediza." },
+  { puerta: "Puerta con mascotas", tipo: "Abatible o corredizo con malla reforzada", href: "/blog/tipos-de-malla-mosquitero/", porque: "La malla reforzada aguanta el empujón y el rasguño que rompen la tela estándar.", no: "Con malla estándar: la mascota la termina rasgando." },
+];
+
+const faqs = [
+  { question: "¿Qué debo revisar en mi puerta antes de pedir un mosquitero?", answer: "Revisa cómo abre tu puerta, si ya tiene riel y qué espacio queda alrededor del vano. Una puerta con bisagras pide un abatible si la hoja puede girar; una corrediza aprovecha su riel. Con esos detalles podemos orientar la opción antes de cotizar." },
+  { question: "¿Qué mosquitero deja libre una puerta amplia cuando no se usa?", answer: "El plisado se recoge contra el marco y la malla queda plegada a un lado. Está pensado para puertas de cristal, ventanales y accesos amplios donde quieres recuperar la abertura al terminar de usarlo." },
+  { question: "¿Cuál conviene para entrar a la cocina o al patio con las manos ocupadas?", answer: "El magnético está hecho para atravesarse: empujas las hojas de malla y los imanes vuelven a unirlas detrás de ti. Es una alternativa para puertas de paso frecuente, como la salida a la cocina, el patio o el tendedero." },
+  { question: "¿Puede un mosquitero seguir el recorrido de una puerta corrediza?", answer: "Sí, el corredizo está pensado para puertas que ya corren sobre riel. Su bastidor se desplaza lateralmente y no necesita abrir hacia dentro o hacia fuera. Si tu puerta no se desliza, ese sistema no tiene dónde montarse." },
+  { question: "¿Para qué sirve indicar hacia dónde abre mi puerta?", answer: "La dirección de apertura ayuda a saber si hay espacio para que un abatible gire o si conviene otro sistema. Junto con el ancho y el alto del vano, ese detalle orienta la cotización. Sigue la guía de <a href=\"/blog/como-medir-ventana-mosquitero/\">cómo medir el vano</a> para ordenar los datos." },
+  { question: "¿Qué debo considerar si mi puerta tiene mascotas o mucho paso?", answer: "El uso de la puerta importa tanto como su marco. Para una salida que se atraviesa seguido, el magnético permite pasar sin abrir una hoja. Si hay mascotas o roce constante, consulta <a href=\"/blog/tipos-de-malla-mosquitero/\">los tipos de malla</a> antes de elegir la tela." },
+];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="directory"
+  breadcrumbs={[
+    { label: "Inicio", href: "/" },
+    { label: "Mosquiteros", href: "/mosquiteros/" },
+    { label: "Para puertas" },
+  ]}
+  schemaData={{
+    list: {
+      name: "Mosquiteros para puertas — Mosquitero.mx",
+      description,
+      path: "/mosquiteros/para-puertas/",
+      items: productos.map((entry) => ({
+        name: entry.data.label,
+        path: entry.data.href,
+        image: entry.data.image,
+        description: doorCopy[entry.data.category],
+      })),
+    },
+    faqs,
+  }}
+>
+  <Hero
+    badge="Hechos a la medida de tu acceso"
+    title="Mosquiteros para"
+    accent="puertas a medida"
+    subtitle="Elige una opción que se adapte a cómo abre tu puerta y al paso que tiene todos los días. Cotiza por WhatsApp."
+    descRight={[
+      "Una puerta no se resuelve con un mosquitero fijo: necesitas pasar, abrir o deslizar sin perder ventilación. Por eso el tipo correcto depende del mecanismo que ya tiene tu acceso.",
+      "Fabricamos a la medida del vano. Cuéntanos si es una entrada, una corrediza, un patio o un acceso amplio y te ayudamos a elegir antes de cotizar.",
+    ]}
+    ctas={[{ text: "Cotizar por WhatsApp", href: waUrl(WA_MESSAGES.cotizar), whatsapp: true }]}
+  />
+
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Según tu acceso"
+        title="Qué mosquitero va en cada puerta"
+        body={[
+          "No todos abren igual. El abatible gira con bisagras, el corredizo acompaña un riel y el magnético se atraviesa. La forma de tu puerta descarta opciones desde el principio.",
+          "Estas son las alternativas que tienen versión para puerta. Compáralas por el uso que le das a tu acceso y por el espacio que deja libre el marco.",
+        ]}
+      />
+      <div class="showcase">
+        {productos.map((entry, index) => (
+          <CategoryCard
+            label={entry.data.label}
+            href={entry.data.href}
+            image={entry.data.image}
+            imageAlt={entry.data.imageAlt}
+            badge={entry.data.badge}
+            blurb={doorCopy[entry.data.category]}
+            subcategories={entry.data.subcategories}
+            ctaLabel={entry.data.ctaLabel}
+            index={index}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Decide con el marco"
+        title="Encuentra el tipo que sigue el movimiento de tu puerta"
+        body={[
+          "Busca primero cómo funciona tu puerta. Si se abre sobre bisagras, se desliza por un riel o se usa como salida frecuente, ya tienes la pista principal para descartar tipos.",
+          "La última columna evita sorpresas: cada opción pide una condición distinta. Si tu caso no encaja claro, compártelo al pedir la cotización y lo revisamos contigo.",
+        ]}
+      />
+      <div class="tabla-wrap">
+        <table class="tabla">
+          <caption class="tabla__caption">Cómo elegir un mosquitero para puerta</caption>
+          <thead>
+            <tr><th scope="col">Tu puerta</th><th scope="col">Qué mosquitero</th><th scope="col">Por qué</th><th scope="col">Cuándo no</th></tr>
+          </thead>
+          <tbody>
+            {decision.map((row) => (
+              <tr>
+                <th scope="row">{row.puerta}</th>
+                <td><a href={row.href}>{row.tipo}</a></td>
+                <td>{row.porque}</td>
+                <td class="tabla__no">{row.no}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container lectura">
+      <SectionHeading
+        eyebrow="Antes de pedirlo"
+        title="Mide el vano y piensa en el uso diario"
+        body={[
+          "Mide el ancho y el alto del vano donde irá la pieza, no sólo la hoja de tu puerta. Anota también si abre con bisagras o corre sobre riel.",
+          "La malla se elige por lo que pasa en esa puerta. Si hay mascotas, mucho roce o entradas y salidas constantes, vale la pena revisarla antes de cotizar.",
+        ]}
+      />
+      <p>Consulta <a href="/blog/como-medir-ventana-mosquitero/">cómo medir el vano</a> antes de cotizar. Si hay mascotas o paso constante, revisa <a href="/blog/tipos-de-malla-mosquitero/">los tipos de malla</a> para identificar qué conviene considerar.</p>
+      <p>Una foto general de la puerta puede ayudar a identificar el riel, el arco de apertura y el espacio alrededor del marco. Con el vano y el uso de tu acceso, la recomendación parte de condiciones reales y no de una suposición.</p>
+    </div>
+  </section>
+
+  <section class="section section--faq">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Dudas sobre puertas"
+        title="Resuelve lo importante antes de cotizar"
+        body={[
+          "Estas respuestas se concentran en el recorrido de la puerta, el espacio del marco y el paso diario. Son los detalles que cambian qué tipo puede funcionar en tu acceso.",
+          "Si tu puerta tiene una condición distinta, escríbenos por WhatsApp con lo que observas. Así revisamos el caso antes de fabricar a la medida.",
+        ]}
+      />
+      <div class="faq-bloque">
+        <FAQAccordion items={faqs} title="" flush>
+          <QuoteForm slot="aside" />
+        </FAQAccordion>
+      </div>
+    </div>
+  </section>
+
+  <SectionMenu items={menuGuias} cta={menuGuiasCta} ariaLabel="Guías para puertas" />
+</PageLayout>
+
+<style>
+  .showcase { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
+  .tabla-wrap { margin-top: var(--sp-6); overflow-x: auto; border: 1px solid var(--c-border); border-radius: var(--radius-lg); background: var(--c-white); }
+  .tabla { width: 100%; min-width: 840px; border-collapse: collapse; }
+  .tabla__caption { padding: var(--sp-4) var(--sp-5) 0; color: var(--c-muted); font-size: var(--text-sm); text-align: left; }
+  .tabla th, .tabla td { padding: var(--sp-4) var(--sp-5); border-bottom: 1px solid var(--c-border); color: var(--c-ink-2); font-size: var(--text-sm); line-height: var(--leading-normal); text-align: left; vertical-align: top; }
+  .tabla thead th { background: var(--c-surface); color: var(--c-muted); font-family: var(--font-heading); font-size: var(--text-xs); font-weight: var(--weight-bold); letter-spacing: .04em; text-transform: uppercase; }
+  .tabla tbody tr:last-child th, .tabla tbody tr:last-child td { border-bottom: 0; }
+  .tabla tbody th { color: var(--c-ink); font-family: var(--font-heading); font-weight: var(--weight-semibold); }
+  .tabla a, .lectura :global(a) { color: var(--c-primary); font-weight: var(--weight-semibold); }
+  .tabla__no { color: var(--c-muted); }
+  .lectura > p { max-width: 72ch; color: var(--c-ink-2); font-size: var(--text-base); line-height: var(--leading-relaxed); }
+  @media (min-width: 640px) { .showcase { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .showcase { grid-template-columns: repeat(3, 1fr); } }
+</style>

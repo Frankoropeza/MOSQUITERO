@@ -81,7 +81,7 @@ const faqSchema = emitSchema ? {
       )}
     </div>
   </div>
-  {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+  {faqSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
 </section>
 
 <style>
