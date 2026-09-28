@@ -1,0 +1,24 @@
+---
+interface Item {
+  titulo: string;
+  texto: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="servicios">
+  {items.map((item, index) => (
+    <article class="servicio">
+      <div class="servicio__contenido">
+        <span class:list={["servicio__marca", `servicio__marca--${index + 1}`]} aria-hidden="true"></span>
+        <h3 class="servicio__titulo">{item.titulo}</h3>
+        <p class="servicio__desc">{item.texto}</p>
+      </div>
+    </article>
+  ))}
+</div>

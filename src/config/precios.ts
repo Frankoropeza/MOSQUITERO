@@ -34,5 +34,14 @@ export const formatearPrecio = (precio: number) =>
 
 export const precioDesde = (precio: number | null) => (precio === null ? null : `desde ${formatearPrecio(precio)}`);
 
+// «Desde» de un mosquitero NUEVO: excluye `cambioDeMalla`, que es una reparación.
+// Sin esta exclusión el hero y la FAQ de /mosquiteros/ decían «desde $390»
+// (el cambio de malla), que no es el precio de ningún mosquitero.
+const SERVICIOS_NO_PIEZA: PrecioSlug[] = ["cambioDeMalla"];
+
 export const precioMasBajo = (tipo: "ventana" | "puerta") =>
-  Math.min(...Object.values(PRECIOS_REFERENCIA).flatMap((precio) => precio[tipo] === null ? [] : [precio[tipo]]));
+  Math.min(
+    ...(Object.entries(PRECIOS_REFERENCIA) as [PrecioSlug, PrecioReferencia][])
+      .filter(([slug]) => !SERVICIOS_NO_PIEZA.includes(slug))
+      .flatMap(([, precio]) => (precio[tipo] === null ? [] : [precio[tipo] as number])),
+  );

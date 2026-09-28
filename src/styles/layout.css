@@ -89,6 +89,55 @@
   clip-path: inset(0 -100vmax);
 }
 
+/* Bandas alternas a sangre para bloques editoriales. Sus hijos suelen ser la
+   raíz de un componente, por eso el selector que la consume desde una página
+   debe usar :global(). */
+.bandas-alternas {
+  display: grid;
+  gap: 0;
+  margin-top: var(--sp-10);
+}
+
+.bandas-alternas > * {
+  --text-muted: var(--c-muted);
+  --color-border: var(--c-border);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  background: var(--band-bg);
+  box-shadow: 0 0 0 100vmax var(--band-bg);
+  clip-path: inset(0 -100vmax);
+  color: var(--c-ink);
+}
+
+.bandas-alternas > *:nth-child(4n + 1),
+.bandas-alternas > *:nth-child(4n + 3) {
+  --band-bg: var(--c-primary);
+  --c-ink: var(--c-on-dark);
+  --c-ink-2: #d9d2c4;
+  --c-muted: var(--c-on-dark-muted);
+  --c-line: var(--c-line-on-dark);
+  --c-border: var(--c-line-on-dark);
+  --btn-bg: var(--c-accent);
+  --btn-fg: var(--c-primary);
+  --btn-bg-hover: var(--c-on-dark);
+  --btn-fg-hover: var(--c-primary);
+}
+
+.bandas-alternas > *:nth-child(4n + 2) {
+  --band-bg: var(--c-accent);
+  --c-muted: var(--c-ink-2);
+  --c-line: rgba(21, 35, 27, .22);
+}
+
+.bandas-alternas > *:nth-child(4n) {
+  --band-bg: var(--c-bg);
+}
+
+@media (max-width: 480px) {
+  .bandas-alternas {
+    margin-top: var(--sp-8);
+  }
+}
+
 /* Botones rectos: sólo su color/fondo conservan transición. */
 .btn,
 .btn--primary,

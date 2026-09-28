@@ -47,6 +47,8 @@ interface Props {
   subcategories?: readonly Sub[];
   ctaLabel?: string;
   index?: number;
+  precio?: string;
+  variant?: "wide";
 }
 const {
   label,
@@ -58,11 +60,13 @@ const {
   subcategories = [],
   ctaLabel = "Ver más",
   index = 99,
+  precio,
+  variant,
 } = Astro.props;
 const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen sin lazy.
 ---
 
-<article class="ccard">
+<article class:list={["ccard", { "ccard--wide": variant === "wide" }]}>
   {image && (
     <a class="ccard__media-link" href={href} tabindex="-1" aria-hidden="true">
       <div class="ccard__media">
@@ -82,7 +86,7 @@ const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen si
 
   <div class="ccard__body">
     <h3 class="ccard__title"><a href={href}>{label}</a></h3>
-    {blurb && <p class="ccard__desc">{blurb}</p>}
+    {blurb && <p class="ccard__desc">{blurb}</p>}{precio && <p class="ccard__precio">{precio}</p>}
 
     {subcategories.length > 0 && (
       <ul class="ccard__subs" aria-label={`Subcategorías de ${label}`}>
@@ -147,6 +151,16 @@ const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen si
     margin: 0; font-family: var(--font-body); font-size: 15px; color: var(--c-on-dark-muted);
     line-height: var(--leading-normal);
   }
+  .ccard__precio {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 12.5px;
+    font-weight: var(--weight-medium);
+    letter-spacing: .06em;
+    line-height: var(--leading-normal);
+    text-transform: uppercase;
+    color: var(--c-accent);
+  }
 
   /* Chips de subcategorías (enlaces) */
   .ccard__subs {
@@ -184,4 +198,33 @@ const eager = index < 4; // las 4 primeras tarjetas (1.ª fila) cargan imagen si
 
   /* El bloque `prefers-reduced-motion` de aquí se fue con las transiciones que
      apagaba: ya no hay ninguna. El único del sitio es el global de tokens.css. */
+  @media (min-width: 1024px) {
+    .ccard--wide {
+      flex-direction: row;
+      grid-column: 1 / -1;
+    }
+    .ccard--wide .ccard__media-link {
+      flex: 0 0 40%;
+    }
+    .ccard--wide .ccard__media {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+    /* Horizontal: contenido centrado en vertical y con más aire; el botón
+       sigue al texto en lugar de irse al fondo de una caja alta. */
+    .ccard--wide .ccard__body {
+      justify-content: center;
+      padding: var(--sp-8);
+    }
+    .ccard--wide .ccard__title {
+      font-size: var(--text-card);
+    }
+    .ccard--wide .ccard__desc {
+      max-width: 56ch;
+    }
+    .ccard--wide .ccard__cta {
+      margin-top: var(--sp-4);
+      align-self: flex-start;
+    }
+  }
 </style>

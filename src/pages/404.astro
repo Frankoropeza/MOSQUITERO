@@ -53,6 +53,6 @@ const description = 'La dirección que buscas no está disponible. Explora nuest
   .not-found__grid ul { display: grid; gap: var(--sp-2); margin: 0; padding-left: 1.2rem; }
   .not-found__grid a { color: var(--c-primary); font-weight: var(--weight-semibold); }
   /* Más específico que `.not-found__grid a` (que pinta los enlaces de la lista):
-     así el botón conserva su color sin !important. */
+     así el botón conserva su color sin una sobrescritura de prioridad. */
   .not-found__grid a.not-found__cta { display: inline-flex; margin-top: var(--sp-5); padding: .8rem 1.25rem; border-radius: 0; background: var(--c-primary); color: var(--c-bg); font-family: var(--font-ui); font-weight: var(--weight-medium); letter-spacing: .02em; text-transform: uppercase; text-decoration: none; }
 </style>

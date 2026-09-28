@@ -22,6 +22,7 @@ import SectionMenu from "@components/SectionMenu.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import CategoryCard from "@components/CategoryCard.astro";
 import CategoryDetail from "@components/CategoryDetail.astro";
+import MarcadoresGrid from "@components/MarcadoresGrid.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
@@ -35,6 +36,11 @@ const showcaseHome = (await getCollection("productos"))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 4)
   .map((entry) => entry.data);
+
+const marcadoresServicios = SERVICES.map((service) => ({
+  titulo: service.label,
+  texto: service.desc,
+}));
 
 // Se fueron con el CTA final (2026-07-14): el import de CTABanner y el
 // `const waLink = waUrl()`, que era su único consumidor en esta página. El
@@ -282,7 +288,7 @@ const faqs: { question: string; answer: string }[] = [
           cuatro H2 anidados bajo otro H2 —y encima detrás de los H3 de las
           tarjetas—, o sea un salto de jerarquía hacia arriba. La regla es
           H2 sección padre → H3 sub-bloque. */}
-      <div class="afondo">
+      <div class="afondo bandas-alternas">
         {showcaseHome.map((cat) => (
           <CategoryDetail
             id={`afondo-${cat.category}`}
@@ -310,17 +316,7 @@ const faqs: { question: string; answer: string }[] = [
           "Si ya tienes mosquiteros, no siempre hay que reponerlos. Cuando el marco aguanta, se cambia solo la malla; cuando no, te decimos con franqueza qué conviene más — reparar o reponer la pieza.",
         ]}
       />
-      <div class="servicios">
-        {SERVICES.map((s) => (
-          <article class="servicio">
-            <div class="servicio__contenido">
-              <span class:list={['servicio__marca', `servicio__marca--${SERVICES.indexOf(s) + 1}`]} aria-hidden="true"></span>
-              <h3 class="servicio__titulo">{s.label}</h3>
-              <p class="servicio__desc">{s.desc}</p>
-            </div>
-          </article>
-        ))}
-      </div>
+      <MarcadoresGrid items={marcadoresServicios} />
     </div>
   </section>
 
@@ -431,51 +427,6 @@ const faqs: { question: string; answer: string }[] = [
      peor: metía un ancho distinto al del resto de la página. La coherencia de
      ancho manda; el equilibrio vertical se resuelve dentro del bloque, no
      estrechándolo (ver la nota de .cdetail__gallery en CategoryDetail.astro). */
-  .afondo {
-    display: grid;
-    gap: 0;
-    margin-top: var(--sp-10);
-  }
-  /* BANDAS A SANGRE (rediseño 2026-09-28): cada bloque pinta su fondo al 100 %
-     del viewport con box-shadow + clip-path (sin scroll horizontal) y el
-     contenido conserva el ancho del .container. Los hijos son la raíz de
-     <CategoryDetail>, que no lleva el atributo de scope de esta página: por eso
-     el selector del hijo va en :global(). Los tokens se redeclaran por banda y
-     el componente se adapta solo (texto, eyebrow, botón). */
-  .afondo > :global(*) {
-    --text-muted: var(--c-muted);
-    --color-border: var(--c-border);
-    padding-block: clamp(2.5rem, 6vw, 5rem);
-    background: var(--band-bg);
-    box-shadow: 0 0 0 100vmax var(--band-bg);
-    clip-path: inset(0 -100vmax);
-    color: var(--c-ink);
-  }
-  .afondo > :global(*:nth-child(4n+1)),
-  .afondo > :global(*:nth-child(4n+3)) {
-    --band-bg: var(--c-primary);
-    --c-ink: var(--c-on-dark);
-    --c-ink-2: #d9d2c4;
-    --c-muted: var(--c-on-dark-muted);
-    --c-line: var(--c-line-on-dark);
-    --c-border: var(--c-line-on-dark);
-    --btn-bg: var(--c-accent);
-    --btn-fg: var(--c-primary);
-    --btn-bg-hover: var(--c-on-dark);
-    --btn-fg-hover: var(--c-primary);
-  }
-  .afondo > :global(*:nth-child(4n+2)) {
-    --band-bg: var(--c-accent);
-    --c-muted: var(--c-ink-2);
-    --c-line: rgba(21, 35, 27, .22);
-  }
-  .afondo > :global(*:nth-child(4n)) {
-    --band-bg: var(--c-bg);
-  }
-  @media (max-width: 480px) {
-    .afondo { margin-top: var(--sp-8); }
-  }
-
   /* ── Servicios ────────────────────────────────────────────────────────────
      CONCEPTO: la tarjeta ES un mosquitero. No hay ícono, imagen ni movimiento:
      la carga visual la lleva la construcción de la pieza.
@@ -487,10 +438,10 @@ const faqs: { question: string; answer: string }[] = [
 
      POR QUÉ SIN HOVER: estas tarjetas NO son enlaces (/servicios/{id}/ aún no
      existe). Un lift o un cambio de color prometería un clic que no hay. */
-  .servicios { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+  :global(.servicios) { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
 
   /* El marco: fondo blanco = cara del perfil de aluminio. */
-  .servicio {
+  :global(.servicio) {
     position: relative;
     /* Top a --sp-6 (32px): deja respirar la escuadra, que llega hasta los 26px
        (inset 8 + 18 de trazo). Con --sp-5 el título se le montaba. */
@@ -502,7 +453,7 @@ const faqs: { question: string; answer: string }[] = [
   }
 
   /* Sin textura: el bloque respira con fondo de banda y tipografía. */
-  .servicio::before {
+  :global(.servicio)::before {
     display: none;
     position: absolute; inset: var(--sp-2); z-index: 0;
     border: 0;
@@ -513,7 +464,7 @@ const faqs: { question: string; answer: string }[] = [
   /* La escuadra: dos trazos en ángulo, en primario, sobre la junta superior
      izquierda. Es el único punto de color de la tarjeta — marca el inicio de
      lectura sin robarle peso al título. */
-  .servicio::after {
+  :global(.servicio)::after {
     display: none;
     position: absolute; z-index: 1;
     top: var(--sp-2); left: var(--sp-2);
@@ -523,34 +474,34 @@ const faqs: { question: string; answer: string }[] = [
     pointer-events: none;
   }
 
-  .servicio__contenido { position: relative; z-index: 1; display: grid; justify-items: center; }
-  .servicio__marca { display: block; width: 28px; height: 28px; margin-bottom: var(--sp-4); background: var(--c-primary); }
-  .servicio__marca--2 { border-radius: var(--radius-full); }
-  .servicio__marca--3 { transform: rotate(45deg); }
-  .servicio__marca--4 { clip-path: polygon(50% 0, 0 100%, 100% 100%); }
+  :global(.servicio__contenido) { position: relative; z-index: 1; display: grid; justify-items: center; }
+  :global(.servicio__marca) { display: block; width: 28px; height: 28px; margin-bottom: var(--sp-4); background: var(--c-primary); }
+  :global(.servicio__marca--2) { border-radius: var(--radius-full); }
+  :global(.servicio__marca--3) { transform: rotate(45deg); }
+  :global(.servicio__marca--4) { clip-path: polygon(50% 0, 0 100%, 100% 100%); }
 
   /* El título sube a --text-lg y a font-heading: sin ícono, la jerarquía la
      tiene que llevar la tipografía sola. */
-  .servicio__titulo {
+  :global(.servicio__titulo) {
     margin: 0 0 var(--sp-3);
     font-family: var(--font-heading); font-size: var(--text-card);
     font-weight: var(--weight-semibold); line-height: var(--leading-tight);
     color: var(--c-ink); text-wrap: balance;
   }
   /* Filete corto bajo el título: separa sin meter una línea de borde completa. */
-  .servicio__titulo::after {
+  :global(.servicio__titulo)::after {
     display: none;
     width: 28px; height: 2px; margin-top: var(--sp-3);
     background: var(--c-primary);
   }
-  .servicio__desc {
+  :global(.servicio__desc) {
     margin: 0; font-family: var(--font-body); font-size: var(--text-body); color: var(--c-ink-2);
     line-height: var(--leading-normal); text-wrap: pretty;
   }
 
   /* La trama es decorativa: en alto contraste desaparece antes que el texto. */
   @media (prefers-contrast: more) {
-    .servicio::before { background-image: none; }
+    :global(.servicio)::before { background-image: none; }
   }
 
   /* ── Proceso ──
@@ -619,11 +570,11 @@ const faqs: { question: string; answer: string }[] = [
   /* ── Desktop ── */
   @media (min-width: 768px) {
     .section { padding: var(--sp-10) 0; }
-    .servicios { grid-template-columns: repeat(2, 1fr); }
+    :global(.servicios) { grid-template-columns: repeat(2, 1fr); }
     .pasos { grid-template-columns: repeat(2, 1fr); }
   }
   @media (min-width: 1024px) {
-    .servicios { grid-template-columns: repeat(4, 1fr); }
+    :global(.servicios) { grid-template-columns: repeat(4, 1fr); }
     /* 8 pasos = dos filas limpias de 4, misma retícula que .servicios. Se fue el
        truco de span/centrado que hacía falta con 5: con múltiplo de 4 no hay
        fila huérfana. Si el cliente confirma otro número de pasos (ver el TODO
