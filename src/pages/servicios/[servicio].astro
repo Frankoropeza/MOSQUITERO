@@ -35,167 +35,56 @@ import SectionHeading from "@components/SectionHeading.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import SectionMenu from "@components/SectionMenu.astro";
-import {
-  SERVICES,
-  SERVICIOS_AFONDO,
-  PRODUCT_CATEGORIES,
-  COVERAGE_STATES,
-  CONTACT,
-  WA_MESSAGES,
-  waUrl,
-  telUrl,
-  servicioHref,
-  zonaHref,
-} from "@config/site";
+import { SERVICES, PRODUCT_CATEGORIES, COVERAGE_STATES, CONTACT, WA_MESSAGES, waUrl, telUrl, servicioHref, zonaHref } from "@config/site";
 import { navIcon } from "@config/nav-icons";
-// TODO el CSS de esta plantilla L4 vive aquí, en UNA definición compartida con
-// la otra L4. Antes estaba copiado en los <style> de las dos: 200 líneas
-// idénticas con un comentario que decía "si cambias una, cambia la otra" — o
-// sea, una promesa que nadie cumple. Ver docs/CONTRATO-L4.md.
-// Ruta relativa y no alias: es la convención del repo para CSS (BaseLayout y
-// ArticleLayout hacen igual), y un alias a medias revienta en build.
 import "../../styles/ficha.css";
 
-// `async`: la guarda de `guias` consulta la colección para comprobar que cada
-// slug genera ruta de verdad.
 export const getStaticPaths = (async () => {
-  // ── Guarda 1: datos completos ─────────────────────────────────────────────
-  const sinAfondo = SERVICES.filter((s) => !SERVICIOS_AFONDO[s.id]);
-  if (sinAfondo.length > 0) {
-    throw new Error(
-      `[servicios/[servicio]] Sin entrada en SERVICIOS_AFONDO: ` +
-        `${sinAfondo.map((s) => s.id).join(", ")}.\n` +
-        `  → Sin ella la ficha sería un título y una frase: thin content.\n` +
-        `  → Escríbela en site.ts o quita el servicio de TAXONOMY.services.\n` +
-        `  → Al escribirla: NADA de plazos, precios ni garantías (CONTRATO-L4 §4).`,
-    );
+  const servicios = (await getCollection("servicios")).sort((a, b) => a.data.order - b.data.order);
+  const porId = new Map(servicios.map((entry) => [entry.data.id, entry]));
+  const esperados = new Set(SERVICES.map((service) => service.id));
+  const faltan = SERVICES.filter((service) => !porId.has(service.id));
+  const sobran = servicios.filter((entry) => !esperados.has(entry.data.id));
+  if (faltan.length > 0 || sobran.length > 0) {
+    throw new Error("[servicios/[servicio]] TAXONOMY.services y la colección servicios no coinciden:\n" + faltan.map((service) => "  · falta " + service.id + " en servicios").concat(sobran.map((entry) => "  · sobra " + entry.data.id + " en servicios")).join("\n"));
   }
-
-  // ── Guarda 2: mínimo de FAQ ───────────────────────────────────────────────
-  // Una ficha con 2 preguntas no responde a nadie y es señal de thin content.
-  // 8 es el suelo del contrato.
-  const MIN_FAQS = 8;
-  const pocas = SERVICES.filter((s) => (SERVICIOS_AFONDO[s.id]?.faqs.length ?? 0) < MIN_FAQS);
-  if (pocas.length > 0) {
-    throw new Error(
-      `[servicios/[servicio]] Fichas con menos de ${MIN_FAQS} preguntas:\n` +
-        pocas.map((s) => `  · ${s.id}: ${SERVICIOS_AFONDO[s.id]?.faqs.length ?? 0}`).join("\n") +
-        `\n  → Escribe más en SERVICIOS_AFONDO[id].faqs (site.ts).\n` +
-        `  → Que sean del SERVICIO ("¿cómo trabajan?"), no de mosquiteros en\n` +
-        `    general: eso ya está en /mosquiteros.`,
-    );
-  }
-
-  // ── Guarda 3: FAQ duplicadas entre fichas ─────────────────────────────────
-  // Normaliza tildes y mayúsculas: la misma pregunta con otra tilde sigue siendo
-  // la misma para Google, y dos FAQPage iguales compiten entre sí.
-  const norm = (s: string) =>
-    s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
+  const publicados = new Set((await getCollection("articulos", ({ data }) => data.draft !== true)).map((article) => article.id));
+  const guiasRotas = servicios.flatMap((entry) => entry.data.guias
+    .filter((reference) => !publicados.has(reference.id))
+    .map((reference) => "  · " + entry.data.id + " → \"" + reference.id + "\""));
+  if (guiasRotas.length > 0) throw new Error("[servicios/[servicio]] SERVICIOS_AFONDO.guias apunta a artículos que no generan ruta:\n" + guiasRotas.join("\n"));
+  const norm = (value: string) => value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
   const vistas = new Map<string, string>();
   const dups: string[] = [];
-  for (const s of SERVICES) {
-    for (const f of SERVICIOS_AFONDO[s.id]?.faqs ?? []) {
-      const k = norm(f.question);
-      const antes = vistas.get(k);
-      if (antes) dups.push(`  · "${f.question}"\n      en ${antes} y en ${s.id}`);
-      else vistas.set(k, s.id);
-    }
+  for (const entry of servicios) for (const faq of entry.data.faqs) {
+    const anterior = vistas.get(norm(faq.question));
+    if (anterior) dups.push("  · \"" + faq.question + "\"\n      en " + anterior + " y en " + entry.data.id);
+    else vistas.set(norm(faq.question), entry.data.id);
   }
-  if (dups.length > 0) {
-    throw new Error(
-      `[servicios/[servicio]] Preguntas REPETIDAS entre fichas de servicio:\n` +
-        dups.join("\n") +
-        `\n  → Dos FAQPage con la misma pregunta compiten: Google elige uno y\n` +
-        `    descarta el otro.\n` +
-        `  → OJO: esta guarda solo mira entre SERVICIOS_AFONDO. El cruce con la\n` +
-        `    home, las L2, las fichas de tipo y los artículos es MANUAL.`,
-    );
-  }
-
-  // ── Guarda 4: las guías generan ruta ──────────────────────────────────────
-  // Mismo filtro `draft !== true` que blog/[slug].astro: que el .mdx exista no
-  // basta, un draft no tiene ruta. Estos enlaces salen en el sidebar de las 4.
-  const publicados = new Set(
-    (await getCollection("articulos", ({ data }) => data.draft !== true)).map((p) => p.id),
-  );
-  const guiasRotas: string[] = [];
-  for (const s of SERVICES) {
-    for (const g of SERVICIOS_AFONDO[s.id]?.guias ?? []) {
-      if (!publicados.has(g)) guiasRotas.push(`  · ${s.id} → "${g}"`);
-    }
-  }
-  if (guiasRotas.length > 0) {
-    throw new Error(
-      `[servicios/[servicio]] SERVICIOS_AFONDO.guias apunta a artículos que no\n` +
-        `generan ruta:\n` +
-        guiasRotas.join("\n") +
-        `\n  Publicados: ${[...publicados].sort().join(", ")}\n` +
-        `  → Causa probable: el .mdx se renombró, se borró o tiene draft: true.`,
-    );
-  }
-
-  return SERVICES.map((s) => ({ params: { servicio: s.id }, props: { svc: s } }));
+  if (dups.length > 0) throw new Error("[servicios/[servicio]] Preguntas REPETIDAS entre fichas de servicio:\n" + dups.join("\n"));
+  return servicios.map((entry) => ({ params: { servicio: entry.data.id }, props: { svc: SERVICES.find((service) => service.id === entry.data.id)!, afondo: entry.data } }));
 }) satisfies GetStaticPaths;
 
-const { svc } = Astro.props;
-const afondo = SERVICIOS_AFONDO[svc.id]!;
-
-const title = `${svc.label} de mosquiteros | CDMX y Edomex`;
-const description = `${afondo.blurb.slice(0, 155).trim()}`;
-
-// WA_MESSAGES ya trae `medicion` y `reparacion` por intención. Los que no tienen
-// uno propio caen a `servicios`.
-const waMsg =
-  (WA_MESSAGES as Record<string, string | undefined>)[svc.id] ??
-  WA_MESSAGES.servicios ??
-  WA_MESSAGES.cotizar;
-
-// ── Enlazado contextual (CONTRATO-L4 §3) ────────────────────────────────────
-// Los títulos salen de la COLECCIÓN, no copiados a mano: si alguien reescribe un
-// artículo, el enlace lo refleja solo. El orden lo manda `guias` (relevancia).
+const { svc, afondo } = Astro.props;
+const title = svc.label + " de mosquiteros | CDMX y Edomex";
+const description = afondo.blurb.slice(0, 155).trim();
+const waMsg = (WA_MESSAGES as Record<string, string | undefined>)[svc.id] ?? WA_MESSAGES.servicios ?? WA_MESSAGES.cotizar;
 const articulos = await getCollection("articulos", ({ data }) => data.draft !== true);
 const guias = afondo.guias
-  .map((slug) => articulos.find((a) => a.id === slug))
-  .filter((a): a is NonNullable<typeof a> => Boolean(a));
-
-const otros = SERVICES.filter((s) => s.id !== svc.id);
-
-// El hero parte el título para resaltar la última palabra en color de marca:
-//   "Medición a domicilio"        → "Medición a"          + «domicilio»
-//   "Reparación y cambio de malla"→ "Reparación y cambio de" + «malla»
-//
-// ⚠️ EL CASO DE UNA SOLA PALABRA: "Instalación" no tiene última palabra que
-// separar. Dejar el título vacío pintaba el H1 ENTERO en color de acento —
-// incoherente con las otras tres fichas, donde el acento resalta una palabra.
-// Se le añade el complemento que la frase pide igual: "Instalación de
-// «mosquiteros»". Sale mejor que un H1 monocolor y de paso mete la keyword.
+  .map((reference) => articulos.find((article) => article.id === reference.id))
+  .filter((article): article is NonNullable<typeof article> => Boolean(article));
+const otros = SERVICES.filter((service) => service.id !== svc.id);
 const palabras = svc.label.split(" ");
 const esUnaPalabra = palabras.length === 1;
-const heroTitle = esUnaPalabra ? `${svc.label} de` : palabras.slice(0, -1).join(" ");
+const heroTitle = esUnaPalabra ? svc.label + " de" : palabras.slice(0, -1).join(" ");
 const heroAccent = esUnaPalabra ? "mosquiteros" : palabras[palabras.length - 1];
-
-// Índice del sidebar. Los ids DEBEN existir en el markup — si renombras una
-// sección, renómbralo aquí: un índice a un ancla muerta es peor que no tenerlo.
 const indice = [
-  { id: "como-funciona", label: "Cómo trabajamos" },
-  { id: "cuando", label: "Cuándo pedirlo" },
-  { id: "datos", label: "Datos rápidos" },
-  { id: "pedir", label: "Cómo se pide" },
-  { id: "faq", label: "Preguntas frecuentes" },
+  { id: "como-funciona", label: "Cómo trabajamos" }, { id: "cuando", label: "Cuándo pedirlo" }, { id: "datos", label: "Datos rápidos" }, { id: "pedir", label: "Cómo se pide" }, { id: "faq", label: "Preguntas frecuentes" },
 ];
-
 const menuSecciones = [
-  { label: "Todos los servicios", href: "/servicios/", sub: "Qué hacemos" },
-  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
-  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: "Todos los servicios", href: "/servicios/", sub: "Qué hacemos" }, { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" }, { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" }, { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
 ];
-const menuCta = {
-  label: "Cotizar por WhatsApp",
-  href: waUrl(waMsg),
-  sub: "Cuéntanos tu caso",
-  external: true,
-};
+const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Cuéntanos tu caso", external: true };
 ---
 
 <PageLayout

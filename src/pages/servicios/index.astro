@@ -39,14 +39,16 @@ import CategoryCard from "@components/CategoryCard.astro";
 import CategoryDetail from "@components/CategoryDetail.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
+import { getCollection } from "astro:content";
 import {
   SERVICES,
-  SERVICIOS_AFONDO,
-  COVERAGE_STATES,
   WA_MESSAGES,
   waUrl,
   servicioHref,
 } from "@config/site";
+
+const servicioEntries = (await getCollection("servicios")).sort((a, b) => a.data.order - b.data.order);
+const serviciosPorId = new Map(servicioEntries.map((entry) => [entry.data.id, entry.data]));
 
 const title = "Servicios | instalación de mosquiteros a medida";
 const description =
@@ -55,7 +57,7 @@ const description =
 // Guarda: mismo criterio que la ficha [servicio].astro. Si un servicio no tiene
 // entrada en SERVICIOS_AFONDO, esta página lo pintaría sin cuerpo ni galería.
 // Que rompa el build, no la página.
-const sinAfondo = SERVICES.filter((s) => !SERVICIOS_AFONDO[s.id]);
+const sinAfondo = SERVICES.filter((s) => !serviciosPorId.has(s.id));
 if (sinAfondo.length > 0) {
   throw new Error(
     `[servicios/index] Estos servicios no tienen entrada en SERVICIOS_AFONDO: ` +
@@ -215,17 +217,20 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="showcase">
-        {SERVICES.map((s, i) => (
+        {SERVICES.map((s, i) => {
+          const afondo = serviciosPorId.get(s.id)!;
+          return (
           <CategoryCard
             label={s.label}
             href={servicioHref(s.id)}
-            image={SERVICIOS_AFONDO[s.id].gallery.main.src}
-            imageAlt={SERVICIOS_AFONDO[s.id].gallery.main.alt}
-            blurb={SERVICIOS_AFONDO[s.id].blurb}
+            image={afondo.gallery.main.src}
+            imageAlt={afondo.gallery.main.alt}
+            blurb={afondo.blurb}
             ctaLabel={`Ver ${s.label.toLowerCase()}`}
             index={i}
           />
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>
@@ -286,18 +291,21 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="afondo">
-        {SERVICES.filter((s) => SERVICIOS_AFONDO[s.id]).map((s) => (
+        {SERVICES.map((s) => {
+          const afondo = serviciosPorId.get(s.id)!;
+          return (
           <CategoryDetail
             id={`afondo-${s.id}`}
             as="h3"
             eyebrow="El servicio a fondo"
             title={s.label}
-            body={SERVICIOS_AFONDO[s.id].body}
-            points={SERVICIOS_AFONDO[s.id].points}
-            gallery={SERVICIOS_AFONDO[s.id].gallery}
+            body={afondo.body}
+            points={afondo.points}
+            gallery={afondo.gallery}
             cta={{ label: `Ver ${s.label.toLowerCase()}`, href: servicioHref(s.id) }}
           />
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>

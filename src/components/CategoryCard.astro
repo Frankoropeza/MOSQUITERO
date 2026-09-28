@@ -33,7 +33,10 @@
 // ESTILO: tokens de src/styles/tokens.css. Alturas iguales en el grid (flex col +
 // CTA al fondo). Mobile-first; hover con elevación. A11y: foco visible, aria.
 // ============================================================================
+import type { CollectionEntry } from "astro:content";
+
 export type Sub = { label: string; href: string };
+export type ProductCategoryCard = CollectionEntry<"productos">["data"];
 interface Props {
   label: string;
   href: string;

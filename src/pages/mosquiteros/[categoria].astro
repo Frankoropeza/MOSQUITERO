@@ -55,17 +55,12 @@ import type { GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Hero from "@components/Hero.astro";
-// SectionHeading vuelve: lo quité al cambiar el H1 a <Hero>, pero el módulo
-// FAQ+cotización de abajo lo necesita para su H2 (contrato de 2 columnas).
 import SectionHeading from "@components/SectionHeading.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import SectionMenu from "@components/SectionMenu.astro";
 import {
   PRODUCT_CATEGORIES,
-  SHOWCASE,
-  AFONDO,
-  FICHAS,
   SERVICES,
   COVERAGE_STATES,
   CONTACT,
@@ -77,178 +72,65 @@ import {
   zonaHref,
 } from "@config/site";
 import { navIcon } from "@config/nav-icons";
-// TODO el CSS de esta plantilla L4 vive aquí, en UNA definición compartida con
-// la otra L4. Antes estaba copiado en los <style> de las dos: 200 líneas
-// idénticas con un comentario que decía "si cambias una, cambia la otra" — o
-// sea, una promesa que nadie cumple. Ver docs/CONTRATO-L4.md.
-// Ruta relativa y no alias: es la convención del repo para CSS (BaseLayout y
-// ArticleLayout hacen igual), y un alias a medias revienta en build.
 import "../../styles/ficha.css";
 
-// `async`: la guarda de `guias` consulta la colección para comprobar que cada
-// slug genera ruta de verdad. Sin async, el `await` de getCollection no compila.
 export const getStaticPaths = (async () => {
-  // Guarda doble: sin AFONDO no hay galería ni cuerpo; sin FICHAS esta L4 sería
-  // la L2 recortada — contenido duplicado compitiendo con su propio padre.
-  const rotos = PRODUCT_CATEGORIES.filter((c) => !AFONDO[c.slug] || !FICHAS[c.slug]);
-  if (rotos.length > 0) {
+  const productos = (await getCollection("productos")).sort((a, b) => a.data.order - b.data.order);
+  const porCategoria = new Map(productos.map((entry) => [entry.data.category, entry]));
+  const esperados = new Set(PRODUCT_CATEGORIES.map((category) => category.slug));
+  const faltan = PRODUCT_CATEGORIES.filter((category) => !porCategoria.has(category.slug));
+  const sobran = productos.filter((entry) => !esperados.has(entry.data.category));
+  if (faltan.length > 0 || sobran.length > 0) {
     throw new Error(
-      `[mosquiteros/[categoria]] Estos tipos no tienen datos completos:\n` +
-        rotos
-          .map((c) => {
-            const falta = [!AFONDO[c.slug] && "AFONDO", !FICHAS[c.slug] && "FICHAS"].filter(Boolean);
-            return `  · ${c.slug}: falta ${falta.join(" y ")}`;
-          })
-          .join("\n") +
-        `\n  → AFONDO da la galería y el cuerpo; FICHAS da la ficha (cómo funciona,\n` +
-        `    cuándo NO conviene, datos y FAQ propia).\n` +
-        `  → Sin FICHAS esta L4 sería la L2 recortada: contenido duplicado que\n` +
-        `    compite con su propio padre por la misma búsqueda.\n` +
-        `  → Escríbelos en site.ts o quita el tipo de TAXONOMY.categories.\n` +
-        `  → Al escribirlos: NADA de materiales, medidas máximas, precios ni plazos.`,
+      "[mosquiteros/[categoria]] TAXONOMY.categories y la colección productos no coinciden:\n" +
+        faltan.map((category) => "  · falta " + category.slug + " en productos").concat(sobran.map((entry) => "  · sobra " + entry.data.category + " en productos")).join("\n"),
     );
   }
-  // ── Guarda de FAQ ─────────────────────────────────────────────────────────
-  // Hasta el 2026-07-14 la unicidad de las preguntas la comprobaba yo A MANO
-  // después de cada cambio. Eso no escala y no sobrevive a la siguiente persona
-  // que edite site.ts: acabaría con dos páginas compitiendo por la misma
-  // pregunta —Google elige un FAQPage y descarta el otro— sin que nadie se
-  // entere hasta ver el tráfico caer.
-  //
-  // Por qué importa el mínimo: una ficha con 2 preguntas no responde a nadie y
-  // es señal de thin content. 8 es el suelo que fijó Frank.
-  const MIN_FAQS = 8;
-  const pocas = PRODUCT_CATEGORIES.filter((c) => (FICHAS[c.slug]?.faqs.length ?? 0) < MIN_FAQS);
-  if (pocas.length > 0) {
-    throw new Error(
-      `[mosquiteros/[categoria]] Fichas con menos de ${MIN_FAQS} preguntas:\n` +
-        pocas.map((c) => `  · ${c.slug}: ${FICHAS[c.slug]?.faqs.length ?? 0}`).join("\n") +
-        `\n  → Escribe más en FICHAS[slug].faqs (site.ts).\n` +
-        `  → Que sean del TIPO, no de mosquiteros en general: eso ya está en\n` +
-        `    /mosquiteros. Y nada de precios, plazos ni garantías.`,
-    );
+  const publicados = new Set((await getCollection("articulos", ({ data }) => data.draft !== true)).map((article) => article.id));
+  const guiasRotas = productos.flatMap((entry) => entry.data.guias
+    .filter((reference) => !publicados.has(reference.id))
+    .map((reference) => "  · " + entry.data.category + " → \"" + reference.id + "\""));
+  if (guiasRotas.length > 0) {
+    throw new Error("[mosquiteros/[categoria]] FICHAS.guias apunta a artículos que no generan ruta:\n" + guiasRotas.join("\n") + "\n  → Causa probable: el .mdx se renombró, se borró o tiene draft: true.");
   }
-
-  // Duplicadas ENTRE fichas. Normaliza para cazar variantes: mismo texto con
-  // otra tilde o mayúscula sigue siendo la misma pregunta para Google.
-  const norm = (s: string) =>
-    s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
+  const norm = (value: string) => value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
   const vistas = new Map<string, string>();
   const dups: string[] = [];
-  for (const c of PRODUCT_CATEGORIES) {
-    for (const f of FICHAS[c.slug]?.faqs ?? []) {
-      const k = norm(f.question);
-      const antes = vistas.get(k);
-      if (antes) dups.push(`  · "${f.question}"\n      en ${antes} y en ${c.slug}`);
-      else vistas.set(k, c.slug);
+  for (const entry of productos) {
+    for (const faq of entry.data.faqs) {
+      const anterior = vistas.get(norm(faq.question));
+      if (anterior) dups.push("  · \"" + faq.question + "\"\n      en " + anterior + " y en " + entry.data.category);
+      else vistas.set(norm(faq.question), entry.data.category);
     }
   }
   if (dups.length > 0) {
-    throw new Error(
-      `[mosquiteros/[categoria]] Preguntas REPETIDAS entre fichas:\n` +
-        dups.join("\n") +
-        `\n  → Dos FAQPage con la misma pregunta compiten: Google elige uno y\n` +
-        `    descarta el otro. Reescribe una para que sea del tipo que la aloja.\n` +
-        `  → OJO: esta guarda solo mira entre FICHAS. Las de la home, /mosquiteros,\n` +
-        `    /servicios, /cobertura y los artículos NO se cruzan aquí — eso hay que\n` +
-        `    revisarlo a mano al escribir preguntas nuevas.`,
-    );
+    throw new Error("[mosquiteros/[categoria]] Preguntas REPETIDAS entre fichas:\n" + dups.join("\n"));
   }
-
-  // ── Guarda del enlazado contextual ────────────────────────────────────────
-  // Las `guias` son slugs de artículos escritos a mano en site.ts. Si alguien
-  // renombra un .mdx o lo pone en draft, estas 7 fichas enlazarían a un 404 sin
-  // que nadie se entere — y son enlaces que van en el sidebar de cada página.
-  // Mismo filtro `draft !== true` que usa blog/[slug].astro para generar rutas:
-  // que el archivo exista no basta, un draft no tiene ruta.
-  const publicados = new Set(
-    (await getCollection("articulos", ({ data }) => data.draft !== true)).map((p) => p.id),
-  );
-  const guiasRotas: string[] = [];
-  for (const c of PRODUCT_CATEGORIES) {
-    for (const g of FICHAS[c.slug]?.guias ?? []) {
-      if (!publicados.has(g)) guiasRotas.push(`  · ${c.slug} → "${g}"`);
-    }
-  }
-  if (guiasRotas.length > 0) {
-    throw new Error(
-      `[mosquiteros/[categoria]] FICHAS.guias apunta a artículos que no generan ruta:\n` +
-        guiasRotas.join("\n") +
-        `\n  Publicados: ${[...publicados].sort().join(", ")}\n` +
-        `  → Causa probable: el .mdx se renombró, se borró o tiene draft: true.\n` +
-        `  → Estos enlaces van en el sidebar de cada ficha: un slug roto son 404s\n` +
-        `    servidos en todas ellas.`,
-    );
-  }
-
-  // Los `servicios` salen de SERVICES, así que un id inválido también rompería.
-  // `Set<string>` explícito: SERVICES es `as const`, así que sin esto el Set
-  // hereda la unión literal ('fabricacion' | 'instalacion' | …) y `.has()`
-  // rechaza un string cualquiera — que es justo lo que necesitamos comprobar.
-  const idsSvc = new Set<string>(SERVICES.map((s) => s.id));
-  const svcRotos: string[] = [];
-  for (const c of PRODUCT_CATEGORIES) {
-    for (const s of FICHAS[c.slug]?.servicios ?? []) {
-      if (!idsSvc.has(s)) svcRotos.push(`  · ${c.slug} → "${s}"`);
-    }
-  }
-  if (svcRotos.length > 0) {
-    throw new Error(
-      `[mosquiteros/[categoria]] FICHAS.servicios apunta a ids que no existen en\n` +
-        `TAXONOMY.services:\n` +
-        svcRotos.join("\n") +
-        `\n  Válidos: ${[...idsSvc].join(", ")}\n` +
-        `  → Si el cliente dejó de prestar ese servicio, quítalo también de FICHAS.`,
-    );
-  }
-
-  return PRODUCT_CATEGORIES.map((c) => ({ params: { categoria: c.slug }, props: { cat: c } }));
+  return productos.map((entry) => ({
+    params: { categoria: entry.data.category },
+    props: { cat: PRODUCT_CATEGORIES.find((category) => category.slug === entry.data.category)!, ficha: entry.data },
+  }));
 }) satisfies GetStaticPaths;
 
-const { cat } = Astro.props;
-const afondo = AFONDO[cat.slug]!;
-const ficha = FICHAS[cat.slug]!;
-
-// "Mosquiteros Accesorios y refacciones" no es español: accesorios es el único
-// que no admite el prefijo.
+const { cat, ficha } = Astro.props;
+const afondo = ficha;
 const esAccesorios = cat.slug === "accesorios";
-const h1 = esAccesorios ? "Accesorios y refacciones" : `Mosquiteros ${cat.label.toLowerCase()}`;
+const h1 = esAccesorios ? "Accesorios y refacciones" : "Mosquiteros " + cat.label.toLowerCase();
 const title = esAccesorios
   ? "Accesorios y refacciones para mosquiteros | CDMX"
-  : `Mosquiteros ${cat.label.toLowerCase()} a medida | CDMX y Edomex`;
-const description = `${ficha.comoFunciona[0].slice(0, 150).trim()}…`;
-
-// Subtítulo del hero: el `blurb` de SHOWCASE (~120–160 chars, escrito para
-// vender) en vez del `desc` de PRODUCT_CATEGORIES (~70, escrito para el
-// mega-menú). Fallback a `desc` si un tipo no estuviera en SHOWCASE — hoy están
-// los 7, pero el fallback evita un subtítulo `undefined` si alguien añade uno.
-const showcase = SHOWCASE.find((s) => s.slug === cat.slug);
-const heroSubtitle = showcase?.blurb ?? cat.desc;
-
-// ── Enlazado contextual del sidebar ─────────────────────────────────────────
-// Los títulos salen de la COLECCIÓN, no de site.ts: si alguien reescribe el
-// título de un artículo, el enlace lo refleja sin tocar nada. Un título copiado
-// a mano se queda viejo el día que cambian el original.
-// El orden lo manda FICHAS.guias (relevancia), no el de la colección.
+  : "Mosquiteros " + cat.label.toLowerCase() + " a medida | CDMX y Edomex";
+const description = ficha.comoFunciona[0].slice(0, 150).trim() + "…";
+const heroSubtitle = ficha.blurb;
 const articulos = await getCollection("articulos", ({ data }) => data.draft !== true);
 const guias = ficha.guias
-  .map((slug) => articulos.find((a) => a.id === slug))
-  .filter((a): a is NonNullable<typeof a> => Boolean(a));
-
+  .map((reference) => articulos.find((article) => article.id === reference.id))
+  .filter((article): article is NonNullable<typeof article> => Boolean(article));
 const serviciosDelTipo = ficha.servicios
-  .map((id) => SERVICES.find((s) => s.id === id))
-  .filter((s): s is NonNullable<typeof s> => Boolean(s));
-
-const otros = PRODUCT_CATEGORIES.filter((c) => c.slug !== cat.slug);
+  .map((reference) => SERVICES.find((service) => service.id === reference.id))
+  .filter((service): service is NonNullable<typeof service> => Boolean(service));
+const otros = PRODUCT_CATEGORIES.filter((category) => category.slug !== cat.slug);
 const waMsg = WA_MESSAGES.productos ?? WA_MESSAGES.cotizar;
-// Singular para los CTA ("Cotiza tu mosquitero enrollable"). Los labels son
-// plurales; un `.replace(/s$/)` a ciegas destrozaría "Accesorios y refacciones",
-// por eso `esAccesorios` va aparte.
 const singular = cat.label.toLowerCase().replace(/s$/, "");
-
-// Índice del sidebar. Los ids DEBEN existir en el markup de abajo — si renombras
-// una sección, renómbralo aquí: un índice que apunta a un ancla muerta es peor
-// que no tener índice.
 const indice = [
   { id: "como-funciona", label: "Cómo funciona" },
   { id: "encaja", label: esAccesorios ? "Para qué sirve" : "En qué ventana encaja" },
@@ -256,19 +138,13 @@ const indice = [
   { id: "pedir", label: "Cómo se pide" },
   { id: "faq", label: "Preguntas frecuentes" },
 ];
-
 const menuSecciones = [
   { label: "Todos los tipos", href: "/mosquiteros/", sub: "Catálogo completo" },
   { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
   { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
   { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
 ];
-const menuCta = {
-  label: "Cotizar por WhatsApp",
-  href: waUrl(waMsg),
-  sub: "Mándanos tus medidas",
-  external: true,
-};
+const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mándanos tus medidas", external: true };
 ---
 
 <PageLayout

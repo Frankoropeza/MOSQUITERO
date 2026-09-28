@@ -47,17 +47,6 @@ const faqSchema = z
   )
   .optional();
 
-// heroSchema — hero opcional reutilizable. Origen: EVENTECH/src/content/config.ts:11-29.
-const heroSchema = z
-  .object({
-    badge: z.string().optional(),
-    title: z.string(),
-    subtitle: z.string(),
-    primaryCTA: z.object({ label: z.string(), href: z.string() }),
-    secondaryCTA: z.object({ label: z.string(), href: z.string() }).optional(),
-  })
-  .optional();
-
 // seoSchema — campos SEO comunes. Origen: EVENTECH/SEGURIDADPRIVADA (seoTitle/seoDescription/noindex).
 // max(60)/max(160) alineados a la convención de títulos del Master System (≤60) y meta (≤160).
 const seoFields = {
@@ -105,61 +94,60 @@ export const ARTICLE_CATEGORIES = [
 
 export const ZONE_TYPES = ['ciudad', 'estado', 'alcaldia', 'municipio', 'zona'] as const;
 
+export const ZONE_CATEGORIES = ['cdmx', 'edomex'] as const;
+
+const imageSchema = z.object({ src: imagePath, alt: z.string() }).strict();
+const gallerySchema = z.object({ main: imageSchema, thumbs: z.array(imageSchema) }).strict();
+const faqItemSchema = z.object({ question: z.string(), answer: z.string() }).strict();
+const dataItemSchema = z.object({ label: z.string(), value: z.string() }).strict();
+
 // ── Colección: productos ──────────────────────────────────────────────────────
-// Arquetipo A (catálogo). Schema Product+Offer aguas abajo. Origen base: MESECI:73-83.
 const productos = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/productos' }),
   schema: z
     .object({
-      title: z.string().min(10).max(110),
-      description: z.string().min(70).max(280),
-      category: z.enum(PRODUCT_CATEGORIES), // enum cerrado — MESECI.
-      image: imagePath, // imagen obligatoria — MESECI.
-      price: z.string().optional(), // string libre ("Desde $X", "Cotizar"). NO number forzado.
-      sku: z.string().optional(),
-      brand: z.string().optional(),
-      gallery: z.array(imagePath).optional(),
-      // Interlinking tipado entre colecciones — reference() (D1).
-      relatedProducts: z.array(reference('productos')).optional(),
-      relatedServices: z.array(reference('servicios')).optional(),
-      faqs: faqSchema,
-      featured: z.boolean().default(false),
-      order: z.number().default(0),
-      draft: z.boolean().default(false),
-      ...seoFields,
+      order: z.number(),
+      category: z.enum(PRODUCT_CATEGORIES),
+      label: z.string(),
+      href: z.string(),
+      image: imagePath,
+      imageAlt: z.string(),
+      badge: z.string().optional(),
+      blurb: z.string(),
+      subcategories: z.array(z.object({ label: z.string(), href: z.string() }).strict()),
+      ctaLabel: z.string().optional(),
+      body: z.array(z.string()),
+      points: z.array(z.string()),
+      gallery: gallerySchema,
+      comoFunciona: z.array(z.string()),
+      encajaEn: z.array(z.string()),
+      noConviene: z.array(z.string()).min(1),
+      datos: z.array(dataItemSchema),
+      faqs: z.array(faqItemSchema).min(8),
+      guias: z.array(reference('articulos')),
+      servicios: z.array(reference('servicios')),
     })
-    .strict(), // rechaza campos desconocidos — MESECI.
+    .strict(),
 });
 
 // ── Colección: servicios ──────────────────────────────────────────────────────
-// Arquetipo B/C. Schema Service+OfferCatalog aguas abajo. Origen: EVENTECH:34-123 + SEGURIDADPRIVADA:13-83.
 const servicios = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/servicios' }),
   schema: z
     .object({
-      title: z.string().min(10).max(110),
-      description: z.string().min(70).max(280),
-      category: z.enum(SERVICE_CATEGORIES),
-      image: imagePath,
-      // pricing transparente opcional (EVENTECH:64-73). Sin number obligatorio.
-      pricing: z
-        .object({
-          min: z.number().optional(),
-          max: z.number().optional(),
-          unit: z.enum(['pieza', 'set', 'evento', 'hora', 'dia', 'mes', 'servicio']).optional(),
-          note: z.string().optional(),
-        })
-        .optional(),
-      includes: z.array(z.string()).optional(), // qué incluye el servicio (EVENTECH:85).
-      isHub: z.boolean().default(false), // página hub vs servicio individual (EVENTECH:120).
-      relatedServices: z.array(reference('servicios')).optional(),
-      relatedProducts: z.array(reference('productos')).optional(),
-      hero: heroSchema,
-      faqs: faqSchema,
-      featured: z.boolean().default(false),
-      order: z.number().default(0),
-      draft: z.boolean().default(false),
-      ...seoFields,
+      order: z.number(),
+      id: z.enum(SERVICE_CATEGORIES),
+      blurb: z.string(),
+      body: z.array(z.string()),
+      points: z.array(z.string()),
+      limite: z.string().optional(),
+      gallery: gallerySchema,
+      comoFunciona: z.array(z.string()),
+      encajaEn: z.array(z.string()),
+      noConviene: z.array(z.string()).min(1),
+      datos: z.array(dataItemSchema),
+      faqs: z.array(faqItemSchema).min(8),
+      guias: z.array(reference('articulos')),
     })
     .strict(),
 });
@@ -192,41 +180,18 @@ const articulos = defineCollection({
     .strict(),
 });
 
-// ── Colección: zonas (SEO local multi-zona) ──────────────────────────────────
-// Arquetipo C. Schema LocalBusiness+Service+areaServed aguas abajo. Origen:
-// SEGURIDADPRIVADA/src/content.config.ts:228-285 + INFLAPY (cobertura/alcaldía).
+// ── Colección: zonas ─────────────────────────────────────────────────────────
 const zonas = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/zonas' }),
   schema: z
     .object({
-      title: z.string().min(10).max(70),
-      description: z.string().min(70).max(160),
-      zoneName: z.string(), // nombre humano de la zona. Ej: 'Benito Juárez'.
-      type: z.enum(ZONE_TYPES), // ciudad|estado|alcaldia|municipio|zona — EVENTECH:208/SEGURIDADPRIVADA.
-      municipality: z.string().optional(),
-      state: z.string().default('CDMX'),
-      image: imagePath,
-      geo: z
-        .object({
-          lat: z.number().optional(),
-          lng: z.number().optional(),
-          postalCodes: z.array(z.string()).optional(),
-        })
-        .optional(),
-      colonias: z.array(z.string()).optional(), // SEGURIDADPRIVADA:283 — colonias de la zona.
-      // delivery/cobertura local (INFLAPY): tiempo y notas de entrega.
-      delivery: z
-        .object({
-          time: z.string().optional(),
-          note: z.string().optional(),
-        })
-        .optional(),
-      availableServices: z.array(reference('servicios')).optional(),
-      nearbyZones: z.array(reference('zonas')).optional(),
-      faqs: faqSchema,
-      hero: heroSchema,
-      draft: z.boolean().default(false),
-      ...seoFields,
+      order: z.number(),
+      id: z.enum(ZONE_CATEGORIES),
+      blurb: z.string(),
+      body: z.array(z.string()),
+      points: z.array(z.string()),
+      confirmar: z.string(),
+      gallery: gallerySchema,
     })
     .strict(),
 });

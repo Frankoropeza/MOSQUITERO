@@ -42,14 +42,16 @@ import CategoryCard from "@components/CategoryCard.astro";
 import CategoryDetail from "@components/CategoryDetail.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
+import { getCollection } from "astro:content";
 import {
-  SHOWCASE,
-  AFONDO,
   PRODUCT_CATEGORIES,
-  COVERAGE_STATES,
   WA_MESSAGES,
   waUrl,
 } from "@config/site";
+
+const showcase = (await getCollection("productos"))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((entry) => entry.data);
 
 const title = "Mosquiteros a medida | tipos para ventanas y puertas";
 const description =
@@ -221,7 +223,7 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="showcase">
-        {SHOWCASE.map((cat, i) => (
+        {showcase.map((cat, i) => (
           <CategoryCard
             label={cat.label}
             href={cat.href}
@@ -307,15 +309,15 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="afondo">
-        {SHOWCASE.filter((cat) => AFONDO[cat.slug]).map((cat) => (
+        {showcase.map((cat) => (
           <CategoryDetail
-            id={`afondo-${cat.slug}`}
+            id={`afondo-${cat.category}`}
             as="h3"
             eyebrow="El tipo a fondo"
             title={cat.label}
-            body={AFONDO[cat.slug].body}
-            points={AFONDO[cat.slug].points}
-            gallery={AFONDO[cat.slug].gallery}
+            body={cat.body}
+            points={cat.points}
+            gallery={cat.gallery}
             cta={{ label: cat.ctaLabel ?? `Ver ${cat.label}`, href: cat.href }}
           />
         ))}

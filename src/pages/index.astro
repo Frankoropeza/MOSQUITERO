@@ -25,10 +25,12 @@ import CategoryDetail from "@components/CategoryDetail.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
-// SHOWCASE_HOME, no SHOWCASE: la home presenta 4 tipos; el catálogo completo (7)
-// es la L2 /mosquiteros. El corte vive en site.ts para que meter una categoría
-// nueva no alargue la home sin que nadie lo decida. Ver SHOWCASE_HOME.
-import { KEYWORDS, NAV, SERVICES, WA_MESSAGES, SHOWCASE_HOME, AFONDO, waUrl } from "@config/site";
+import { KEYWORDS, NAV, SERVICES, WA_MESSAGES, waUrl } from "@config/site";
+
+const showcaseHome = (await getCollection("productos"))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 4)
+  .map((entry) => entry.data);
 
 // Se fueron con el CTA final (2026-07-14): el import de CTABanner y el
 // `const waLink = waUrl()`, que era su único consumidor en esta página. El
@@ -234,7 +236,7 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="showcase">
-        {SHOWCASE_HOME.map((cat, i) => (
+        {showcaseHome.map((cat, i) => (
           <CategoryCard
             label={cat.label}
             href={cat.href}
@@ -270,15 +272,15 @@ const faqs: { question: string; answer: string }[] = [
           tarjetas—, o sea un salto de jerarquía hacia arriba. La regla es
           H2 sección padre → H3 sub-bloque. */}
       <div class="afondo">
-        {SHOWCASE_HOME.filter((cat) => AFONDO[cat.slug]).map((cat) => (
+        {showcaseHome.map((cat) => (
           <CategoryDetail
-            id={`afondo-${cat.slug}`}
+            id={`afondo-${cat.category}`}
             as="h3"
             eyebrow="El tipo a fondo"
             title={cat.label}
-            body={AFONDO[cat.slug].body}
-            points={AFONDO[cat.slug].points}
-            gallery={AFONDO[cat.slug].gallery}
+            body={cat.body}
+            points={cat.points}
+            gallery={cat.gallery}
             cta={{ label: cat.ctaLabel ?? `Ver ${cat.label}`, href: cat.href }}
           />
         ))}

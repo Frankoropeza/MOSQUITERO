@@ -43,14 +43,17 @@ import CategoryCard from "@components/CategoryCard.astro";
 import CategoryDetail from "@components/CategoryDetail.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
+import { getCollection } from "astro:content";
 import {
   COVERAGE_STATES,
-  ZONAS_AFONDO,
   CONTACT,
   WA_MESSAGES,
   waUrl,
   zonaHref,
 } from "@config/site";
+
+const zonaEntries = (await getCollection("zonas")).sort((a, b) => a.data.order - b.data.order);
+const zonasPorId = new Map(zonaEntries.map((entry) => [entry.data.id, entry.data]));
 
 const title = "Cobertura | mosquiteros en CDMX y Estado de México";
 const description =
@@ -58,7 +61,7 @@ const description =
 
 // Guarda: mismo criterio que las otras dos L2. Sin entrada en ZONAS_AFONDO, la
 // tarjeta y el bloque saldrían vacíos. Que rompa el build, no la página.
-const sinAfondo = COVERAGE_STATES.filter((z) => !ZONAS_AFONDO[z.slug]);
+const sinAfondo = COVERAGE_STATES.filter((z) => !zonasPorId.has(z.slug));
 if (sinAfondo.length > 0) {
   throw new Error(
     `[cobertura/index] Estas zonas no tienen entrada en ZONAS_AFONDO: ` +
@@ -179,7 +182,7 @@ const faqs: { question: string; answer: string }[] = [
       items: COVERAGE_STATES.map((z) => ({
         name: z.label,
         path: zonaHref(z.slug),
-        description: ZONAS_AFONDO[z.slug]?.blurb,
+        description: zonasPorId.get(z.slug)?.blurb,
       })),
     },
     faqs,
@@ -211,18 +214,21 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="zonas-grid">
-        {COVERAGE_STATES.map((z, i) => (
+        {COVERAGE_STATES.map((z, i) => {
+          const afondo = zonasPorId.get(z.slug)!;
+          return (
           <CategoryCard
             label={z.label}
             href={zonaHref(z.slug)}
-            image={ZONAS_AFONDO[z.slug].gallery.main.src}
-            imageAlt={ZONAS_AFONDO[z.slug].gallery.main.alt}
+            image={afondo.gallery.main.src}
+            imageAlt={afondo.gallery.main.alt}
             badge={z.type === "operativo" ? "Cobertura completa" : "Consulta tu zona"}
-            blurb={ZONAS_AFONDO[z.slug].blurb}
+            blurb={afondo.blurb}
             ctaLabel={`Ver ${z.label}`}
             index={i}
           />
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>
@@ -287,18 +293,21 @@ const faqs: { question: string; answer: string }[] = [
         ]}
       />
       <div class="afondo">
-        {COVERAGE_STATES.filter((z) => ZONAS_AFONDO[z.slug]).map((z) => (
+        {COVERAGE_STATES.map((z) => {
+          const afondo = zonasPorId.get(z.slug)!;
+          return (
           <CategoryDetail
             id={`afondo-${z.slug}`}
             as="h3"
             eyebrow="La zona a fondo"
             title={z.label}
-            body={ZONAS_AFONDO[z.slug].body}
-            points={ZONAS_AFONDO[z.slug].points}
-            gallery={ZONAS_AFONDO[z.slug].gallery}
+            body={afondo.body}
+            points={afondo.points}
+            gallery={afondo.gallery}
             cta={{ label: `Ver ${z.label}`, href: zonaHref(z.slug) }}
           />
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>

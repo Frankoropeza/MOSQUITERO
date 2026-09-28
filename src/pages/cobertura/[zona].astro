@@ -33,26 +33,25 @@
 // página (lib/seo.ts:413) — así la zona es la que declara, no la lista completa.
 // ============================================================================
 import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { COVERAGE_STATES, SERVICES, CONTACT, WA_MESSAGES, waUrl } from "@config/site";
 
-export const getStaticPaths = (() =>
-  COVERAGE_STATES.map((z) => ({
-    params: { zona: z.slug },
-    props: { zona: z },
-  }))) satisfies GetStaticPaths;
+export const getStaticPaths = (async () => {
+  const zonas = (await getCollection("zonas")).sort((a, b) => a.data.order - b.data.order);
+  const porId = new Map(zonas.map((entry) => [entry.data.id, entry]));
+  const esperados = new Set(COVERAGE_STATES.map((zone) => zone.slug));
+  const faltan = COVERAGE_STATES.filter((zone) => !porId.has(zone.slug));
+  const sobran = zonas.filter((entry) => !esperados.has(entry.data.id));
+  if (faltan.length > 0 || sobran.length > 0) throw new Error("[cobertura/[zona]] TAXONOMY.coverageStates y la colección zonas no coinciden:\n" + faltan.map((zone) => "  · falta " + zone.slug + " en zonas").concat(sobran.map((entry) => "  · sobra " + entry.data.id + " en zonas")).join("\n"));
+  return zonas.map((entry) => ({ params: { zona: entry.data.id }, props: { zona: COVERAGE_STATES.find((zone) => zone.slug === entry.data.id)! } }));
+}) satisfies GetStaticPaths;
 
 const { zona } = Astro.props;
-
-const title = `Mosquiteros en ${zona.label} | a medida e instalados`;
-const description =
-  `Fabricamos e instalamos mosquiteros a medida en ${zona.label}. Vamos a tu domicilio, tomamos las medidas del vano y colocamos la pieza. Cotiza por WhatsApp.`;
-
-// Copy por tipo de cobertura. Es la ÚNICA diferencia real entre zonas que el
-// negocio ha confirmado: 'operativo' vs 'comercial' ya venía en site.ts. No se
-// inventan tiempos, precios de visita ni colonias.
+const title = "Mosquiteros en " + zona.label + " | a medida e instalados";
+const description = "Fabricamos e instalamos mosquiteros a medida en " + zona.label + ". Vamos a tu domicilio, tomamos las medidas del vano y colocamos la pieza. Cotiza por WhatsApp.";
 const esOperativo = zona.type === "operativo";
 ---
 
