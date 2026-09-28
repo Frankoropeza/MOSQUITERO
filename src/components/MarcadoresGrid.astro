@@ -22,3 +22,68 @@ const { items } = Astro.props;
     </article>
   ))}
 </div>
+
+<style>
+  /* Rejilla de marcadores geométricos (cuadrado, círculo, rombo, triángulo).
+     Los estilos viven AQUÍ: antes estaban copiados con :global() en la home,
+     /mosquiteros/ y /servicios/, y /cobertura/ usó el componente sin ellos
+     (salió como lista sin marcadores). Color por tokens: se adapta solo a la
+     banda donde se use (lino, menta o tinta). */
+  .servicios {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-4);
+  }
+  .servicio {
+    position: relative;
+    padding: var(--sp-4);
+    text-align: center;
+  }
+  .servicio__contenido {
+    display: grid;
+    justify-items: center;
+  }
+  .servicio__marca {
+    display: block;
+    width: 28px;
+    height: 28px;
+    margin-bottom: var(--sp-4);
+    background: var(--c-ink);
+  }
+  .servicio__marca--2 {
+    border-radius: var(--radius-full);
+  }
+  .servicio__marca--3 {
+    transform: rotate(45deg);
+  }
+  .servicio__marca--4 {
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  }
+  .servicio__titulo {
+    margin: 0 0 var(--sp-3);
+    color: var(--c-ink);
+    font-family: var(--font-heading);
+    font-size: var(--text-card);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    text-wrap: balance;
+  }
+  .servicio__desc {
+    margin: 0;
+    color: var(--c-ink-2);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    text-wrap: pretty;
+  }
+  @media (min-width: 768px) {
+    .servicios {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .servicios {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

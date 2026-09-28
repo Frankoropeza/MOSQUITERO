@@ -8,8 +8,9 @@
 //     3) Vitrina         → CategoryCard, una por zona
 //     4) Comparativa     → en qué se diferencian CDMX y Edomex (lo que aporta)
 //     5) A fondo         → CategoryDetail por zona (as="h3")
-//     6) FAQ + QuoteForm → dos columnas
-//     7) SectionMenu     → menú de guías antes del footer
+//     6) Agenda          → MarcadoresGrid, mismo proceso en ambas zonas
+//     7) FAQ + QuoteForm → dos columnas
+//     8) SectionMenu     → menú de guías antes del footer
 //
 // POR QUÉ ESTA L2 ES LA MÁS IMPORTANTE DE LAS TRES
 // Mosquitero.mx es un NEGOCIO DE ÁREA DE SERVICIO: no se atiende al público en
@@ -31,9 +32,12 @@
 // tipo?", /servicios responde "¿qué me hacen?", ésta responde "¿llegan a mi
 // casa?". Tres intenciones distintas, tres textos distintos.
 //
-// SEO: kw2 "mosquiteros para ventanas" no encaja aquí; esta página va por la
-// intención geográfica ("mosquiteros en CDMX"), que no compite con kw1 ni kw3.
-// FAQ propia, sin solapar con las otras tres páginas.
+// SEO: Ahrefs México (2026-09-28) registra 0 para variantes geográficas como
+// «mosquiteros en CDMX», «Estado de México», Toluca, Naucalpan, Ecatepec,
+// Metepec y Coyoacán; «mosquiteros cdmx» marca 10. La intención local se gana
+// en el Perfil de Negocio de Google, no con páginas por zona. Se mantiene el
+// aviso anterior: nada de páginas o listas de colonias/municipios (doorway
+// pages). FAQ propia, sin solapar con las otras tres páginas.
 // ============================================================================
 import PageLayout from "@layouts/PageLayout.astro";
 import Hero from "@components/Hero.astro";
@@ -41,6 +45,7 @@ import SectionMenu from "@components/SectionMenu.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import CategoryCard from "@components/CategoryCard.astro";
 import CategoryDetail from "@components/CategoryDetail.astro";
+import MarcadoresGrid from "@components/MarcadoresGrid.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
@@ -51,13 +56,21 @@ import {
   waUrl,
   zonaHref,
 } from "@config/site";
+import {
+  NOTA_PRECIOS_REFERENCIA,
+  formatearPrecio,
+  precioMasBajo,
+} from "@config/precios";
 
 const zonaEntries = (await getCollection("zonas")).sort((a, b) => a.data.order - b.data.order);
 const zonasPorId = new Map(zonaEntries.map((entry) => [entry.data.id, entry.data]));
 
-const title = "Cobertura | mosquiteros en CDMX y Estado de México";
+const title = "Zonas de cobertura: CDMX y Estado de México | Mosquitero.mx";
 const description =
-  "Instalamos mosquiteros a medida en CDMX y Estado de México. Vamos a tu domicilio a medir e instalar. Consulta si llegamos a tu zona por WhatsApp.";
+  `Cobertura de Mosquitero.mx en las 16 alcaldías de la CDMX y el Estado de México: medición, fabricación a medida e instalación a domicilio desde ${formatearPrecio(precioMasBajo("ventana"))}`;
+
+const precioVentana = formatearPrecio(precioMasBajo("ventana"));
+const precioPuerta = formatearPrecio(precioMasBajo("puerta"));
 
 // Guarda: mismo criterio que las otras dos L2. Sin entrada en ZONAS_AFONDO, la
 // tarjeta y el bloque saldrían vacíos. Que rompa el build, no la página.
@@ -129,6 +142,23 @@ const comparativa: { fila: string; cdmx: string; edomex: string }[] = [
     cdmx: "Tu alcaldía y una foto de la ventana",
     edomex: "Tu municipio y colonia, más la foto",
   },
+  {
+    fila: "Precio de referencia",
+    cdmx: `Desde ${precioVentana} ventana · ${precioPuerta} puerta, instalado`,
+    edomex: "Los mismos «desde»; el acceso puede mover la cotización",
+  },
+  {
+    fila: "Horario de visitas",
+    cdmx: `${CONTACT.hours.weekdays} · ${CONTACT.hours.saturday}`,
+    edomex: `${CONTACT.hours.weekdays} · ${CONTACT.hours.saturday}`,
+  },
+];
+
+const pasosAgenda = [
+  { titulo: "Nos dices dónde estás", texto: "Tu alcaldía o municipio y una foto de la ventana, por WhatsApp." },
+  { titulo: "Confirmamos antes", texto: "Si llegamos y en qué condiciones, antes de agendar; nunca en la puerta de tu casa." },
+  { titulo: "Medimos", texto: "Vamos a tomar las medidas, o las mandas tú y te ahorras esa visita." },
+  { titulo: "Instalamos", texto: "Volvemos con la pieza hecha a la medida de tu vano y la dejamos funcionando." },
 ];
 
 // ── FAQ de cobertura ────────────────────────────────────────────────────────
@@ -166,6 +196,11 @@ const faqs: { question: string; answer: string }[] = [
     answer:
       `Sí, dentro de nuestro horario: <strong>${CONTACT.hours.saturday}</strong>. Entre semana estamos <strong>${CONTACT.hours.weekdays}</strong> y el domingo no trabajamos. Si solo puedes en fin de semana, dilo al escribir y lo acomodamos desde el principio.`,
   },
+  {
+    question: "¿El precio cambia si estoy en el Estado de México?",
+    answer:
+      `No: los precios de referencia son los mismos en la CDMX y en el Estado de México, desde <strong>${precioVentana}</strong> por ventana y <strong>${precioPuerta}</strong> por puerta, con fabricación a medida e instalación. La cotización final depende de la medida, la malla y el acceso, igual que en la ciudad.`,
+  },
 ];
 ---
 
@@ -192,7 +227,7 @@ const faqs: { question: string; answer: string }[] = [
   <Hero
     title="Vamos a tu casa: CDMX y Estado de"
     accent="México"
-    subtitle="No hay mostrador ni piezas de línea. Vamos, medimos tu ventana, fabricamos a esa medida y volvemos a instalarla."
+    subtitle={`No hay mostrador ni piezas de línea. Vamos, medimos tu ventana, fabricamos a esa medida y volvemos a instalarla. El precio de referencia es el mismo en las dos zonas: desde ${precioVentana} por ventana, ya instalado.`}
     descRight={[
       "Como el mosquitero se hace a la medida de tu vano, el trabajo tiene que pasar donde está la ventana. Por eso lo importante de este negocio no es dónde está nuestra oficina —ahí no se atiende a nadie— sino hasta dónde llegamos y qué pasa cuando llegamos.",
       "Trabajamos la Ciudad de México completa y buena parte del Estado de México. Si no estás seguro de que alcanzamos tu zona, pregúntanos antes de nada: te contestamos al momento y te ahorramos la espera.",
@@ -203,7 +238,7 @@ const faqs: { question: string; answer: string }[] = [
   <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
 
   {/* ═══ 2) VITRINA — una zona por tarjeta ═══ */}
-  <section class="section section--surface">
+  <section class="section">
     <div class="container">
       <SectionHeading
         eyebrow="Cobertura"
@@ -226,6 +261,7 @@ const faqs: { question: string; answer: string }[] = [
             blurb={afondo.blurb}
             ctaLabel={`Ver ${z.label}`}
             index={i}
+            precio={z.slug === "cdmx" ? "Las 16 alcaldías · sin confirmar antes" : "Confirma tu municipio antes de agendar"}
           />
           );
         })}
@@ -271,6 +307,7 @@ const faqs: { question: string; answer: string }[] = [
         </table>
       </div>
 
+      <p class="tabla__nota">{NOTA_PRECIOS_REFERENCIA}</p>
       <p class="tabla__nota">
         ¿Estás justo en el límite entre las dos? Pregúntanos: según el municipio y
         cuántas piezas sean, a veces sale. Te lo decimos en el momento.
@@ -282,7 +319,7 @@ const faqs: { question: string; answer: string }[] = [
       Mismo patrón que /mosquiteros y /servicios. as="h3": cuelgan del H2 de esta
       sección. Regla: H2 sección padre → H3 sub-bloque.
       ═══════════════════════════════════════════════════════════════════════ */}
-  <section class="section section--surface">
+  <section class="section">
     <div class="container">
       <SectionHeading
         eyebrow="A fondo"
@@ -292,7 +329,7 @@ const faqs: { question: string; answer: string }[] = [
           "Si quieres el detalle completo de una —con su galería y su formulario— entra a su página desde el botón del bloque.",
         ]}
       />
-      <div class="afondo">
+      <div class="afondo bandas-alternas">
         {COVERAGE_STATES.map((z) => {
           const afondo = zonasPorId.get(z.slug)!;
           return (
@@ -312,7 +349,20 @@ const faqs: { question: string; answer: string }[] = [
     </div>
   </section>
 
-  {/* ═══ 5) FAQ + COTIZACIÓN — misma estructura que las otras L2 ═════════════
+  {/* ═══ 5) CÓMO SE AGENDA — mismo proceso en las dos zonas ═══════════════ */}
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Agenda"
+        title="Cómo se agenda una visita"
+        layout="simple"
+        desc="El orden es el mismo en las dos zonas; lo único que cambia es si hay que confirmar tu municipio."
+      />
+      <MarcadoresGrid items={pasosAgenda} />
+    </div>
+  </section>
+
+  {/* ═══ 6) FAQ + COTIZACIÓN — misma estructura que las otras L2 ═════════════
       El JSON-LD FAQPage lo emite lib/seo.ts vía schemaData → <FAQAccordion> va
       SIN `emitSchema` (anti-patrón B3: doble FAQPage). ══════════════════════ */}
   <section class="section section--faq">
@@ -334,7 +384,7 @@ const faqs: { question: string; answer: string }[] = [
     </div>
   </section>
 
-  {/* ═══ 6) MENÚ DE GUÍAS ═══ */}
+  {/* ═══ 7) MENÚ DE GUÍAS ═══ */}
   <SectionMenu items={menuGuias} cta={menuGuiasCta} ariaLabel="Guías antes de agendar" />
 </PageLayout>
 
@@ -343,8 +393,11 @@ const faqs: { question: string; answer: string }[] = [
   /* Vitrina — 2 zonas. NO se usa la retícula de 4 de las otras L2: dos tarjetas
      estiradas a un cuarto del ancho cada una dejarían media fila vacía. A 2
      columnas llenan la fila y la foto respira, que es lo que las hace creíbles. */
-  .zonas-grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
-  @media (min-width: 640px) { .zonas-grid { grid-template-columns: repeat(2, 1fr); } }
+  .zonas-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
 
   /* ── Comparativa ──
      Scroll horizontal en móvil, igual que en las otras dos L2: una comparación
@@ -357,43 +410,103 @@ const faqs: { question: string; answer: string }[] = [
     border-radius: var(--radius-lg);
     background: var(--c-white);
   }
-  .tabla { width: 100%; border-collapse: collapse; min-width: 640px; }
-  .tabla__caption {
-    padding: var(--sp-4) var(--sp-5) 0;
-    font-size: var(--text-sm); color: var(--c-muted); text-align: left;
+  .tabla {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
   }
-  .tabla th, .tabla td {
+  .tabla__caption {
     padding: var(--sp-4) var(--sp-5);
-    text-align: left; vertical-align: top;
-    font-size: var(--text-sm); line-height: var(--leading-normal);
+    color: var(--c-muted);
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+  .tabla th,
+  .tabla td {
+    padding: var(--sp-4) var(--sp-5);
     border-bottom: 1px solid var(--c-border);
+    color: var(--c-ink-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    text-align: left;
+    vertical-align: top;
   }
   .tabla thead th {
+    background: var(--c-primary);
+    border-bottom: 1px solid var(--c-primary);
+    color: var(--c-on-dark);
     font-family: var(--font-heading);
-    font-size: var(--text-sm); font-weight: var(--weight-semibold);
-    color: var(--c-ink); background: var(--c-surface);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: .04em;
+    text-transform: uppercase;
   }
-  .tabla thead th a { color: var(--c-primary); text-decoration: none; }
-  .tabla thead th a:hover { text-decoration: underline; }
-  .tabla thead th a:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
-  .tabla tbody tr:last-child th, .tabla tbody tr:last-child td { border-bottom: 0; }
+  .tabla thead th a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .tabla thead th a:hover {
+    text-decoration: underline;
+  }
+  .tabla thead th a:focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+  }
+  .tabla tbody tr {
+    background: var(--c-bg);
+  }
+  .tabla tbody tr:last-child th,
+  .tabla tbody tr:last-child td {
+    border-bottom: 0;
+  }
   .tabla__fila {
-    font-size: var(--text-xs); font-weight: var(--weight-bold);
-    letter-spacing: .04em; text-transform: uppercase;
-    color: var(--c-muted); white-space: nowrap;
+    color: var(--c-ink);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
-  .tabla td { color: var(--c-ink-2); }
+  .tabla td {
+    color: var(--c-ink-2);
+  }
   .tabla__nota {
-    margin: var(--sp-4) 0 0; font-size: var(--text-sm);
-    color: var(--c-muted); line-height: var(--leading-normal); max-width: 66ch;
+    max-width: 66ch;
+    margin: var(--sp-4) 0 0;
+    color: var(--c-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
   }
 
   /* Pila de bloques "a fondo" — mismo gap que las otras L2 y la home. */
-  .afondo { display: grid; gap: clamp(2.5rem, 6vw, 5rem); margin-top: var(--sp-8); }
+  .afondo {
+    display: grid;
+    gap: 0;
+    margin-top: var(--sp-8);
+  }
 
-  .faq-bloque { margin-top: var(--sp-6); }
+  .faq-bloque {
+    margin-top: var(--sp-6);
+  }
 
   @media (min-width: 768px) {
-    .section { padding: var(--sp-10) 0; }
+    .zonas-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .tabla th:first-child,
+    .tabla tbody .tabla__fila {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: var(--c-bg);
+    }
+    .tabla thead th:first-child {
+      z-index: 2;
+      background: var(--c-primary);
+    }
   }
 </style>

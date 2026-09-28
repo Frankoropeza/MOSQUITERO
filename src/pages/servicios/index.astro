@@ -506,57 +506,10 @@ const faqs: { question: string; answer: string }[] = [
   .faq-bloque {
     margin-top: var(--sp-6);
   }
-  :global(.servicios) {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--sp-4);
-  }
-  :global(.servicio) {
-    padding: var(--sp-4);
-    text-align: center;
-  }
-  :global(.servicio__contenido) {
-    display: grid;
-    justify-items: center;
-  }
-  :global(.servicio__marca) {
-    display: block;
-    width: 28px;
-    height: 28px;
-    margin-bottom: var(--sp-4);
-    background: var(--c-primary);
-  }
-  :global(.servicio__marca--2) {
-    border-radius: var(--radius-full);
-  }
-  :global(.servicio__marca--3) {
-    transform: rotate(45deg);
-  }
-  :global(.servicio__marca--4) {
-    clip-path: polygon(50% 0, 0 100%, 100% 100%);
-  }
-  :global(.servicio__titulo) {
-    margin: 0 0 var(--sp-3);
-    color: var(--c-ink);
-    font-family: var(--font-heading);
-    font-size: var(--text-card);
-    font-weight: var(--weight-semibold);
-    line-height: var(--leading-tight);
-  }
-  :global(.servicio__desc) {
-    margin: 0;
-    color: var(--c-ink-2);
-    font-family: var(--font-body);
-    font-size: var(--text-body);
-    line-height: var(--leading-normal);
-  }
 
   @media (min-width: 768px) {
     .section {
       padding: var(--sp-10) 0;
-    }
-    :global(.servicios) {
-      grid-template-columns: repeat(2, 1fr);
     }
   }
   @media (min-width: 640px) {
@@ -566,9 +519,6 @@ const faqs: { question: string; answer: string }[] = [
   }
   @media (min-width: 1024px) {
     .showcase {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    :global(.servicios) {
       grid-template-columns: repeat(4, 1fr);
     }
   }

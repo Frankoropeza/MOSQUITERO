@@ -427,82 +427,9 @@ const faqs: { question: string; answer: string }[] = [
      peor: metía un ancho distinto al del resto de la página. La coherencia de
      ancho manda; el equilibrio vertical se resuelve dentro del bloque, no
      estrechándolo (ver la nota de .cdetail__gallery en CategoryDetail.astro). */
-  /* ── Servicios ────────────────────────────────────────────────────────────
-     CONCEPTO: la tarjeta ES un mosquitero. No hay ícono, imagen ni movimiento:
-     la carga visual la lleva la construcción de la pieza.
-       • marco exterior + hairline interior = el PERFIL de aluminio con su junta.
-       • trama CSS a 5px = la TELA tensada dentro del marco.
-       • esquina superior izquierda = la ESCUADRA de ensamble del perfil.
-     Es la única sección de la home sin foto; la textura evita que se lea como un
-     hueco, y sale del producto — no es decoración prestada de otra plantilla.
-
-     POR QUÉ SIN HOVER: estas tarjetas NO son enlaces (/servicios/{id}/ aún no
-     existe). Un lift o un cambio de color prometería un clic que no hay. */
-  :global(.servicios) { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
-
-  /* El marco: fondo blanco = cara del perfil de aluminio. */
-  :global(.servicio) {
-    position: relative;
-    /* Top a --sp-6 (32px): deja respirar la escuadra, que llega hasta los 26px
-       (inset 8 + 18 de trazo). Con --sp-5 el título se le montaba. */
-    padding: var(--sp-4);
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    text-align: center;
-  }
-
-  /* Sin textura: el bloque respira con fondo de banda y tipografía. */
-  :global(.servicio)::before {
-    display: none;
-    position: absolute; inset: var(--sp-2); z-index: 0;
-    border: 0;
-    background: transparent;
-    pointer-events: none;
-  }
-
-  /* La escuadra: dos trazos en ángulo, en primario, sobre la junta superior
-     izquierda. Es el único punto de color de la tarjeta — marca el inicio de
-     lectura sin robarle peso al título. */
-  :global(.servicio)::after {
-    display: none;
-    position: absolute; z-index: 1;
-    top: var(--sp-2); left: var(--sp-2);
-    width: 18px; height: 18px;
-    border-top: 2px solid var(--c-primary);
-    border-left: 2px solid var(--c-primary);
-    pointer-events: none;
-  }
-
-  :global(.servicio__contenido) { position: relative; z-index: 1; display: grid; justify-items: center; }
-  :global(.servicio__marca) { display: block; width: 28px; height: 28px; margin-bottom: var(--sp-4); background: var(--c-primary); }
-  :global(.servicio__marca--2) { border-radius: var(--radius-full); }
-  :global(.servicio__marca--3) { transform: rotate(45deg); }
-  :global(.servicio__marca--4) { clip-path: polygon(50% 0, 0 100%, 100% 100%); }
-
-  /* El título sube a --text-lg y a font-heading: sin ícono, la jerarquía la
-     tiene que llevar la tipografía sola. */
-  :global(.servicio__titulo) {
-    margin: 0 0 var(--sp-3);
-    font-family: var(--font-heading); font-size: var(--text-card);
-    font-weight: var(--weight-semibold); line-height: var(--leading-tight);
-    color: var(--c-ink); text-wrap: balance;
-  }
-  /* Filete corto bajo el título: separa sin meter una línea de borde completa. */
-  :global(.servicio__titulo)::after {
-    display: none;
-    width: 28px; height: 2px; margin-top: var(--sp-3);
-    background: var(--c-primary);
-  }
-  :global(.servicio__desc) {
-    margin: 0; font-family: var(--font-body); font-size: var(--text-body); color: var(--c-ink-2);
-    line-height: var(--leading-normal); text-wrap: pretty;
-  }
-
-  /* La trama es decorativa: en alto contraste desaparece antes que el texto. */
-  @media (prefers-contrast: more) {
-    :global(.servicio)::before { background-image: none; }
-  }
+  /* ── Servicios ──
+     La rejilla de «Qué hacemos» es <MarcadoresGrid>: sus estilos viven en el
+     componente (2026-09-28). Aquí no se redeclaran. */
 
   /* ── Proceso ──
      MISMA tarjeta que .servicio (borde, radio, filete de acento en hover, alza
@@ -570,11 +497,9 @@ const faqs: { question: string; answer: string }[] = [
   /* ── Desktop ── */
   @media (min-width: 768px) {
     .section { padding: var(--sp-10) 0; }
-    :global(.servicios) { grid-template-columns: repeat(2, 1fr); }
     .pasos { grid-template-columns: repeat(2, 1fr); }
   }
   @media (min-width: 1024px) {
-    :global(.servicios) { grid-template-columns: repeat(4, 1fr); }
     /* 8 pasos = dos filas limpias de 4, misma retícula que .servicios. Se fue el
        truco de span/centrado que hacía falta con 5: con múltiplo de 4 no hay
        fila huérfana. Si el cliente confirma otro número de pasos (ver el TODO
