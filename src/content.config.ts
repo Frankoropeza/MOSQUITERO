@@ -26,7 +26,8 @@
 // del cliente. Los slugs DEBEN coincidir con TAXONOMY en src/config/site.ts.
 // ============================================================================
 
-import { defineCollection, reference, z } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 // ── Helpers reutilizables ────────────────────────────────────────────────────

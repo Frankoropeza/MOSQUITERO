@@ -1,0 +1,56 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import { PRODUCT_CATEGORIES, SERVICES, WA_MESSAGES, servicioHref, waUrl } from '@config/site';
+
+const title = 'Página no encontrada | Mosquitero.mx';
+const description = 'La dirección que buscas no está disponible. Explora nuestros tipos de mosquitero, servicios de instalación, blog o contacta al equipo por WhatsApp.';
+---
+
+<PageLayout title={title} description={description} pageType="page" noindex={true}>
+  <section class="section not-found">
+    <div class="container">
+      <SectionHeading
+        as="h1"
+        eyebrow="Error 404"
+        title="Página no encontrada"
+        body={[
+          'La dirección que abriste no existe, pudo cambiar o quizá se escribió con un error. Puedes retomar la navegación desde alguno de los accesos disponibles.',
+          'Consulta los tipos de mosquitero y nuestros servicios, revisa las guías del blog o escríbenos por WhatsApp para orientarte según tu ventana.',
+        ]}
+      />
+
+      <div class="not-found__grid">
+        <section aria-labelledby="not-found-products">
+          <h2 id="not-found-products">Tipos de mosquitero</h2>
+          <ul>
+            {PRODUCT_CATEGORIES.map((category) => <li><a href={category.href}>{category.label}</a></li>)}
+          </ul>
+        </section>
+        <section aria-labelledby="not-found-services">
+          <h2 id="not-found-services">Servicios</h2>
+          <ul>
+            {SERVICES.map((service) => <li><a href={servicioHref(service.id)}>{service.label}</a></li>)}
+          </ul>
+        </section>
+        <section aria-labelledby="not-found-help">
+          <h2 id="not-found-help">También puedes</h2>
+          <ul>
+            <li><a href="/blog/">Ver el blog</a></li>
+            <li><a href="/contacto/">Ir a contacto</a></li>
+          </ul>
+          <a class="not-found__cta" href={waUrl(WA_MESSAGES.default)} target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
+        </section>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .not-found__grid { display: grid; gap: var(--sp-6); grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+  .not-found__grid section { padding: var(--sp-5); border: 1px solid var(--c-border); border-radius: var(--radius-lg); background: var(--c-white); }
+  .not-found__grid h2 { margin: 0 0 var(--sp-3); font-size: var(--text-xl); color: var(--c-ink); }
+  .not-found__grid ul { display: grid; gap: var(--sp-2); margin: 0; padding-left: 1.2rem; }
+  .not-found__grid a { color: var(--c-primary); font-weight: var(--weight-semibold); }
+  .not-found__cta { display: inline-flex; margin-top: var(--sp-5); padding: .75rem 1rem; border-radius: var(--radius-md); background: var(--c-primary); color: #fff !important; text-decoration: none; }
+</style>

@@ -170,7 +170,7 @@ const jsonLd = buildSchema(pageType, schemaData);
 
     {/* ── JSON-LD: un <script> por nodo del grafo, generado por buildSchema ── */}
     {jsonLd.map((node) => (
-      <script type="application/ld+json" set:html={JSON.stringify(node)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(node)} />
     ))}
   </head>
 

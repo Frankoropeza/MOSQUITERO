@@ -1,96 +1,75 @@
 #!/usr/bin/env node
-// ============================================================================
-// check-links.mjs — verifica que NINGÚN enlace interno del sitio dé 404.
-// ----------------------------------------------------------------------------
-// POR QUÉ EXISTE ESTE ARCHIVO
-// El 2026-07-14 el sitio tenía ~53 hrefs con barra final (`/productos/`) contra
-// una política `trailingSlash: 'never'`. O sea: el PRIMER botón del menú
-// —"Mosquiteros"— llevaba a un 404. Estuvo así todo el rato.
-//
-// Y no se detectó porque el verificador que yo usaba hacía esto antes de
-// comprobar:
-//
-//     links[h.rstrip('/')]        // ← EL BUG
-//
-// Normalizaba la barra final y luego preguntaba si existía `/productos`. Claro
-// que existía. Pero el usuario no visita `/productos`: visita lo que dice el
-// href, que era `/productos/`. El verificador comprobaba una URL que nadie abre
-// y daba "0 enlaces rotos" con el menú roto. Un test que no puede fallar no es
-// un test.
-//
-// REGLA DE ORO DE ESTE SCRIPT: se pide la URL **exactamente como aparece en el
-// href**. Sin normalizar, sin arreglar, sin adivinar. Si el href lleva barra y
-// el servidor devuelve 404, eso ES el bug — no un detalle de formato.
-//
-// USO:
-//   1. npm run dev            (en otra terminal)
-//   2. node scripts/check-links.mjs
-//   3. Opcional: BASE=https://mosquitero.mx node scripts/check-links.mjs
-//
-// Sale con código 1 si hay algún enlace roto → sirve en CI.
-// ============================================================================
+// Verifica offline el HTML generado en dist/: rutas, slash final, robots, JSON-LD y OG.
 
-const BASE = process.env.BASE ?? 'http://localhost:4321';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 
-// Prefijos que no son páginas: assets y rutas de infraestructura.
-const IGNORAR = ['/_astro', '/images', '/fonts', '/cdn-cgi', '/favicon'];
+const dist = join(process.cwd(), 'dist');
+const failures = new Map();
+let pages = 0;
+let links = 0;
 
-const visitadas = new Set();
-const cola = ['/'];
-const rotas = [];
-const ok = [];
-/** Dónde se encontró cada href, para poder arreglarlo sin buscarlo a ciegas. */
-const origen = new Map();
-
-const esPagina = (h) =>
-  h.startsWith('/') &&
-  !IGNORAR.some((p) => h.startsWith(p)) &&
-  !h.split('/').pop().includes('.');
-
-while (cola.length > 0) {
-  const ruta = cola.shift();
-  if (visitadas.has(ruta)) continue;
-  visitadas.add(ruta);
-
-  let res;
-  try {
-    // ⚠️ `${BASE}${ruta}` TAL CUAL. No se toca la barra final. Ver cabecera.
-    res = await fetch(`${BASE}${ruta}`, { redirect: 'manual' });
-  } catch (e) {
-    rotas.push({ ruta, estado: `sin respuesta (${e.message})` });
-    continue;
-  }
-
-  if (res.status === 200) {
-    ok.push(ruta);
-  } else {
-    rotas.push({ ruta, estado: String(res.status) });
-    continue; // no se rastrea lo que no carga
-  }
-
-  const html = await res.text();
-  for (const m of html.matchAll(/href="(\/[^"#?]*)"/g)) {
-    const h = m[1];
-    if (!esPagina(h)) continue;
-    if (!origen.has(h)) origen.set(h, ruta);
-    if (!visitadas.has(h)) cola.push(h);
-  }
+function addFailure(type, page, value) {
+  const entries = failures.get(type) ?? [];
+  entries.push({ page, value });
+  failures.set(type, entries);
 }
 
-console.log(`\n  ✔ 200 OK:  ${ok.length} URLs`);
-console.log(`  ✖ ROTAS:   ${rotas.length}\n`);
+function htmlFiles(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) return htmlFiles(path);
+    return entry.isFile() && entry.name.endsWith('.html') ? [path] : [];
+  });
+}
 
-if (rotas.length > 0) {
-  for (const { ruta, estado } of rotas.sort((a, b) => a.ruta.localeCompare(b.ruta))) {
-    console.log(`     HTTP ${estado}  ${ruta}`);
-    console.log(`       └─ enlazada desde: ${origen.get(ruta) ?? '(raíz)'}`);
-    if (ruta.endsWith('/')) {
-      console.log(`       └─ 💡 Lleva barra final y la política es trailingSlash:'never'.`);
-      console.log(`             La URL buena es ${ruta.slice(0, -1)} — arréglalo en la FUENTE`);
-      console.log(`             (site.ts: ROUTES / productoHref / servicioHref / zonaHref).`);
-    }
-  }
+function targetExists(href) {
+  const path = href.replace(/^\//, '');
+  if (!path) return existsSync(join(dist, 'index.html'));
+  const direct = join(dist, path);
+  return (existsSync(direct) && statSync(direct).isFile()) || existsSync(join(direct, 'index.html'));
+}
+
+if (!existsSync(dist)) {
+  console.error('No existe dist/. Ejecuta el build antes de comprobar enlaces.');
   process.exit(1);
 }
 
-console.log('  Ningún enlace interno roto.\n');
+for (const file of htmlFiles(dist)) {
+  pages += 1;
+  const page = `/${relative(dist, file)}`;
+  const html = readFileSync(file, 'utf8');
+
+  for (const match of html.matchAll(/\b(?:href|src)\s*=\s*(["'])(.*?)\1/gi)) {
+    const raw = match[2];
+    if (!raw.startsWith('/') || raw.startsWith('//')) continue;
+    const href = raw.split(/[?#]/, 1)[0];
+    if (!href) continue;
+    links += 1;
+
+    if (!targetExists(href)) addFailure('rutas inexistentes', page, raw);
+    const lastSegment = href.split('/').filter(Boolean).at(-1) ?? '';
+    if (lastSegment && !lastSegment.includes('.') && !href.endsWith('/')) addFailure('páginas sin barra final', page, raw);
+  }
+
+  if (!page.endsWith('/404.html') && /<meta\s+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) {
+    addFailure('noindex inesperado', page, '<meta name="robots" content="noindex…">');
+  }
+  if (/<meta\s+property=["']og:image["'][^>]*content=["'][^"']+\.svg(?:["']|[?#])/i.test(html)) addFailure('og:image SVG', page, 'og:image termina en .svg');
+  for (const match of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { JSON.parse(match[1]); } catch { addFailure('JSON-LD inválido', page, match[1].trim().slice(0, 120)); }
+  }
+}
+
+console.log(`Páginas revisadas: ${pages}`);
+console.log(`Enlaces internos revisados: ${links}`);
+if (!failures.size) {
+  console.log('Fallos: 0');
+  process.exit(0);
+}
+console.log(`Fallos: ${[...failures.values()].reduce((total, entries) => total + entries.length, 0)}`);
+for (const [type, entries] of failures) {
+  console.log(`\n${type}: ${entries.length}`);
+  for (const { page, value } of entries.slice(0, 5)) console.log(`  ${page} → ${value}`);
+}
+process.exit(1);

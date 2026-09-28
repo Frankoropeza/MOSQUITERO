@@ -81,6 +81,21 @@ function absImage(src?: string): string | undefined {
   return /^https?:\/\//.test(src) ? src : `${SITE.url}${src.startsWith('/') ? src : `/${src}`}`;
 }
 
+/** Las tarjetas sociales y los consumidores de schema requieren imágenes raster. */
+function rasterImage(src?: string): string | undefined {
+  return src?.toLowerCase().endsWith('.svg') ? absImage(SITE.seo?.image) : absImage(src);
+}
+
+/** Representa la cobertura estatal real del negocio, no ciudades sueltas. */
+function servedArea(name: string) {
+  const normalizedName = name === 'CDMX' ? 'Ciudad de México' : name;
+  return {
+    '@type': 'State',
+    name: normalizedName,
+    containedInPlace: { '@type': 'Country', name: 'México' },
+  };
+}
+
 // Longitud máxima del <title> (Google trunca ~580px ≈ 60 caracteres).
 const TITLE_MAX = SITE.seo?.titleMaxLength ?? 60;
 const TITLE_SUFFIX = ` | ${SITE.name}`;
@@ -339,7 +354,7 @@ export function buildMeta(input: MetaInput): MetaOutput {
     title: formatTitle(input.title),
     description: truncateMetaDescription(input.description ?? SITE.seo?.description ?? ''),
     canonical: absUrl(input.canonical ?? '/'),
-    image: absImage(input.image) ?? absImage(SITE.seo?.image) ?? `${SITE.url}/og.jpg`,
+    image: rasterImage(input.image) ?? rasterImage(SITE.seo?.image) ?? `${SITE.url}/og.jpg`,
     type: input.type ?? 'website',
     robots: input.noindex
       ? 'noindex,nofollow'
@@ -419,7 +434,7 @@ export function localBusinessSchema(overrides?: { areaServed?: string[] }) {
     name: SITE.organization?.name ?? SITE.name,
     description: SITE.seo?.description ?? SITE.description ?? '',
     url: SITE.url,
-    image: absImage(SITE.seo?.image),
+    image: rasterImage(SITE.seo?.image),
     logo: { '@id': LOGO_ID },
     parentOrganization: { '@id': ORG_ID },
     telephone: CONTACT.phoneRaw ?? CONTACT.phone,
@@ -456,7 +471,7 @@ export function localBusinessSchema(overrides?: { areaServed?: string[] }) {
           ],
         }
       : {}),
-    areaServed: (overrides?.areaServed ?? (b as any).areaServed ?? ['Ciudad de México']).map((name: string) => ({ '@type': 'City', name })),
+    areaServed: (overrides?.areaServed ?? (b as any).areaServed ?? ['Ciudad de México']).map(servedArea),
     ...(SITE.organization?.sameAs?.length ? { sameAs: SITE.organization.sameAs } : {}),
   };
 }
@@ -490,66 +505,45 @@ export type ProductData = {
   category?: string;
   material?: string;
   price?: string;        // 'desde' en MXN, solo dígitos. Omítelo si es "bajo cotización".
-  availability?: 'InStock' | 'OutOfStock' | 'PreOrder';
+  availability?: 'InStock' | 'OutOfStock' | 'PreOrder' | 'MadeToOrder';
   reviews?: Review[];    // ← solo reseñas REALES verificables (ver emitReviews)
 };
 
 /**
  * Product + Offer honesto.
- * - Si NO hay `price`, se emite Offer "bajo cotización" (UnitPriceSpecification),
- *   patrón de negocio WhatsApp-first sin precio público (origen BOMBERO).
- * - aggregateRating/Review SOLO si emitReviews() valida reseñas reales.
+ * Solo emitimos Product cuando existe precio numérico real: Google exige Offer,
+ * Review o AggregateRating para sus resultados enriquecidos. Sin precio validado,
+ * la ficha conserva su grafo base, BreadcrumbList y FAQPage sin Product.
  */
 export function productSchema(p: ProductData) {
   const url = absUrl(p.path);
 
-  // ⚠️ BUG CORREGIDO el 2026-07-14 (heredado del template 🔵, afecta a todo sitio
-  // que lo copie). El `else` de aquí abajo hacía esto cuando NO había precio:
-  //
-  //     offer.price = '0';
-  //     offer.priceSpecification = { price: '0', description: 'Precio bajo cotización…' }
-  //
-  // O sea: si omitías el precio —justo lo que hay que hacer cuando el negocio
-  // cotiza por pieza— el JSON-LD le declaraba a Google que el producto cuesta
-  // **$0 MXN** y está **InStock**. La `description` era una hoja de parra: Google
-  // parsea `price: "0"`, no la frase. Resultado posible: "$0.00" en el resultado
-  // enriquecido, o rechazo del rich result por precio inválido. Y es falso.
-  //
-  // LO CORRECTO: sin precio, NO se emite `offers`. Un Product sin Offer es válido
-  // en schema.org — simplemente no opta a rich result de precio, que es exactamente
-  // lo que debe pasar cuando no hay precio. Mejor sin dato que con dato falso.
-  //
-  // Aquí también se iba `availability: InStock`, que en un producto hecho a la
-  // medida tampoco era verdad: no hay stock, se fabrica cuando lo pides.
-  const offer: Record<string, unknown> | undefined = p.price
-    ? {
-        '@type': 'Offer',
-        url,
-        priceCurrency: 'MXN',
-        availability: `https://schema.org/${p.availability ?? 'InStock'}`,
-        itemCondition: 'https://schema.org/NewCondition',
-        seller: { '@id': BUSINESS_ID },
-        areaServed: 'MX',
-        price: p.price,
-        priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
-      }
-    : undefined;
+  if (!p.price || !Number.isFinite(Number(p.price))) return undefined;
+
+  const offer: Record<string, unknown> = {
+    '@type': 'Offer',
+    url,
+    priceCurrency: 'MXN',
+    availability: `https://schema.org/${p.availability ?? 'MadeToOrder'}`, // se fabrica al pedido: no hay stock
+    itemCondition: 'https://schema.org/NewCondition',
+    seller: { '@id': BUSINESS_ID },
+    areaServed: 'MX',
+    price: Number(p.price),
+    priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
+  };
   return {
     '@type': 'Product',
     '@id': `${url}#product`,
     name: p.name,
     description: p.description,
-    image: p.images.map((i) => absImage(i)!),
+    image: p.images.map((i) => rasterImage(i)!),
     ...(p.sku ? { sku: p.sku } : {}),
     ...(p.category ? { category: p.category } : {}),
     ...(p.material ? { material: p.material } : {}),
     brand: { '@type': 'Brand', name: p.brand ?? SITE.name },
     manufacturer: { '@id': ORG_ID },
     url,
-    // Spread condicional, no `offers: offer`: con `undefined` la clave seguiría
-    // en el objeto y JSON.stringify la tiraría, pero dejarlo explícito evita que
-    // alguien la "arregle" luego devolviéndole un precio 0. Sin precio no hay Offer.
-    ...(offer ? { offers: offer } : {}),
+    offers: offer,
     ...emitReviews(p.reviews),
   };
 }
@@ -574,9 +568,9 @@ export function serviceSchema(s: ServiceData) {
     description: s.description,
     serviceType: s.serviceType ?? s.name,
     url,
-    ...(s.image ? { image: absImage(s.image) } : {}),
+    ...(s.image ? { image: rasterImage(s.image) } : {}),
     provider: { '@id': BUSINESS_ID },
-    areaServed: (s.areaServed ?? (SITE.business as any)?.areaServed ?? ['Ciudad de México']).map((name: string) => ({ '@type': 'City', name })),
+    areaServed: (s.areaServed ?? (SITE.business as any)?.areaServed ?? ['Ciudad de México']).map(servedArea),
     availableChannel: {
       '@type': 'ServiceChannel',
       serviceUrl: url,
@@ -620,11 +614,13 @@ export function articleSchema(a: ArticleData) {
     headline: a.title,
     description: a.description,
     url,
-    ...(a.image ? { image: absImage(a.image) } : {}),
+    ...(a.image ? { image: rasterImage(a.image) } : {}),
     datePublished: a.datePublished,
     dateModified: a.dateModified ?? a.datePublished,
     inLanguage: SITE.locale ?? 'es-MX',
-    author: a.author ? { '@type': 'Person', name: a.author } : { '@id': ORG_ID },
+    author: !a.author || [SITE.name, SITE.organization?.name].filter(Boolean).some((name) => a.author!.toLowerCase() === name!.toLowerCase())
+      ? { '@id': ORG_ID }
+      : { '@type': 'Person', name: a.author },
     publisher: { '@id': ORG_ID },
     isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
@@ -672,7 +668,7 @@ export function directorySchema(data: { name: string; description: string; path:
         position: i + 1,
         name: it.name,
         url: absUrl(it.path),
-        ...(it.image ? { image: absImage(it.image) } : {}),
+        ...(it.image ? { image: rasterImage(it.image) } : {}),
         ...(it.description ? { description: it.description } : {}),
       })),
     },
@@ -765,7 +761,10 @@ export function buildSchema(pageType: PageType, data: SchemaData = {}): object[]
     case 'page':
       break; // el grafo base ya cubre la home y las páginas genéricas
     case 'product':
-      if (data.product) out.push({ '@context': CTX, ...productSchema(data.product) });
+      if (data.product) {
+        const product = productSchema(data.product);
+        if (product) out.push({ '@context': CTX, ...product });
+      }
       break;
     case 'service':
       if (data.service) out.push({ '@context': CTX, ...serviceSchema(data.service) });

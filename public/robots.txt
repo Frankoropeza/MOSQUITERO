@@ -1,32 +1,21 @@
 # ═══════════════════════════════════════════════════════════════════════════
-# robots.txt — Plantilla canónica (Vault Maestro · EJEMPLOS)
-# PROPÓSITO: permitir indexación de buscadores y motores de IA (GEO), permitir
-#   bots de redes sociales (OG/cards), bloquear scrapers SEO abusivos, y declarar
-#   el/los sitemap(s). Copiar a `public/robots.txt` y reemplazar el dominio.
-# ORIGEN: BOMBERO/public/robots.txt (allowlist de bots IA/GEO + bloqueo de
-#   scrapers) + EVENTECH/public/robots.txt (esquema mínimo) + INFLAPY/PROYECTORED
-#   (Disallow /_astro/ y páginas auxiliares sin valor SEO).
-# DECISIÓN: por defecto PERMITIMOS bots de IA. El directorio/contenido busca ser
-#   citado en ChatGPT, Gemini, Claude, Perplexity y AI Overviews. Si el cliente
-#   NO quiere alimentar entrenamiento de IA, mover GPTBot/CCBot/Google-Extended/
-#   anthropic-ai/ClaudeBot al bloque "Disallow: /" (variante EVENTECH).
+# robots.txt — indexación abierta para buscadores, redes sociales y motores IA.
+# Se permite el rastreo de recursos necesarios para renderizar las páginas y se
+# bloquean sólo scrapers SEO no contratados. AhrefsBot queda permitido.
 # ═══════════════════════════════════════════════════════════════════════════
 
 # ─── Reglas globales ───
 User-agent: *
 Allow: /
-Disallow: /_astro/
 Disallow: /api/
 Disallow: /draft/
 Disallow: /admin/
 Disallow: /404
 Disallow: /gracias
-Crawl-delay: 1
 
 # ─── Google (prioritario) ───
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
 
 User-agent: Googlebot-Image
 Allow: /img/
@@ -44,14 +33,12 @@ Allow: /blog/
 # ─── Bing y otros buscadores ───
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 1
 
 User-agent: DuckDuckBot
 Allow: /
 
 User-agent: Yandex
 Allow: /
-Crawl-delay: 2
 
 # ─── Redes sociales (necesario para previews OG / Twitter Cards) ───
 User-agent: facebookexternalhit
@@ -115,13 +102,36 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: meta-externalfetcher
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: Google-CloudVertexBot
+Allow: /
+
 # ─── Bots/scrapers bloqueados ───
 # AhrefsBot / AhrefsSiteAudit NO se bloquean: Ahrefs es herramienta contratada
 #   del portafolio; caen en las reglas globales (User-agent: *).
-# Bytespider (ByteDance): histórico de scraping abusivo.
-User-agent: Bytespider
-Disallow: /
-
 User-agent: SemrushBot
 Disallow: /
 

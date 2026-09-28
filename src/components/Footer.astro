@@ -46,7 +46,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
         <p class="footer__brand-desc">{SITE.description}</p>
 
         <address class="footer__contact" aria-label="Datos de contacto">
-          <a href={waDefault} class="footer__contact-row footer__contact-row--cta" target="_blank" rel="noopener noreferrer" aria-label={`Abrir WhatsApp: ${CONTACT.phone}`}>
+          <a href={waDefault} class="footer__contact-row footer__contact-row--cta" target="_blank" rel="noopener noreferrer">
             <span class="footer__contact-icon footer__contact-icon--wa" aria-hidden="true"><Fragment set:html={WA_SVG} /></span>
             <span class="footer__contact-text"><strong>{CONTACT.phone}</strong><em>WhatsApp — cotización inmediata</em></span>
           </a>
@@ -172,7 +172,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
     <div class="footer__bottom-inner">
       <p class="footer__copy">© {currentYear} {SITE.name}. Todos los derechos reservados.</p>
       <p class="footer__seo-tagline">{seoTagline}</p>
-      <a href={waDefault} class="footer__bottom-wa" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+      <a href={waDefault} class="footer__bottom-wa" target="_blank" rel="noopener noreferrer">
         <Fragment set:html={WA_SVG} />{CONTACT.phone}
       </a>
     </div>
@@ -208,7 +208,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
   .footer__schedule-row { display: flex; gap: .75rem; align-items: center; }
   .footer__schedule-day { font-size: .8rem; color: rgba(255,255,255,.55); min-width: 60px; }
   .footer__schedule-hours { font-size: .8rem; color: rgba(255,255,255,.8); font-weight: var(--weight-medium, 500); }
-  .footer__schedule-hours--dim { color: rgba(255,255,255,.4); font-weight: 400; font-style: italic; }
+  .footer__schedule-hours--dim { color: rgba(255,255,255,.5); font-weight: 400; font-style: italic; }
   .footer__col-heading { display: flex; align-items: center; gap: .5rem; font-size: var(--text-xs, .75rem); font-weight: var(--weight-bold, 700); color: var(--ft-white); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 1.25rem; }
   .footer__col-heading--mt { margin-top: 2rem; }
   .footer__col-heading-accent { display: block; width: 16px; height: 2px; background: var(--ft-accent); border-radius: 2px; flex-shrink: 0; }
@@ -228,7 +228,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
   .footer__cert-item:hover { color: rgba(255,255,255,.8); border-color: var(--ft-accent); background: var(--ft-accent-dim); }
   .footer__bottom { background: var(--ft-bg-bottom); padding: 1.125rem 0; }
   .footer__bottom-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; max-width: var(--container-max, 1400px); margin-inline: auto; padding-inline: var(--container-px, 1.5rem); }
-  .footer__copy, .footer__seo-tagline { font-size: var(--text-xs, .75rem); color: rgba(255,255,255,.3); line-height: 1.5; }
+  .footer__copy, .footer__seo-tagline { font-size: var(--text-xs, .75rem); color: rgba(255,255,255,.5); line-height: 1.5; }
   .footer__seo-tagline { text-align: center; flex: 1; }
   .footer__bottom-wa { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--text-xs, .75rem); font-weight: var(--weight-semibold, 600); color: rgba(37,211,102,.7); text-decoration: none; white-space: nowrap; flex-shrink: 0; }
   .footer__bottom-wa:hover { color: #25d366; }
