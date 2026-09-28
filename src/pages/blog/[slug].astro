@@ -19,6 +19,7 @@
 import type { GetStaticPaths } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import ArticleLayout from "@layouts/ArticleLayout.astro";
+import { minutosLectura } from "@lib/lectura";
 
 export const getStaticPaths = (async () => {
   // Los drafts no generan ruta: no basta con ocultarlos del listado — si la
@@ -64,6 +65,7 @@ const relacionados = (
   tags={post.data.tags}
   faqs={post.data.faqs}
   showReferencePrices={post.data.showReferencePrices}
+  minutos={minutosLectura(post.body)}
   related={relacionados}
 >
   <Content />

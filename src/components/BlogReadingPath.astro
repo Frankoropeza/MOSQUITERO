@@ -1,0 +1,151 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { minutosLectura } from '@lib/lectura';
+
+interface Props {
+  posts: CollectionEntry<'articulos'>[];
+  slugs: string[];
+}
+
+const { posts, slugs } = Astro.props;
+
+const pasos = slugs.map((slug) => {
+  const post = posts.find((entry) => entry.id === slug);
+
+  if (!post) {
+    throw new Error(`BlogReadingPath: no existe el artículo publicado con slug "${slug}".`);
+  }
+
+  if (post.data.draft === true) {
+    throw new Error(`BlogReadingPath: el artículo "${slug}" es draft y no puede aparecer en la ruta de lectura.`);
+  }
+
+  return post;
+});
+---
+
+<section class="brp tone-dark" aria-labelledby="brp-title">
+  <p class="brp__eyebrow">Empieza por aquí</p>
+  <h2 id="brp-title">Antes de encargar, en 5 lecturas</h2>
+  <p class="brp__intro">
+    El orden en que conviene leerlas si todavía no has cotizado: primero qué tipo va con tu ventana, al final qué preguntarle a quien te lo instale.
+  </p>
+
+  <ol class="brp__list">
+    {pasos.map((post, index) => (
+      <li class="brp__item">
+        <span class="brp__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <div class="brp__content">
+          <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+          <span>{minutosLectura(post.body)} min de lectura</span>
+        </div>
+      </li>
+    ))}
+  </ol>
+
+  <a class="brp__footer-link" href="/mosquiteros/">Ver los tipos de mosquitero y sus precios →</a>
+</section>
+
+<style>
+  .brp {
+    padding: var(--sp-6);
+  }
+
+  .brp__eyebrow {
+    margin: 0 0 var(--sp-3);
+    color: var(--c-accent);
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .brp h2 {
+    margin: 0;
+    color: var(--c-ink);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: -0.01em;
+  }
+
+  .brp__intro {
+    margin: var(--sp-4) 0 0;
+    color: var(--c-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .brp__list {
+    display: grid;
+    gap: var(--sp-4);
+    margin: var(--sp-6) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .brp__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--sp-3);
+    align-items: start;
+  }
+
+  .brp__number {
+    color: var(--c-accent);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .brp__content {
+    display: grid;
+    gap: var(--sp-1);
+  }
+
+  .brp__content a {
+    color: var(--c-ink);
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+  }
+
+  .brp__content a:hover {
+    color: var(--c-accent);
+  }
+
+  .brp__content a:focus-visible,
+  .brp__footer-link:focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+  }
+
+  .brp__content span {
+    color: var(--c-muted);
+    font-size: var(--text-xs);
+  }
+
+  .brp__footer-link {
+    display: inline-block;
+    color: var(--c-accent);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+  }
+
+  .brp__footer-link:hover {
+    color: var(--c-ink);
+  }
+
+  @media (min-width: 1024px) {
+    .brp h2 {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>

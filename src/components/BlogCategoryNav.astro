@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import { BLOG_CATEGORIES } from '@config/site';
+
+interface Props {
+  /** Slug activo; "todas" corresponde al índice del blog. */
+  current?: string;
+}
+
+const { current } = Astro.props;
+
+// El componente consulta la colección para que los conteos no se desalineen
+// entre índice, categorías y tags. Los borradores no son navegación pública.
+const publicados = await getCollection('articulos', ({ data }) => data.draft !== true);
+const categorias = BLOG_CATEGORIES.map((category) => ({
+  ...category,
+  count: publicados.filter((post) => post.data.category === category.slug).length,
+})).filter((category) => category.count > 0);
+---
+
+<nav class="bcn" aria-label="Temas del blog">
+  <ul class="bcn__list" role="list">
+    <li>
+      <a
+        class:list={['bcn__link', { 'is-active': current === 'todas' }]}
+        href="/blog/"
+        aria-current={current === 'todas' ? 'page' : undefined}
+      >
+        <span>Todos</span>
+        <span class="bcn__count">{publicados.length}</span>
+      </a>
+    </li>
+    {categorias.map((category) => (
+      <li>
+        <a
+          class:list={['bcn__link', { 'is-active': current === category.slug }]}
+          href={`/blog/categoria/${category.slug}/`}
+          aria-current={current === category.slug ? 'page' : undefined}
+        >
+          <span>{category.label}</span>
+          <span class="bcn__count">{category.count}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .bcn__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bcn__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-height: 44px;
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--c-border);
+    color: var(--c-ink);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    text-decoration: none;
+  }
+
+  .bcn__link:hover {
+    border-color: var(--c-ink);
+  }
+
+  .bcn__link:focus-visible {
+    outline: 2px solid var(--c-primary);
+    outline-offset: 2px;
+  }
+
+  .bcn__link.is-active {
+    border-color: var(--c-ink);
+    background: var(--c-ink);
+    color: var(--c-on-dark);
+  }
+
+  .bcn__count {
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

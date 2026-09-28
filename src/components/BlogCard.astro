@@ -32,6 +32,12 @@ interface Props {
   pubDate: Date;
   /** true → tarjeta destacada: imagen más alta y título más grande (solo /blog, primer post). */
   featured?: boolean;
+  /** Presentación editorial para el índice, categoría y tag. */
+  variant?: "card" | "lead" | "row";
+  /** Tiempo de lectura calculado desde el cuerpo real del artículo. */
+  minutos?: number;
+  /** El contexto de la página decide la jerarquía del título. */
+  headingLevel?: 2 | 3;
   /**
    * Índice en el listado. Las 2 primeras imágenes cargan eager (están sobre el
    * pliegue → candidatas a LCP); el resto lazy. Sin esto, o se penaliza el LCP
@@ -49,14 +55,21 @@ const {
   categoryLabel,
   pubDate,
   featured = false,
+  variant = 'card',
+  minutos,
+  headingLevel = 3,
   index = 0,
 } = Astro.props;
 
 const eager = index < 2;
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+const isCard = variant === 'card';
+const isLead = variant === 'lead';
 // Fecha corta para la tarjeta ("14 jul 2026"); la larga se reserva al artículo.
-const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 ---
 
+{isCard ? (
 <article class:list={['bcard', { 'bcard--featured': featured }]}>
   <a class="bcard__link" href={href}>
     <div class="bcard__media">
@@ -74,11 +87,12 @@ const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 
     <div class="bcard__body">
       <p class="bcard__meta">
         {categoryLabel && <span class="bcard__cat">{categoryLabel}</span>}
+        {categoryLabel && minutos !== undefined && <span aria-hidden="true">·</span>}
         <time datetime={pubDate.toISOString()}>{fechaCorta}</time>
+        {minutos !== undefined && <><span aria-hidden="true">·</span><span>{minutos} min de lectura</span></>}
       </p>
 
-      {/* H3: el H2 del listado lo pone el SectionHeading de la página. */}
-      <h3 class="bcard__title">{title}</h3>
+      <Heading class="bcard__title">{title}</Heading>
       <p class="bcard__desc">{description}</p>
 
       <span class="bcard__cta">
@@ -88,6 +102,37 @@ const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 
     </div>
   </a>
 </article>
+ ) : (
+<article class:list={['bcard', { 'bcard--lead': isLead, 'bcard--row': !isLead }]}>
+  <a class="bcard__link" href={href}>
+    <div class="bcard__media">
+      <img
+        src={image}
+        alt={imageAlt ?? title}
+        width={isLead ? 1200 : 600}
+        height={isLead ? 750 : 450}
+        loading={isLead || eager ? 'eager' : 'lazy'}
+        fetchpriority={isLead || eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+    </div>
+
+    <div class="bcard__body">
+      <p class="bcard__meta">
+        {categoryLabel && <span class="bcard__cat">{categoryLabel}</span>}
+        {categoryLabel && <span aria-hidden="true">·</span>}
+        <time datetime={pubDate.toISOString()}>{fechaCorta}</time>
+        {minutos !== undefined && <><span aria-hidden="true">·</span><span>{minutos} min de lectura</span></>}
+      </p>
+
+      <Heading class="bcard__title">{title}</Heading>
+      <p class="bcard__desc">{description}</p>
+
+      <span class="bcard__cta">Leer artículo →</span>
+    </div>
+  </a>
+</article>
+)}
 
 <style>
   /* CSS vanilla + tokens (C1/C2). Mismo lenguaje que CategoryCard: la tarjeta de
@@ -146,11 +191,17 @@ const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 
 
   .bcard__meta {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: var(--sp-3);
+    gap: var(--sp-1) var(--sp-3);
     margin: 0;
     font-size: var(--text-xs);
     color: var(--c-muted);
+  }
+  /* Cada dato de la meta se lee entero: en móvil la fila salta de línea
+     completa, nunca parte «4 min de lectura» en tres renglones. */
+  .bcard__meta > * {
+    white-space: nowrap;
   }
   .bcard__cat {
     font-family: var(--font-heading);
@@ -204,5 +255,84 @@ const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 
     .bcard--featured .bcard__body { padding: var(--sp-6); gap: var(--sp-3); justify-content: center; }
     .bcard--featured .bcard__title { font-size: var(--text-2xl); }
     .bcard--featured .bcard__desc { font-size: var(--text-base); }
+  }
+
+  /* ── Variantes editoriales ── */
+  .bcard--lead,
+  .bcard--row {
+    display: block;
+    background: transparent;
+    border: 0;
+    overflow: visible;
+  }
+  .bcard--lead:hover,
+  .bcard--row:hover {
+    border-color: var(--c-border);
+  }
+  .bcard--lead .bcard__media,
+  .bcard--row .bcard__media {
+    border: 0;
+  }
+  .bcard--lead .bcard__body,
+  .bcard--row .bcard__body {
+    padding: 0;
+  }
+  .bcard--lead .bcard__link {
+    gap: var(--sp-5);
+  }
+  .bcard--lead .bcard__media {
+    aspect-ratio: 16 / 10;
+  }
+  .bcard--lead .bcard__body {
+    gap: var(--sp-3);
+  }
+  .bcard--lead .bcard__title {
+    font-size: var(--text-2xl);
+  }
+  .bcard--lead .bcard__desc {
+    font-size: var(--text-base);
+  }
+  .bcard--lead .bcard__cta,
+  .bcard--row .bcard__cta {
+    padding-top: 0;
+  }
+  .bcard--row {
+    border-top: 1px solid var(--c-border);
+    padding-block: var(--sp-6);
+  }
+  .bcard--row .bcard__link {
+    gap: var(--sp-5);
+  }
+  .bcard--row .bcard__media {
+    aspect-ratio: 16 / 9;
+  }
+  .bcard--row .bcard__body {
+    gap: var(--sp-2);
+  }
+  .bcard--row .bcard__title {
+    font-size: var(--text-xl);
+  }
+  .bcard--row .bcard__cta {
+    margin-top: var(--sp-2);
+  }
+
+  @media (min-width: 640px) {
+    .bcard--row .bcard__link {
+      display: grid;
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      gap: var(--sp-6);
+    }
+    .bcard--row .bcard__media {
+      aspect-ratio: 4 / 3;
+    }
+    .bcard--row .bcard__desc {
+      font-size: var(--text-base);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .bcard--lead .bcard__title {
+      font-size: var(--text-3xl);
+    }
   }
 </style>

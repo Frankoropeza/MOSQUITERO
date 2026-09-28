@@ -58,6 +58,8 @@ export interface Props {
   related?: { label: string; href: string; description?: string }[];
   /** Renderiza la tabla centralizada de precios cuando el artículo lo declara. */
   showReferencePrices?: boolean;
+  /** Tiempo de lectura calculado desde el cuerpo MDX en la ruta. */
+  minutos?: number;
 }
 
 const {
@@ -75,16 +77,16 @@ const {
   faqs = [],
   related = [],
   showReferencePrices = false,
+  minutos,
 } = Astro.props;
 
 const published = new Date(pubDate);
 const updated = updatedDate ? new Date(updatedDate) : published;
 const fmt = (d: Date) =>
-  d.toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" });
+  d.toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 
-// Tiempo de lectura: NO se calcula aquí. Sin acceso al texto renderizado (entra
-// por <slot/>), cualquier cifra sería inventada — y el sitio no publica datos que
-// no pueda sostener. Si se quiere, se calcula en la ruta con post.body y se pasa.
+// Tiempo de lectura: se calcula en la ruta desde post.body y llega como prop.
+// El layout no puede inferirlo del slot sin convertir una cifra real en estimación.
 
 const categoryLabel = category ? blogCategoryLabel(category) : undefined;
 
@@ -145,6 +147,12 @@ const waLink = waUrl(waMessage);
             <span>Por {author}</span>
             <span class="post__dot" aria-hidden="true">·</span>
             <time datetime={published.toISOString()}>{fmt(published)}</time>
+            {minutos && (
+              <>
+                <span class="post__dot" aria-hidden="true">·</span>
+                <span>{minutos} min de lectura</span>
+              </>
+            )}
             {updated.getTime() !== published.getTime() && (
               <>
                 <span class="post__dot" aria-hidden="true">·</span>

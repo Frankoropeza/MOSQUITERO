@@ -27,8 +27,12 @@ import PageLayout from "@layouts/PageLayout.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import BlogCard from "@components/BlogCard.astro";
 import BlogSidebar from "@components/BlogSidebar.astro";
+import BlogCategoryNav from "@components/BlogCategoryNav.astro";
+import BlogReadingPath from "@components/BlogReadingPath.astro";
 import CTABanner from "@components/CTABanner.astro";
 import { SITE, WA_MESSAGES, blogCategoryLabel, waUrl } from "@config/site";
+import { BLOG_CATEGORIES } from "@config/site";
+import { minutosLectura } from "@lib/lectura";
 
 export const getStaticPaths = (async ({ paginate }) => {
   // draft !== true → un artículo sin el campo también se publica (default false).
@@ -58,11 +62,32 @@ interface Props {
 }
 const { page } = Astro.props;
 
+const publicados = await getCollection("articulos", ({ data }) => data.draft !== true);
+const fechaMasReciente = publicados.reduce((masReciente, post) => {
+  const fecha = post.data.updatedDate ?? post.data.pubDate;
+  return fecha > masReciente ? fecha : masReciente;
+}, publicados[0]?.data.updatedDate ?? publicados[0]?.data.pubDate);
+const fechaRevision = fechaMasReciente?.toLocaleDateString("es-MX", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+const totalTemas = BLOG_CATEGORIES.filter((categoria) => (
+  publicados.some((post) => post.data.category === categoria.slug)
+)).length;
+
 // La página 1 destaca el artículo más reciente a lo ancho; el resto va en grid.
 // De la página 2 en adelante no hay destacado: ya no es "lo último", es archivo.
 const esPrimera = page.currentPage === 1;
 const destacado = esPrimera ? page.data[0] : undefined;
-const rejilla = esPrimera ? page.data.slice(1) : page.data;
+const articulos = esPrimera ? page.data.slice(1) : page.data;
+const rutaDeLectura = [
+  "tipos-de-mosquitero-cual-elegir",
+  "tipos-de-malla-mosquitero",
+  "como-medir-ventana-mosquitero",
+  "de-que-depende-el-precio-de-un-mosquitero",
+  "que-preguntar-antes-de-contratar-mosquiteros",
+];
 
 // ── Metas ──────────────────────────────────────────────────────────────────
 // Solo la página 1 lleva las metas "buenas"; las siguientes declaran su número
@@ -118,25 +143,59 @@ const breadcrumbs = esPrimera
         ]}
       />
 
+      <dl class="blog-datos">
+        <div>
+          <dt class="blog-datos__term">Guías publicadas</dt>
+          <dd>{page.total} guías publicadas</dd>
+        </div>
+        <div>
+          <dt class="blog-datos__term">Temas</dt>
+          <dd>{totalTemas} temas</dd>
+        </div>
+        {fechaRevision && (
+          <div>
+            <dt class="blog-datos__term">Fecha de revisión</dt>
+            <dd>Revisado en {fechaRevision}</dd>
+          </div>
+        )}
+        <div>
+          <dt class="blog-datos__term">Autoría</dt>
+          <dd>Por el equipo de Mosquitero.mx</dd>
+        </div>
+      </dl>
+
+      <BlogCategoryNav current="todas" />
+
+      {destacado && (
+        <div class="blog__lead">
+          <BlogCard
+            title={destacado.data.title}
+            description={destacado.data.description}
+            href={`/blog/${destacado.id}/`}
+            image={destacado.data.heroImage}
+            imageAlt={destacado.data.title}
+            category={destacado.data.category}
+            categoryLabel={blogCategoryLabel(destacado.data.category)}
+            pubDate={destacado.data.pubDate}
+            variant="lead"
+            headingLevel={2}
+            minutos={minutosLectura(destacado.body)}
+            index={0}
+          />
+          <BlogReadingPath posts={publicados} slugs={rutaDeLectura} />
+        </div>
+      )}
+
       <div class="blog">
         <div class="blog__main">
-          {destacado && (
-            <BlogCard
-              title={destacado.data.title}
-              description={destacado.data.description}
-              href={`/blog/${destacado.id}/`}
-              image={destacado.data.heroImage}
-              imageAlt={destacado.data.title}
-              category={destacado.data.category}
-              categoryLabel={blogCategoryLabel(destacado.data.category)}
-              pubDate={destacado.data.pubDate}
-              featured={true}
-              index={0}
-            />
+          {page.data.length > 0 && (
+            <h2 class="blog__title">
+              {esPrimera ? "Todos los artículos" : `Archivo · página ${page.currentPage}`}
+            </h2>
           )}
 
-          <div class="blog__grid">
-            {rejilla.map((post, i) => (
+          <div class="blog__list">
+            {articulos.map((post, i) => (
               <BlogCard
                 title={post.data.title}
                 description={post.data.description}
@@ -146,6 +205,8 @@ const breadcrumbs = esPrimera
                 category={post.data.category}
                 categoryLabel={blogCategoryLabel(post.data.category)}
                 pubDate={post.data.pubDate}
+                variant="row"
+                minutos={minutosLectura(post.body)}
                 index={esPrimera ? i + 1 : i}
               />
             ))}
@@ -197,22 +258,78 @@ const breadcrumbs = esPrimera
 
 <style>
 
-  /* ── Retícula: listado + sidebar. Misma que el artículo (texto + 20rem) para
-       que /blog y /blog/[slug] se sientan la misma pieza. ── */
   .blog {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--sp-8);
   }
-  .blog__main { display: grid; gap: var(--sp-5); align-content: start; }
-
-  /* auto-fit + minmax: las tarjetas deciden cuántas caben. En la última fila
-     incompleta se estiran en vez de dejar un hueco — a diferencia de un
-     repeat(3,1fr) fijo, que en móvil obliga a media query por breakpoint. */
-  .blog__grid {
+  .blog__main {
     display: grid;
-    grid-template-columns: 1fr;
     gap: var(--sp-5);
+    align-content: start;
+  }
+
+  .blog__lead {
+    display: grid;
+    gap: var(--sp-8);
+    margin-top: var(--sp-8);
+    margin-bottom: var(--sp-10);
+  }
+
+  .blog-datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+    margin: var(--sp-8) 0 var(--sp-5);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-border);
+    color: var(--c-muted);
+    font-size: var(--text-sm);
+  }
+
+  .blog-datos div {
+    display: flex;
+    align-items: center;
+  }
+
+  .blog-datos div:not(:last-child)::after {
+    content: "·";
+    margin-left: var(--sp-5);
+    color: var(--c-border);
+  }
+
+  .blog-datos dt {
+    font-weight: var(--weight-regular);
+  }
+
+  .blog-datos dd {
+    margin: 0;
+  }
+
+  .blog-datos__term {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .blog__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    color: var(--c-ink);
+  }
+
+  .blog__list {
+    display: grid;
+    gap: 0;
   }
 
   .blog__empty {
@@ -224,7 +341,6 @@ const breadcrumbs = esPrimera
     border-radius: var(--radius-lg);
   }
 
-  /* ── Paginación ── */
   .pager {
     display: flex;
     align-items: center;
@@ -237,7 +353,7 @@ const breadcrumbs = esPrimera
   .pager__btn {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;                 /* objetivo táctil mínimo (WCAG 2.5.8) */
+    min-height: 44px;
     padding: var(--sp-2) var(--sp-4);
     border: 1px solid var(--c-border);
     border-radius: var(--radius-md);
@@ -246,35 +362,39 @@ const breadcrumbs = esPrimera
     font-weight: var(--weight-semibold);
     color: var(--c-ink);
     text-decoration: none;
-    /* Excepción del contrato de movimiento: es un control pulsable. Solo color. */
     transition: color var(--transition-btn), border-color var(--transition-btn);
   }
-  .pager__btn:hover { border-color: var(--c-primary); color: var(--c-primary); }
-  .pager__btn:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
-  /* Extremo de la serie: <span>, no <a> deshabilitado. Un enlace sin destino es
-     un enlace roto para el teclado y para el rastreador. */
-  .pager__btn.is-off { color: var(--c-border); border-style: dashed; }
-  .pager__count { font-size: var(--text-sm); color: var(--c-muted); }
-
-  @media (min-width: 640px) {
-    .blog__grid { grid-template-columns: repeat(2, 1fr); }
+  .pager__btn:hover {
+    border-color: var(--c-primary);
+    color: var(--c-primary);
+  }
+  .pager__btn:focus-visible {
+    outline: 2px solid var(--c-primary);
+    outline-offset: 2px;
+  }
+  .pager__btn.is-off {
+    color: var(--c-border);
+    border-style: dashed;
+  }
+  .pager__count {
+    font-size: var(--text-sm);
+    color: var(--c-muted);
   }
   @media (min-width: 768px) {
     .section { padding: var(--sp-10) 0; }
   }
   @media (min-width: 1024px) {
-    .blog { grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--sp-10); }
-    /* Con el sidebar a un lado, la columna de tarjetas se queda en 2 por fila:
-       3 en 1fr las dejaría demasiado estrechas para que el título respire. */
-    .blog__grid { grid-template-columns: repeat(2, 1fr); }
-    /* El sticky lo decide la PÁGINA, no el componente. :global() porque .bsb
-       pertenece a BlogSidebar y el scope de este <style> no la alcanza. */
+    .blog__lead {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: var(--sp-8);
+    }
+    .blog {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: var(--sp-10);
+    }
     .blog > :global(.bsb) {
       position: sticky;
       top: calc(var(--header-height) + var(--sp-4));
     }
-  }
-  @media (min-width: 1400px) {
-    .blog__grid { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
