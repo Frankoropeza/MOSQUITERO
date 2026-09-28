@@ -27,7 +27,7 @@ import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
 import { NAV, SERVICES, WA_MESSAGES, waUrl } from "@config/site";
-import { MEDICION_CONDICION, PRECIOS_REFERENCIA, formatearPrecio } from "@config/precios";
+import { MEDICION_CONDICION, PRECIOS_REFERENCIA, formatearPrecio, precioMasBajo } from "@config/precios";
 
 const title = "Mosquiteros para ventanas y puertas a medida | CDMX";
 const description = `Mosquitero para ventana y puerta a medida, en aluminio y con instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)} por pieza. Cotiza por WhatsApp.`;
@@ -195,7 +195,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "¿De qué depende el precio de un mosquitero?",
     answer:
-      "De tres cosas: las <strong>medidas</strong> del vano, el <strong>tipo</strong> de mosquitero y la <strong>malla</strong> que lleve. Por eso no publicamos lista de precios: una cifra genérica no aplicaría a tu ventana y solo serviría para que la comparación salga mal. Mándanos las medidas y te pasamos el precio <strong>por pieza</strong>, con el tipo y la malla que recomendamos para tu caso.",
+      `De tres cosas: las <strong>medidas</strong> del vano, el <strong>tipo</strong> de mosquitero y la <strong>malla</strong> que lleve. Por eso lo que publicamos es un precio de referencia, <strong>desde ${formatearPrecio(precioMasBajo("ventana"))}</strong> en ventana, para una pieza de medida estándar con instalación e IVA incluidos; no es la cotización de tu ventana. Mándanos las medidas y te pasamos el precio <strong>por pieza</strong>, con el tipo y la malla que recomendamos para tu caso.`,
   },
   {
     question: "¿Qué malla conviene en mi caso?",
