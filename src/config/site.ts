@@ -32,8 +32,9 @@ export const SITE = {
   defaultImage: '/images/og/default.png', // OG raster 1200×630 (WhatsApp/Facebook/X no aceptan SVG). Wordmark provisional 2026-09-28.
 
   // ── COLOR DE MARCA — fuente única del HEX ────────────────────────────────
-  // TODO: color de marca real de mosquitero.mx. Hoy es el índigo heredado del
-  // template, NO la marca. Al cambiarlo hay que tocar los TRES sitios de abajo.
+  // Tinta (#15231b) del rediseño «Ronnsquare adaptado» del 2026-09-28 (antes:
+  // índigo #5b3df5 heredado del template). Sistema completo en tokens.css.
+  // Al cambiarlo hay que tocar los TRES sitios de abajo.
   //
   // Por qué existe esta clave: el hex vive en 3 lugares que NO pueden leerse
   // entre sí — CSS, JSON estático y TS:
@@ -45,7 +46,7 @@ export const SITE = {
   // navegador lo ignoraba y la barra del navegador en móvil nunca se pintó.
   // Ahora sale de aquí. Los 3 hex deben coincidir; no hay forma de garantizarlo
   // en build sin un generador de tokens, así que queda como contrato escrito.
-  themeColor: '#5b3df5',
+  themeColor: '#15231b',
 
   // ── GATE DE LANZAMIENTO ─────────────────────────────────────────────────
   // noindexAll: true → TODA página emite `robots: noindex, nofollow`.

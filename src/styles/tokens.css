@@ -4,54 +4,72 @@
    El bloque "PUENTE DE ALIAS" mapea nombres heredados (MESECI --color-*, --space-*) al canónico
    para que los componentes extraídos rendericen sin reescritura. Migrar a nombres canónicos es deuda de roadmap. */
 
-/* ── Fuentes self-hosted (variables, subset latin) — 2026-09-28 ─────────────── */
+/* ── Fuentes self-hosted — 2026-09-28 · rediseño «Ronnsquare adaptado» ─────────
+   Títulos/UI: Space Grotesk (variable 300–700, SIL OFL 1.1, subset latin).
+   Texto: Gambetta 400/400i/500/600 (Indian Type Foundry, Fontshare Free Font
+   License: uso comercial y web permitido, self-hosting incluido).
+   Sustituyen a Outfit + Inter. No añadir más pesos sin medir peso de página. */
 @font-face {
-  font-family: 'Outfit';
+  font-family: 'Space Grotesk';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 300 700;
   font-display: swap;
-  src: url('/fonts/outfit-latin-wght.woff2') format('woff2-variations'), url('/fonts/outfit-latin-wght.woff2') format('woff2');
+  src: url('/fonts/spacegrotesk-latin-wght.woff2') format('woff2-variations'), url('/fonts/spacegrotesk-latin-wght.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('/fonts/inter-latin-wght.woff2') format('woff2-variations'), url('/fonts/inter-latin-wght.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+@font-face { font-family: 'Gambetta'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/gambetta-400.woff2') format('woff2'); }
+@font-face { font-family: 'Gambetta'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/gambetta-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Gambetta'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/gambetta-500.woff2') format('woff2'); }
+@font-face { font-family: 'Gambetta'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/gambetta-600.woff2') format('woff2'); }
 
 :root {
-  /* ---------- COLOR (marca) ---------- */
-  /* TODO: color de marca real de mosquitero.mx. Es el índigo heredado del template.
-     ⚠️ El hex vive en 3 sitios que no pueden leerse entre sí. Al cambiarlo, cambia
-     LOS TRES o el sitio se pinta de dos colores distintos:
-       1. AQUÍ → --c-primary  (y --c-primary-rgb abajo: es su canal RGB, se calcula a mano)
-       2. public/site.webmanifest → "theme_color"
-       3. src/config/site.ts → SITE.themeColor (lo lee el <meta name="theme-color">)
-     El contrato completo está explicado en site.ts, junto a SITE.themeColor. */
-  --c-primary: #5b3df5;
-  --c-primary-light: #7c66f7;
-  --c-primary-dark: #3f28c2;
-  --c-accent: var(--c-primary);
-  /* Canal RGB del primario para rgba(var(--c-primary-rgb), a). Mantener
-     sincronizado con --c-primary (#5b3df5 = 91,61,245). Lo usan Header/CTA. */
-  --c-primary-rgb: 91, 61, 245;
+  /* ---------- COLOR — sistema «Ronnsquare adaptado» (2026-09-28) ----------
+     Tres colores hacen todo el trabajo, como en la referencia:
+       · LINO   (--c-bg)      fondo cálido claro de casi todo el sitio
+       · TINTA  (--c-ink)     verde casi negro: texto, botones, bandas oscuras
+       · MENTA  (--c-accent)  acento pastel: bandas de color, CTA sobre tinta,
+                              resaltado de palabra en títulos
+     Contraste medido (WCAG): tinta/lino 14.1 · tinta/menta 12.0 · menta/tinta 12.0 ·
+     --c-muted/lino 5.3 · --c-on-dark-muted/tinta 7.9. Todo ≥ AA.
+     ⚠️ Los 3 espejos del color de marca siguen vigentes: --c-primary (aquí),
+     public/site.webmanifest "theme_color" y SITE.themeColor en src/config/site.ts. */
+  --c-primary: #15231b;          /* = tinta. Botón principal, enlaces, bordes fuertes */
+  --c-primary-light: #2c3d33;
+  --c-primary-dark: #0b130e;
+  --c-accent: #bfe6cd;           /* menta */
+  --c-accent-strong: #9fd8b5;    /* menta en hover de botón */
+  /* Canal RGB del primario para rgba(var(--c-primary-rgb), a). #15231b = 21,35,27. */
+  --c-primary-rgb: 21, 35, 27;
 
   /* ---------- COLOR (tinta / neutros) ---------- */
-  --c-ink: #14181f;              /* texto principal */
-  --c-ink-2: #3a424e;            /* texto secundario */
-  --c-muted: #6b7280;            /* texto tenue / captions */
-  --c-border: #e5e7eb;
-  --c-surface: #f7f8fa;          /* fondos de sección */
+  --c-ink: #15231b;              /* texto principal (tinta) */
+  --c-ink-2: #3b4a41;            /* texto secundario */
+  --c-muted: #56655c;            /* texto tenue / captions (5.3:1 sobre lino) */
+  --c-border: #d8cfbe;           /* línea sólida sobre lino */
+  --c-line: rgba(21, 35, 27, .18);        /* línea fina translúcida (sobre lino o menta) */
+  --c-surface: #ede5d6;          /* lino oscuro: fondos alternos de sección interior */
   --c-white: #ffffff;
-  --c-bg: #ffffff;
-  --color-bg: #ffffff;           /* alias usado por ServiceLayout (fondo de dl/toc) */
+  --c-bg: #f5eee1;               /* lino */
+  --color-bg: #f5eee1;           /* alias usado por ServiceLayout (fondo de dl/toc) */
+  /* Sobre fondo tinta */
+  --c-on-dark: #f5eee1;
+  --c-on-dark-muted: #a9b8ae;
+  --c-line-on-dark: rgba(245, 238, 225, .22);
 
   /* ---------- TIPOGRAFÍA ---------- */
-  --font-heading: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-ui: var(--font-heading);   /* botones, etiquetas, eyebrows, nav de acción */
+  --font-body: 'Gambetta', Georgia, 'Times New Roman', serif;
+
+  /* Títulos al estilo de la referencia: grotesca en MAYÚSCULAS, bold, interlineado apretado */
+  --heading-transform: uppercase;
+  --heading-weight: 700;
+  --heading-leading: 1.02;
+  --heading-tracking: -0.01em;
+  --text-display: clamp(2.35rem, 1.1rem + 4.4vw, 4.5rem);   /* H1 del hero */
+  --text-section: clamp(2.1rem, 0.9rem + 4.4vw, 4.75rem);   /* H2 de sección */
+  --text-card: clamp(1.2rem, 1rem + .7vw, 1.55rem);         /* H3 de tarjeta/bloque */
+  --text-body: 1.0625rem;                                   /* 17px: Gambetta pide un punto más que Inter */
 
   --text-xs: .75rem;   --text-sm: .875rem;  --text-base: 1rem;
   --text-lg: 1.125rem; --text-xl: 1.25rem;  --text-2xl: 1.5rem;
@@ -68,7 +86,8 @@
   --sp-5: 1.5rem; --sp-6: 2rem;   --sp-8: 3rem;   --sp-10: 4rem; --sp-12: 6rem;
 
   /* ---------- RADIOS / BORDES ---------- */
-  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-xl: 20px; --radius-full: 999px;
+  /* Esquinas rectas en todo (lenguaje de la referencia). --radius-full sólo para puntos y el botón flotante. */
+  --radius-sm: 0; --radius-md: 0; --radius-lg: 0; --radius-xl: 0; --radius-full: 999px;
   --border: 1px solid var(--c-border);
 
   /* ---------- LAYOUT ---------- */
@@ -108,10 +127,11 @@
   --z-panel: 505;
 
   /* ---------- SOMBRAS / TRANSICIONES ---------- */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.10);
-  --shadow-header: 0 1px 2px rgba(20,24,31,.05);          /* header (única: ya no hay estado "al hacer scroll") */
-  --shadow-panel: 0 16px 40px rgba(20,24,31,.14), 0 2px 8px rgba(20,24,31,.06);       /* mega/dropdown/drawer */
+  /* Sin sombras decorativas: la separación la hacen el color de banda y la línea de 1px. */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-header: 0 1px 0 var(--c-line);          /* header (única: ya no hay estado "al hacer scroll") */
+  --shadow-panel: 0 0 0 1px var(--c-line), 0 12px 32px rgba(21,35,27,.10);       /* mega/dropdown/drawer */
   /* ══════════════════════════════════════════════════════════════════════════
      CONTRATO DE MOVIMIENTO — mosquitero.mx · decisión de Frank, 2026-07-14
      ──────────────────────────────────────────────────────────────────────────
@@ -151,7 +171,7 @@
   --text-muted: var(--c-muted);
   --color-border: var(--c-border);
   --color-surface: var(--c-surface);
-  --color-gray-50: #f9fafb; --color-gray-100: #f3f4f6; --color-gray-200: #e5e7eb;
+  --color-gray-50: #f5eee1; --color-gray-100: #ede5d6; --color-gray-200: #d8cfbe;
   --color-gray-400: #9ca3af; --color-gray-500: #6b7280;
   --color-gray-700: #374151; --color-gray-900: #111827;
   --space-1: var(--sp-1); --space-2: var(--sp-2); --space-3: var(--sp-3);
@@ -182,7 +202,8 @@ body {
   font-family: var(--font-body);
   color: var(--c-ink);
   background: var(--c-bg);
-  line-height: var(--leading-normal);
+  font-size: var(--text-body);
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
 

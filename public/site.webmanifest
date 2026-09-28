@@ -4,9 +4,9 @@
   "description": "Mosquiteros a medida para ventanas y puertas: fabricación, instalación y reparación.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "_comment_theme_color": "TODO: índigo del template, NO la marca real. El hex vive en 3 sitios que no se leen entre sí: (1) src/styles/tokens.css --c-primary + --c-primary-rgb, (2) AQUÍ theme_color, (3) src/config/site.ts SITE.themeColor. Cambia los tres. Contrato explicado en site.ts. (Las claves desconocidas las ignora el spec de Web App Manifest: este comentario es inerte.)",
-  "theme_color": "#5b3df5",
+  "background_color": "#f5eee1",
+  "_comment_theme_color": "Tinta del rediseño 2026-09-28 (#15231b). El hex vive en 3 sitios que no se leen entre sí: (1) src/styles/tokens.css --c-primary + --c-primary-rgb, (2) AQUÍ theme_color, (3) src/config/site.ts SITE.themeColor. Cambia los tres. (Claves desconocidas: inertes para el spec.)",
+  "theme_color": "#15231b",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },

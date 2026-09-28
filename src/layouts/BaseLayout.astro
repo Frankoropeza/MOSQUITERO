@@ -152,10 +152,11 @@ const jsonLd = buildSchema(pageType, schemaData);
         sale de SITE.themeColor, que documenta los 3 sitios donde vive. */}
     <meta name="theme-color" content={SITE.themeColor} />
 
-    {/* ── Fuentes self-hosted (C3): Outfit + Inter variables, subset latin (incluye
-         acentos y ñ). @font-face en tokens.css. Sin Google Fonts CDN. */}
-    <link rel="preload" href="/fonts/outfit-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
+    {/* ── Fuentes self-hosted (C3): Space Grotesk (títulos/UI) + Gambetta (texto),
+         desde el rediseño del 2026-09-28. Se precargan las dos que pinta el primer
+         pantallazo. @font-face en tokens.css. Sin Google Fonts CDN. */}
+    <link rel="preload" href="/fonts/spacegrotesk-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/gambetta-400.woff2" as="font" type="font/woff2" crossorigin />
 
     {/*
       ── Preconnect CDN de imágenes (E3) — opcional ──
