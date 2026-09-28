@@ -3,6 +3,9 @@ order: 0
 category: enrollables
 label: Mosquiteros Enrollables
 href: /mosquiteros/enrollables/
+seoDescription: "Mosquitero enrollable a medida para ventana o puerta: la malla se recoge en un cajón cuando no la usas. Instalación en CDMX y Edomex desde {precio}."
+seoTitle: "Mosquitero enrollable a medida | CDMX y Edomex"
+h1: "Mosquitero enrollable a medida"
 image: /images/placeholder.svg
 imageAlt: Mosquitero enrollable instalado en ventana
 blurb: "El mosquitero se recoge solo cuando no lo usas: la malla queda oculta en el cajón y la ventana se ve libre. Ideal para ventanas de uso diario."

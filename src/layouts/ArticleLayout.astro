@@ -29,6 +29,7 @@ import BlogSidebar from "@components/BlogSidebar.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import CTABanner from "@components/CTABanner.astro";
+import TablaPreciosReferencia from "@components/TablaPreciosReferencia.astro";
 import { SITE, blogCategoryLabel, waUrl } from "@config/site";
 
 // Hoja tipográfica del cuerpo largo (.prose). Import global a propósito: el HTML
@@ -55,6 +56,8 @@ export interface Props {
   faqs?: { question: string; answer: string }[];
   /** Artículos / servicios relacionados (interlinking). */
   related?: { label: string; href: string; description?: string }[];
+  /** Renderiza la tabla centralizada de precios cuando el artículo lo declara. */
+  showReferencePrices?: boolean;
 }
 
 const {
@@ -71,6 +74,7 @@ const {
   tags = [],
   faqs = [],
   related = [],
+  showReferencePrices = false,
 } = Astro.props;
 
 const published = new Date(pubDate);
@@ -167,6 +171,13 @@ const waLink = waUrl(waMessage);
         {/* prose: el cuerpo del .mdx entra por el slot. Estilo en typography.css. */}
         <div class="prose">
           <slot />
+          {showReferencePrices && (
+            <section aria-labelledby="precios-referencia-2026">
+              <h2 id="precios-referencia-2026">Precios de referencia en 2026</h2>
+              <p>Estos importes son precios de referencia para un mosquitero fabricado a medida e instalado en CDMX y Edomex, en tamaño estándar.</p>
+              <TablaPreciosReferencia />
+            </section>
+          )}
         </div>
 
         <BlogSidebar

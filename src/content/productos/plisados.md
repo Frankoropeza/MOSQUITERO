@@ -3,6 +3,7 @@ order: 3
 category: plisados
 label: Mosquiteros Plisados
 href: /mosquiteros/plisados/
+seoDescription: "Mosquitero plisado a medida para ventanas, puertas y vanos amplios, con instalación en CDMX y Edomex. Precio de referencia desde {precio}, según medida y malla."
 image: /images/placeholder.svg
 imageAlt: Mosquitero plisado retráctil en vano amplio
 blurb: La malla se pliega como acordeón y casi desaparece. Resuelven vanos amplios y puertas de cristal donde otros mosquiteros no alcanzan.

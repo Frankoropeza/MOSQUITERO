@@ -1,0 +1,57 @@
+---
+import {
+  ALCANCE_PRECIOS_REFERENCIA,
+  ETIQUETAS_PRECIO,
+  NOTA_PRECIOS_REFERENCIA,
+  PRECIOS_REFERENCIA,
+  TAMANO_REFERENCIA,
+  formatearPrecio,
+  type PrecioSlug,
+} from "@config/precios";
+
+interface Props {
+  slugs?: PrecioSlug[];
+  soloPuerta?: boolean;
+  titulo?: string;
+}
+
+const { slugs = Object.keys(PRECIOS_REFERENCIA) as PrecioSlug[], soloPuerta = false, titulo } = Astro.props;
+const filas = slugs.map((slug) => ({ slug, ...PRECIOS_REFERENCIA[slug] })).filter((fila) => !soloPuerta || fila.puerta !== null);
+---
+
+{titulo && <h2 class="precios__h2">{titulo}</h2>}
+<div class="precios__wrap">
+  <table class="precios">
+    <thead>
+      <tr>
+        <th scope="col">Tipo</th>
+        {!soloPuerta && <th scope="col">Ventana</th>}
+        <th scope="col">Puerta</th>
+      </tr>
+    </thead>
+    <tbody>
+      {filas.map((fila) => (
+        <tr>
+          <th scope="row">{ETIQUETAS_PRECIO[fila.slug]}</th>
+          {!soloPuerta && <td>{fila.ventana === null ? "—" : `Desde ${formatearPrecio(fila.ventana)}`}</td>}
+          <td>{fila.puerta === null ? "—" : `Desde ${formatearPrecio(fila.puerta)}`}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="precios__detalle">{TAMANO_REFERENCIA}</p>
+<p class="precios__detalle">{ALCANCE_PRECIOS_REFERENCIA}</p>
+<p class="precios__nota">{NOTA_PRECIOS_REFERENCIA}</p>
+
+<style>
+  .precios__h2 { margin: 0 0 var(--sp-4); font-family: var(--font-heading); font-size: var(--text-2xl); font-weight: var(--weight-semibold); color: var(--c-ink); }
+  .precios__wrap { overflow-x: auto; border: 1px solid var(--c-border); border-radius: var(--radius-lg); background: var(--c-white); }
+  .precios { width: 100%; min-width: 420px; border-collapse: collapse; }
+  .precios th, .precios td { padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--c-border); color: var(--c-ink-2); font-size: var(--text-sm); line-height: var(--leading-normal); text-align: left; }
+  .precios thead th { background: var(--c-surface); color: var(--c-muted); font-family: var(--font-heading); font-size: var(--text-xs); letter-spacing: .04em; text-transform: uppercase; }
+  .precios tbody th { color: var(--c-ink); font-family: var(--font-heading); font-weight: var(--weight-semibold); }
+  .precios tbody tr:last-child th, .precios tbody tr:last-child td { border-bottom: 0; }
+  .precios__detalle, .precios__nota { margin: var(--sp-3) 0 0; color: var(--c-ink-2); font-size: var(--text-sm); line-height: var(--leading-normal); }
+  .precios__nota { color: var(--c-muted); }
+</style>

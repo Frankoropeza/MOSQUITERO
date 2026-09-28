@@ -3,6 +3,9 @@ order: 1
 category: corredizos
 label: Mosquiteros Corredizos
 href: /mosquiteros/corredizos/
+seoDescription: "Mosquitero corredizo de aluminio a medida para ventanas y puertas corredizas. Fabricación e instalación en CDMX y Edomex desde {precio} por ventana."
+seoTitle: "Mosquitero corredizo de aluminio | CDMX y Edomex"
+h1: "Mosquitero corredizo de aluminio"
 image: /images/placeholder.svg
 imageAlt: Mosquitero corredizo de aluminio en ventana corrediza
 blurb: Corren sobre riel junto a tu ventana corrediza, sin obstruir el paso. Marco de aluminio a medida y malla que puedes cambiar cuando se dañe.

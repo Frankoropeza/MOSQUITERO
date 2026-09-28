@@ -3,6 +3,9 @@ order: 4
 category: magneticos
 label: Mosquiteros Magnéticos
 href: /mosquiteros/magneticos/
+seoTitle: "Mosquitero magnético para puerta a medida | CDMX"
+seoDescription: "Mosquitero magnético con imán para puerta a medida, para paso frecuente. Fabricación e instalación en CDMX y Edomex desde {precio} por puerta, según medida."
+h1: "Mosquitero magnético para puerta"
 image: /images/placeholder.svg
 imageAlt: Mosquitero magnético instalado en el marco de una puerta
 blurb: "Cortina de malla con banda de imanes: pasas empujando y se vuelve a sellar solo. Para puertas por las que entras con las manos ocupadas."
@@ -22,7 +25,7 @@ gallery:
     - src: /images/placeholder.svg
       alt: Mosquitero magnético abriéndose al paso de una persona
 body:
-  - El mosquitero magnético es una cortina de malla partida al centro, con una banda de imanes a lo largo de la unión. Pasas empujando con el cuerpo y, detrás de ti, los imanes vuelven a juntar las dos hojas sin que tengas que hacer nada.
+  - El mosquitero magnético es una cortina de malla partida al centro, con una banda de imanes a lo largo de la unión. Pasas empujando con el cuerpo y, detrás de ti, los imanes vuelven a juntar las dos hojas sin que tengas que hacer nada; es un mosquitero con imán pensado para el paso.
   - "Es la solución para accesos por donde entras y sales con las manos ocupadas: la puerta del patio, la de la cocina, la del jardín. No lleva bastidor rígido, así que se instala sobre el marco existente sin obra."
 points:
   - "Se cierra solo: pasas empujando y los imanes vuelven a sellar"

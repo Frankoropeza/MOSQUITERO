@@ -3,6 +3,7 @@ order: 2
 category: abatibles
 label: Mosquiteros Abatibles
 href: /mosquiteros/abatibles/
+seoDescription: "Mosquitero abatible a medida para ventana o puerta, con fabricación e instalación en CDMX y Edomex. Precio de referencia desde {precio}, según medida y malla."
 image: /images/placeholder.svg
 imageAlt: Mosquitero abatible con bisagras en puerta de acceso
 blurb: Se abren como puerta con bisagras y cierre automático. La opción práctica para accesos por donde entras y sales todo el día.

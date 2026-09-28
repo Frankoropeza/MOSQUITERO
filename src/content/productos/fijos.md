@@ -3,6 +3,9 @@ order: 5
 category: fijos
 label: Mosquiteros Fijos
 href: /mosquiteros/fijos/
+seoDescription: "Mosquitero fijo de aluminio a medida para ventanas que no necesitas abrir: sin mecanismo que falle. Fabricación e instalación en CDMX y Edomex desde {precio}."
+seoTitle: "Mosquitero fijo de aluminio | CDMX y Edomex"
+h1: "Mosquitero fijo de aluminio"
 image: /images/placeholder.svg
 imageAlt: Mosquitero fijo montado en el marco de una ventana
 blurb: "Bastidor con la malla tensada que se monta y se queda. Sin mecanismo que falle: la opción más económica para ventanas de poco uso."

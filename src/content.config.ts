@@ -110,6 +110,9 @@ const productos = defineCollection({
       category: z.enum(PRODUCT_CATEGORIES),
       label: z.string(),
       href: z.string(),
+      seoTitle: z.string().max(60).optional(),
+      seoDescription: z.string().min(140).max(160).optional(),
+      h1: z.string().optional(),
       image: imagePath,
       imageAlt: z.string(),
       badge: z.string().optional(),
@@ -175,6 +178,7 @@ const articulos = defineCollection({
       faqs: faqSchema,
       featured: z.boolean().default(false),
       draft: z.boolean().default(false),
+      showReferencePrices: z.boolean().optional(),
       ...seoFields,
     })
     .strict(),

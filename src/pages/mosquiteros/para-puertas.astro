@@ -7,7 +7,9 @@ import SectionHeading from "@components/SectionHeading.astro";
 import CategoryCard from "@components/CategoryCard.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
+import TablaPreciosReferencia from "@components/TablaPreciosReferencia.astro";
 import { WA_MESSAGES, waUrl } from "@config/site";
+import { PRECIOS_REFERENCIA, formatearPrecio } from "@config/precios";
 
 const doorSlugs = ["enrollables", "corredizos", "abatibles", "plisados", "magneticos"];
 const productOrder = new Map(doorSlugs.map((slug, index) => [slug, index]));
@@ -23,8 +25,8 @@ const doorCopy: Record<string, string> = {
   magneticos: "Para patio o cocina cuando pasas seguido; se atraviesa y los imanes vuelven a juntar la abertura.",
 };
 
-const title = "Mosquiteros para puertas a medida | CDMX y Edomex";
-const description = "Mosquiteros para puertas a medida para accesos, patios y corredizas. Elige el tipo según tu puerta y pide tu cotización por WhatsApp hoy mismo.";
+const title = "Mosquitero para puerta a medida | precios CDMX y Edomex";
+const description = `Mosquitero para puerta a medida y puerta mosquitera de aluminio, con fabricación e instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(PRECIOS_REFERENCIA.magneticos.puerta)}.`;
 
 const menuSecciones = [
   { label: "Todos los tipos", href: "/mosquiteros/", sub: "Catálogo completo" },
@@ -51,6 +53,7 @@ const decision = [
 ];
 
 const faqs = [
+  { question: "¿Cuánto cuesta un mosquitero para puerta?", answer: `Los precios de referencia para puerta van desde ${formatearPrecio(PRECIOS_REFERENCIA.magneticos.puerta)} para un magnético hasta ${formatearPrecio(PRECIOS_REFERENCIA.plisados.puerta)} para un plisado; el tipo, la medida, la malla y el acceso definen la cotización final.` },
   { question: "¿Qué debo revisar en mi puerta antes de pedir un mosquitero?", answer: "Revisa cómo abre tu puerta, si ya tiene riel y qué espacio queda alrededor del vano. Una puerta con bisagras pide un abatible si la hoja puede girar; una corrediza aprovecha su riel. Con esos detalles podemos orientar la opción antes de cotizar." },
   { question: "¿Qué mosquitero deja libre una puerta amplia cuando no se usa?", answer: "El plisado se recoge contra el marco y la malla queda plegada a un lado. Está pensado para puertas de cristal, ventanales y accesos amplios donde quieres recuperar la abertura al terminar de usarlo." },
   { question: "¿Cuál conviene para entrar a la cocina o al patio con las manos ocupadas?", answer: "El magnético está hecho para atravesarse: empujas las hojas de malla y los imanes vuelven a unirlas detrás de ti. Es una alternativa para puertas de paso frecuente, como la salida a la cocina, el patio o el tendedero." },
@@ -123,6 +126,20 @@ const faqs = [
           />
         ))}
       </div>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container lectura">
+      <SectionHeading
+        eyebrow="Precios de referencia"
+        title="Precios de mosquiteros para puerta"
+        body={[
+          "Una puerta con mosquitero se cotiza según el tipo de apertura y la medida del vano. Esta tabla orienta el punto de partida para una puerta mosquitera de aluminio a medida.",
+          "Compara sólo como referencia: la cotización final considera la malla, el acceso y las condiciones reales de instalación.",
+        ]}
+      />
+      <TablaPreciosReferencia soloPuerta />
     </div>
   </section>
 

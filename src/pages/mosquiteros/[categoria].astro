@@ -59,6 +59,8 @@ import SectionHeading from "@components/SectionHeading.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import SectionMenu from "@components/SectionMenu.astro";
+import TablaPreciosReferencia from "@components/TablaPreciosReferencia.astro";
+import { PRECIOS_REFERENCIA, formatearPrecio } from "@config/precios";
 import {
   PRODUCT_CATEGORIES,
   SERVICES,
@@ -116,11 +118,23 @@ const { cat, ficha } = Astro.props;
 const afondo = ficha;
 const esAccesorios = cat.slug === "accesorios";
 const tieneVersionParaPuerta = ["enrollables", "corredizos", "abatibles", "plisados", "magneticos"].includes(cat.slug);
-const h1 = esAccesorios ? "Accesorios y refacciones" : "Mosquiteros " + cat.label.toLowerCase();
+const h1 = ficha.h1 ?? (esAccesorios ? "Accesorios y refacciones" : "Mosquiteros " + cat.label.toLowerCase());
 const title = esAccesorios
   ? "Accesorios y refacciones para mosquiteros | CDMX"
-  : "Mosquiteros " + cat.label.toLowerCase() + " a medida | CDMX y Edomex";
-const description = ficha.comoFunciona[0].slice(0, 150).trim() + "…";
+  : ficha.seoTitle ?? ("Mosquiteros " + cat.label.toLowerCase() + " a medida | CDMX y Edomex");
+// seoDescription admite el token {precio} → «$1,290» desde precios.ts (fuente única).
+const precioTexto = (() => {
+  const p = PRECIOS_REFERENCIA[cat.slug as keyof typeof PRECIOS_REFERENCIA];
+  const v = p ? (p.ventana ?? p.puerta) : null;
+  return v === null || v === undefined ? "" : formatearPrecio(v);
+})();
+const description = ficha.seoDescription
+  ? ficha.seoDescription.replace("{precio}", precioTexto)
+  : ficha.comoFunciona[0].slice(0, 150).trim() + "…";
+// Hero: conserva el patrón título + acento; con h1 propio, el acento es su última palabra.
+const heroTitle = ficha.h1 ? ficha.h1.slice(0, ficha.h1.lastIndexOf(" ")) : (esAccesorios ? "Accesorios y" : "Mosquiteros");
+const heroAccent = ficha.h1 ? ficha.h1.slice(ficha.h1.lastIndexOf(" ") + 1) : (esAccesorios ? "refacciones" : cat.label.toLowerCase());
+const precio = !esAccesorios ? PRECIOS_REFERENCIA[cat.slug as Exclude<keyof typeof PRECIOS_REFERENCIA, "cambioDeMalla">] : undefined;
 const heroSubtitle = ficha.blurb;
 const articulos = await getCollection("articulos", ({ data }) => data.draft !== true);
 const guias = ficha.guias
@@ -179,8 +193,8 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
       SIN `ctas`: regla canónica «el hero presenta, la franja convierte» — el CTA
       va en el SectionMenu de abajo, igual que en la home. */}
   <Hero
-    title={esAccesorios ? "Accesorios y" : "Mosquiteros"}
-    accent={esAccesorios ? "refacciones" : cat.label.toLowerCase()}
+    title={heroTitle}
+    accent={heroAccent}
     subtitle={heroSubtitle}
     descRight={[afondo.body[0], afondo.body[1] ?? afondo.body[0]]}
   />
@@ -276,6 +290,12 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
               importa es el tuyo. Mándanos las medidas y te cotizamos por pieza.
             </p>
           </section>
+
+          {precio && (
+            <section class="bloque">
+              <TablaPreciosReferencia slugs={[cat.slug as Exclude<keyof typeof PRECIOS_REFERENCIA, "cambioDeMalla">]} titulo="Precio de referencia" />
+            </section>
+          )}
 
           {/* ── Cómo se pide ── */}
           <section class="bloque" id="pedir">

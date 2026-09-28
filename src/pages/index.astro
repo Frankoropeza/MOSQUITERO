@@ -25,7 +25,11 @@ import CategoryDetail from "@components/CategoryDetail.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
-import { KEYWORDS, NAV, SERVICES, WA_MESSAGES, waUrl } from "@config/site";
+import { NAV, SERVICES, WA_MESSAGES, waUrl } from "@config/site";
+import { PRECIOS_REFERENCIA, formatearPrecio } from "@config/precios";
+
+const title = "Mosquiteros para ventanas y puertas a medida | CDMX";
+const description = `Mosquitero para ventana y puerta a medida, en aluminio y con instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)} por pieza. Cotiza por WhatsApp.`;
 
 const showcaseHome = (await getCollection("productos"))
   .sort((a, b) => a.data.order - b.data.order)
@@ -157,6 +161,10 @@ const proceso: { paso: string; titulo: string; detalle: string; img: string; alt
 // limpia: por eso las respuestas deben leerse bien también SIN las negritas.
 const faqs: { question: string; answer: string }[] = [
   {
+    question: "¿Cuánto cuesta un mosquitero para ventana?",
+    answer: `Un mosquitero para ventana a medida, fabricado e instalado, parte de ${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)} en un fijo y llega a ${formatearPrecio(PRECIOS_REFERENCIA.plisados.ventana)} en un plisado, para una ventana de hasta 1.00 × 1.20 m. Si sólo hay que cambiar la malla, desde ${formatearPrecio(PRECIOS_REFERENCIA.cambioDeMalla.ventana)} por hoja. Revisa <a href="/blog/de-que-depende-el-precio-de-un-mosquitero/">de qué depende el precio de un mosquitero</a> antes de comparar tu caso.`,
+  },
+  {
     question: "¿Cómo mido el vano de mi ventana para pedir un mosquitero?",
     answer:
       "Con un flexómetro metálico, mide por dentro del marco: el <strong>ancho</strong> en tres alturas (arriba, en medio y abajo) y el <strong>alto</strong> en tres puntos (izquierda, centro y derecha). De cada terna, quédate con la <strong>medida menor</strong>. Los vanos casi nunca son perfectamente rectangulares, y una pieza fabricada sobre la medida mayor simplemente no entra. Anota los números en centímetros y mándanoslos con una foto de la ventana completa: con eso confirmamos el tipo y te decimos si el vano necesita algún ajuste antes de fabricar.",
@@ -209,12 +217,12 @@ const faqs: { question: string; answer: string }[] = [
 {/* schemaData.faqs → el JSON-LD FAQPage lo emite buildSchema() UNA sola vez
     (lib/seo.ts). Por eso <FAQAccordion> NO lleva `emitSchema` (anti-patrón B3:
     doble FAQPage). */}
-<PageLayout keywords={KEYWORDS} pageType="home" schemaData={{ faqs }}>
+<PageLayout title={title} description={description} pageType="home" schemaData={{ faqs }}>
   {/* ═══ 1) HERO — H1 único con la propuesta + kw1. TODO: validar copy con el cliente. ═══ */}
   <Hero
     title="Mosquiteros a medida para tus ventanas y"
     accent="puertas"
-    subtitle="Los fabricamos e instalamos a la medida exacta de tu vano. Mándanos tus medidas por WhatsApp y te cotizamos por pieza."
+    subtitle="Fabricamos tu mosquitero para ventana o puerta a la medida exacta del vano, con marco de aluminio en los tipos que lo llevan. Mándanos tus medidas por WhatsApp y te cotizamos por pieza."
     descRight={[
       "Cada ventana es distinta. Por eso no vendemos medidas de línea: tomamos el ancho y el alto de tu vano y armamos el mosquitero para que cierre completo, sin huecos por donde se cuele un mosquito. Trabajamos enrollables, corredizos, abatibles, plisados, magnéticos y fijos — te decimos cuál corresponde a tu tipo de ventana y para qué uso.",
       "Si ya tienes mosquiteros y solo se rompió la malla, también los reparamos: cambio de tela, marcos y herrajes. Escríbenos con una foto y las medidas, y te decimos qué conviene más en tu caso.",
