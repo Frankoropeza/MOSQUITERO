@@ -116,11 +116,10 @@ User-agent: CCBot
 Allow: /
 
 # ─── Bots/scrapers bloqueados ───
+# AhrefsBot / AhrefsSiteAudit NO se bloquean: Ahrefs es herramienta contratada
+#   del portafolio; caen en las reglas globales (User-agent: *).
 # Bytespider (ByteDance): histórico de scraping abusivo.
 User-agent: Bytespider
-Disallow: /
-
-User-agent: AhrefsBot
 Disallow: /
 
 User-agent: SemrushBot
