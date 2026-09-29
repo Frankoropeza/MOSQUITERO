@@ -320,10 +320,12 @@ const waLink = waUrl(waMessage);
   /* ── Retícula del cuerpo ──
      Móvil: 1 columna (el sidebar cae bajo el texto).
      Desktop: texto + 20rem. minmax(0,1fr) y no 1fr: sin ese min 0, un bloque
-     ancho (tabla, <pre>) infla la columna y desborda el grid. */
+     ancho (tabla, <pre>) infla la columna y desborda el grid. Aplica también en
+     móvil: con 1fr las tablas (display:block + nowrap) empujaban la página
+     hasta 366 px de scroll horizontal a 390 px. */
   .post__body {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-8);
     padding-bottom: var(--sp-8);
   }

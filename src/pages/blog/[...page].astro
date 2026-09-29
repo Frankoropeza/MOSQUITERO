@@ -29,6 +29,7 @@ import BlogCard from "@components/BlogCard.astro";
 import BlogSidebar from "@components/BlogSidebar.astro";
 import BlogCategoryNav from "@components/BlogCategoryNav.astro";
 import BlogReadingPath from "@components/BlogReadingPath.astro";
+import BlogPager from "@components/BlogPager.astro";
 import CTABanner from "@components/CTABanner.astro";
 import { SITE, WA_MESSAGES, blogCategoryLabel, waUrl } from "@config/site";
 import { BLOG_CATEGORIES } from "@config/site";
@@ -37,8 +38,8 @@ import { minutosLectura } from "@lib/lectura";
 export const getStaticPaths = (async ({ paginate }) => {
   // draft !== true → un artículo sin el campo también se publica (default false).
   //
-  // ORDEN: pubDate desc y, A IGUALDAD DE FECHA, `featured` primero y luego
-  // título alfabético. Los dos desempates existen por una razón concreta:
+  // ORDEN: `featured` primero, pubDate desc y luego título alfabético. Los dos
+  // desempates existen por una razón concreta:
   //   • `featured` estaba declarado en el schema y NADIE lo leía. Un campo que
   //     el frontmatter pide y el sitio ignora es una mentira del contrato: el
   //     editor lo marca, no pasa nada, y no hay error que se lo diga.
@@ -47,8 +48,8 @@ export const getStaticPaths = (async ({ paginate }) => {
   //     destacado de /blog cambie entre builds sin que nadie toque el contenido.
   const posts = (await getCollection("articulos", ({ data }) => data.draft !== true)).sort(
     (a, b) =>
-      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() ||
       Number(b.data.featured) - Number(a.data.featured) ||
+      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() ||
       a.data.title.localeCompare(b.data.title, "es"),
   );
 
@@ -218,23 +219,7 @@ const breadcrumbs = esPrimera
             <p class="blog__empty">Todavía no hay artículos publicados. Vuelve pronto.</p>
           )}
 
-          {/* Paginación: solo si hay más de una página. rel=prev/next ayuda al
-              rastreador a entender la serie. */}
-          {page.lastPage > 1 && (
-            <nav class="pager" aria-label="Paginación del blog">
-              {page.url.prev ? (
-                <a class="pager__btn" href={page.url.prev} rel="prev">← Anteriores</a>
-              ) : (
-                <span class="pager__btn is-off" aria-hidden="true">← Anteriores</span>
-              )}
-              <span class="pager__count">Página {page.currentPage} de {page.lastPage}</span>
-              {page.url.next ? (
-                <a class="pager__btn" href={page.url.next} rel="next">Siguientes →</a>
-              ) : (
-                <span class="pager__btn is-off" aria-hidden="true">Siguientes →</span>
-              )}
-            </nav>
-          )}
+          <BlogPager currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog/" prevUrl={page.url.prev} nextUrl={page.url.next} articleCount={page.total} />
         </div>
 
         <BlogSidebar
@@ -341,45 +326,6 @@ const breadcrumbs = esPrimera
     border-radius: var(--radius-lg);
   }
 
-  .pager {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--sp-3);
-    margin-top: var(--sp-3);
-    padding-top: var(--sp-5);
-    border-top: 1px solid var(--c-border);
-  }
-  .pager__btn {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: var(--sp-2) var(--sp-4);
-    border: 1px solid var(--c-border);
-    border-radius: var(--radius-md);
-    background: var(--c-white);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
-    color: var(--c-ink);
-    text-decoration: none;
-    transition: color var(--transition-btn), border-color var(--transition-btn);
-  }
-  .pager__btn:hover {
-    border-color: var(--c-primary);
-    color: var(--c-primary);
-  }
-  .pager__btn:focus-visible {
-    outline: 2px solid var(--c-primary);
-    outline-offset: 2px;
-  }
-  .pager__btn.is-off {
-    color: var(--c-border);
-    border-style: dashed;
-  }
-  .pager__count {
-    font-size: var(--text-sm);
-    color: var(--c-muted);
-  }
   @media (min-width: 768px) {
     .section { padding: var(--sp-10) 0; }
   }

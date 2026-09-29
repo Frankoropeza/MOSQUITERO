@@ -1,61 +1,66 @@
 ---
 // ============================================================================
-// blog/tag/[tag].astro — ARCHIVO POR TAG (L3). Ruta: /blog/tag/<tag>
+// blog/categoria/[categoria].astro — ARCHIVO POR CATEGORÍA (L3). /blog/categoria/<slug>
 // ----------------------------------------------------------------------------
-// Cierra el otro enlace que el artículo ya exportaba y que no tenía destino.
+// Es la página que ya enlazaban el chip de categoría del artículo y el sidebar.
+// Antes de esta ruta, esos enlaces eran 404 — es decir, cada artículo publicado
+// exportaba un enlace roto al rastreador.
 //
-// TAG ≠ CATEGORÍA (y por qué se tratan distinto):
-//   • La categoría es un enum CERRADO (Zod la valida) → es taxonomía: pocas,
-//     estables, indexables, con página propia que merece posicionar.
-//   • El tag es string libre (máx. 10 por artículo) → es etiqueta: muchas,
-//     efímeras, se solapan entre sí. Cada tag genera una página con casi los
-//     mismos artículos que la categoría: contenido duplicado a ojos de Google.
+// SOLO SE GENERAN LAS CATEGORÍAS CON ARTÍCULOS. El enum de content.config.ts
+// tiene 5 (guias, mantenimiento, tipos-de-malla, novedades, general); si tres
+// están vacías, generarlas produce tres páginas en blanco que Google clasifica
+// como thin content y que arrastran la calidad percibida del dominio. Cuando se
+// publique el primer artículo de esa categoría, la ruta aparece sola.
 //
-// DECISIÓN DE FRANK (2026-09-28): todo el sitio es index,follow, incluidos los
-// tags. El riesgo de contenido fino se mitiga con título y descripción únicos,
-// más el listado explícito de artículos que convierte cada archivo en una
-// CollectionPage útil, en vez de una taxonomía vacía o duplicada sin contexto.
+// Cada categoría se pagina a partir de 9 artículos para que el archivo conserve
+// una lectura escaneable conforme crezca la colección.
 // ============================================================================
-import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
+import type { GetStaticPaths, Page } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import BlogCard from "@components/BlogCard.astro";
 import BlogSidebar from "@components/BlogSidebar.astro";
 import BlogCategoryNav from "@components/BlogCategoryNav.astro";
+import BlogPager from "@components/BlogPager.astro";
 import CTABanner from "@components/CTABanner.astro";
-import { WA_MESSAGES, blogCategoryLabel, waUrl } from "@config/site";
+import { BLOG_CATEGORIES, WA_MESSAGES, waUrl } from "@config/site";
 import { minutosLectura } from "@lib/lectura";
 
-export const getStaticPaths = (async () => {
-  // Mismo orden que /blog (ver la nota en blog/[...page].astro).
+export const getStaticPaths = (async ({ paginate }) => {
+  // Mismo orden que /blog: destacado, fecha descendente y título alfabético.
   const posts = (await getCollection("articulos", ({ data }) => data.draft !== true)).sort(
     (a, b) =>
-      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() ||
       Number(b.data.featured) - Number(a.data.featured) ||
+      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() ||
       a.data.title.localeCompare(b.data.title, "es"),
   );
 
-  // Set: un tag repetido en 3 artículos genera UNA ruta, no tres. Sin esto,
-  // getStaticPaths devuelve params duplicados y Astro falla el build.
-  const tags = new Set(posts.flatMap((p) => p.data.tags ?? []));
-
-  return [...tags].map((tag) => ({
-    params: { tag },
-    props: { tag, posts: posts.filter((p) => (p.data.tags ?? []).includes(tag)) },
-  }));
+  return BLOG_CATEGORIES.flatMap((cat) => {
+    const categoryPosts = posts.filter((post) => post.data.category === cat.slug);
+    return categoryPosts.length === 0 ? [] : paginate(categoryPosts, {
+      params: { categoria: cat.slug },
+      props: { cat },
+      pageSize: 9,
+    });
+  });
 }) satisfies GetStaticPaths;
 
-const { tag, posts } = Astro.props;
+interface Props { cat: (typeof BLOG_CATEGORIES)[number]; page: Page<CollectionEntry<"articulos">>; }
+const { cat, page } = Astro.props;
+const posts = page.data;
+const esPrimera = page.currentPage === 1;
 
-const title = `Artículos sobre ${tag} | blog de mosquiteros`;
-const description = `${posts.length === 1 ? "Artículo" : "Artículos"} del blog de Mosquitero.mx etiquetados con "${tag}": guías, tipos de malla y mantenimiento de mosquiteros a medida.`;
+// ── Metas ──
+// El title abre con la keyword de la categoría, sin marca (regla de metas).
+const title = esPrimera ? `${cat.label} de mosquiteros | blog de Mosquitero.mx` : `${cat.label} de mosquiteros — página ${page.currentPage} | blog de Mosquitero.mx`;
+const description = esPrimera ? `${cat.desc} ${page.total === 1 ? "1 artículo" : `${page.total} artículos`} sobre mosquiteros a medida, fabricación e instalación.` : `Página ${page.currentPage} de ${page.lastPage}: ${cat.desc}`;
 
 const schemaData = {
   list: {
-    name: `#${tag} — blog de Mosquitero.mx`,
-    description,
-    path: `/blog/tag/${tag}/`,
+    name: `${cat.label} — blog de Mosquitero.mx`,
+    description: cat.desc,
+    path: page.url.current,
     items: posts.map((post) => ({
       name: post.data.title,
       path: `/blog/${post.id}/`,
@@ -65,7 +70,7 @@ const schemaData = {
   },
 };
 
-const breadcrumbs = [{ label: "Blog", href: "/blog/" }, { label: `#${tag}` }];
+const breadcrumbs = esPrimera ? [{ label: "Blog", href: "/blog/" }, { label: cat.label }] : [{ label: "Blog", href: "/blog/" }, { label: cat.label, href: `/blog/categoria/${cat.slug}/` }, { label: `Página ${page.currentPage}` }];
 ---
 
 <PageLayout
@@ -81,19 +86,19 @@ const breadcrumbs = [{ label: "Blog", href: "/blog/" }, { label: `#${tag}` }];
           del documento (ver la nota del contrato en SectionHeading.astro). */}
       <SectionHeading
         as="h1"
-        eyebrow="Tema"
-        title={`#${tag}`}
+        eyebrow="Categoría"
+        title={cat.label}
         body={[
-          `Todo lo que hemos escrito sobre ${tag}. Los temas cruzan las categorías del blog: un mismo artículo puede resolver una duda de medición y otra de mantenimiento.`,
-          "Si buscas algo más concreto, el índice del blog está ordenado por categoría — o escríbenos y te decimos directamente qué aplica a tu ventana.",
+          cat.desc,
+          "Si después de leer sigues con la duda, mándanos una foto de tu ventana por WhatsApp: con verla sabemos qué corresponde y te evitamos comprar la pieza equivocada.",
         ]}
       />
 
-      <BlogCategoryNav />
+      <BlogCategoryNav current={cat.slug} />
 
       <div class="blog">
         <div class="blog__main">
-          <h2 class="blog__title">{posts.length === 1 ? "1 artículo" : `${posts.length} artículos`}</h2>
+          <h2 class="blog__title">{posts.length === 1 ? "1 artículo" : `${posts.length} artículos`} · página {page.currentPage} de {page.lastPage}</h2>
           <div class="blog__list">
             {posts.map((post, i) => (
               <BlogCard
@@ -103,7 +108,7 @@ const breadcrumbs = [{ label: "Blog", href: "/blog/" }, { label: `#${tag}` }];
                 image={post.data.heroImage}
                 imageAlt={post.data.title}
                 category={post.data.category}
-                categoryLabel={blogCategoryLabel(post.data.category)}
+                categoryLabel={cat.label}
                 pubDate={post.data.pubDate}
                 variant="row"
                 minutos={minutosLectura(post.body)}
@@ -112,13 +117,15 @@ const breadcrumbs = [{ label: "Blog", href: "/blog/" }, { label: `#${tag}` }];
             ))}
           </div>
 
+          <BlogPager currentPage={page.currentPage} lastPage={page.lastPage} baseUrl={`/blog/categoria/${cat.slug}/`} prevUrl={page.url.prev} nextUrl={page.url.next} articleCount={page.total} />
+
           <p class="blog__back">
-            <a href="/blog/">← Ver todos los artículos</a>
+            <a href="/blog/">← Todos los artículos</a>
           </p>
         </div>
 
         <BlogSidebar
-          currentTags={[tag]}
+          currentCategory={cat.slug}
           ctaHeading="¿Prefieres preguntarnos?"
           waMessage={WA_MESSAGES.blog}
         />

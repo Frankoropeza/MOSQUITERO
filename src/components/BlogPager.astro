@@ -1,0 +1,70 @@
+---
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  baseUrl: string;
+  prevUrl?: string;
+  nextUrl?: string;
+  articleCount: number;
+}
+
+const { currentPage, lastPage, baseUrl, prevUrl, nextUrl, articleCount } = Astro.props;
+
+if (!baseUrl.endsWith("/")) throw new Error("BlogPager: baseUrl debe terminar en '/'.");
+
+const pageUrl = (page: number) => page === 1 ? baseUrl : `${baseUrl}${page}/`;
+const visiblePages = [...new Set([1, currentPage - 1, currentPage, currentPage + 1, lastPage])]
+  .filter((page) => page >= 1 && page <= lastPage)
+  .sort((a, b) => a - b);
+---
+
+{lastPage > 1 && (
+  <nav class="bp" aria-label="Paginación">
+    <div class="bp__controls">
+      {prevUrl ? (
+        <a class="bp__control" href={prevUrl} rel="prev" aria-label="Página anterior"><span aria-hidden="true">←</span><span class="bp__word"> Anteriores</span></a>
+      ) : (
+        <span class="bp__control is-off" aria-hidden="true">←<span class="bp__word"> Anteriores</span></span>
+      )}
+
+      <ol class="bp__pages" aria-label="Páginas">
+        {visiblePages.map((page, index) => (
+          <>
+            {index > 0 && page - visiblePages[index - 1] > 1 && <li class="bp__ellipsis" aria-hidden="true">…</li>}
+            <li>
+              {page === currentPage ? (
+                <span class="bp__page is-current" aria-current="page">{page}</span>
+              ) : (
+                <a class="bp__page" href={pageUrl(page)}>{page}</a>
+              )}
+            </li>
+          </>
+        ))}
+      </ol>
+
+      {nextUrl ? (
+        <a class="bp__control" href={nextUrl} rel="next" aria-label="Página siguiente"><span class="bp__word">Siguientes </span><span aria-hidden="true">→</span></a>
+      ) : (
+        <span class="bp__control is-off" aria-hidden="true"><span class="bp__word">Siguientes </span>→</span>
+      )}
+    </div>
+    <p class="bp__summary">{`Página ${currentPage} de ${lastPage} · ${articleCount} ${articleCount === 1 ? "artículo" : "artículos"}`}</p>
+  </nav>
+)}
+
+<style>
+  .bp { display: grid; gap: var(--sp-3); margin-top: var(--sp-3); padding-top: var(--sp-5); border-top: 1px solid var(--c-border); }
+  .bp__controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+  .bp__pages { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--sp-1); margin: 0; padding: 0; list-style: none; }
+  .bp__control, .bp__page { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-border); color: var(--c-ink); font-size: var(--text-sm); font-weight: var(--weight-semibold); line-height: var(--leading-tight); text-decoration: none; transition: color var(--transition-btn), border-color var(--transition-btn), background-color var(--transition-btn); }
+  .bp__control:hover, .bp__page:hover { border-color: var(--c-primary); color: var(--c-primary); }
+  .bp__control:focus-visible, .bp__page:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+  .bp__page.is-current { border-color: var(--c-ink); background: var(--c-ink); color: var(--c-on-dark); }
+  .bp__control.is-off { color: var(--c-muted); border-style: dashed; }
+  .bp__ellipsis { display: grid; place-items: center; min-width: 24px; min-height: 44px; color: var(--c-muted); }
+  .bp__summary { margin: 0; color: var(--c-muted); font-size: var(--text-xs); text-align: center; }
+  @media (max-width: 480px) { .bp__word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; } .bp__controls { justify-content: center; flex-wrap: nowrap; gap: var(--sp-1); } .bp__control, .bp__page { min-width: 40px; padding-inline: var(--sp-2); } }
+  /* ≤ 480 px: 7 controles × 40 px caben en una línea a 390 px (a 44 px la flecha
+     «siguiente» caía sola a un segundo renglón). 40 px sigue sobre el mínimo AA
+     de 24 px (WCAG 2.5.8). */
+</style>
