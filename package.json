@@ -9,12 +9,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "postbuild": "node scripts/build-id.mjs && node scripts/check-links.mjs",
+    "postbuild": "node scripts/build-id.mjs && node scripts/check-links.mjs && node scripts/check-anchors.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
     "check:links": "node scripts/check-links.mjs",
-    "check:voz": "node scripts/check-voz.mjs"
+    "check:voz": "node scripts/check-voz.mjs",
+    "check:anchors": "node scripts/check-anchors.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",

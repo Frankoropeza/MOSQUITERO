@@ -10,6 +10,7 @@ import QuoteForm from "@components/QuoteForm.astro";
 import TablaPreciosReferencia from "@components/TablaPreciosReferencia.astro";
 import { WA_MESSAGES, waUrl } from "@config/site";
 import { PRECIOS_REFERENCIA, formatearPrecio } from "@config/precios";
+import { anchorText } from '@config/anchors';
 
 const doorSlugs = ["enrollables", "corredizos", "abatibles", "plisados", "magneticos"];
 const productOrder = new Map(doorSlugs.map((slug, index) => [slug, index]));
@@ -41,7 +42,7 @@ const menuGuias = [
   { label: "Qué tipo elegir", href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Compara tus opciones" },
   { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Decide qué conviene" },
 ];
-const menuGuiasCta = { label: "Ver todas las guías", href: "/blog/", sub: "Guías y mantenimiento", icon: "arrow" as const };
+const menuGuiasCta = { label: anchorText('/blog/'), href: "/blog/", sub: "Guías y mantenimiento", icon: "arrow" as const };
 
 const decision = [
   { puerta: "Puerta de acceso con bisagras", tipo: "Abatible", href: "/mosquiteros/abatibles/", porque: "Abre como puerta y tiene cierre automático para el paso frecuente.", no: "Si no hay espacio para que la hoja gire." },

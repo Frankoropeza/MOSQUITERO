@@ -38,6 +38,7 @@ import SectionMenu from "@components/SectionMenu.astro";
 import { SERVICES, PRODUCT_CATEGORIES, COVERAGE_STATES, CONTACT, WA_MESSAGES, waUrl, telUrl, servicioHref, zonaHref } from "@config/site";
 import { navIcon } from "@config/nav-icons";
 import "../../styles/ficha.css";
+import { anchorText, PRIORIDAD_ENLACES } from '@config/anchors';
 
 export const getStaticPaths = (async () => {
   const servicios = (await getCollection("servicios")).sort((a, b) => a.data.order - b.data.order);
@@ -296,7 +297,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Cuén
                   ))}
                   <li>
                     <a href="/blog/" class="enlace enlace--all">
-                      Ver todas las guías
+                      {anchorText('/blog/')}
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                   </li>
@@ -309,17 +310,20 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Cuén
             <nav class="widget" aria-labelledby="tipos-h">
               <h2 class="widget__h2 widget__h2--label" id="tipos-h">Para qué mosquitero</h2>
               <ul class="enlaces">
-                {PRODUCT_CATEGORIES.slice(0, 4).map((c) => (
+                {PRIORIDAD_ENLACES.slice(0, 4).map((href) => {
+                  const c = PRODUCT_CATEGORIES.find((item) => item.href === href);
+                  return (
                   <li>
-                    <a href={c.href} class="enlace">
-                      <span class="enlace__icon" aria-hidden="true"><Fragment set:html={navIcon(c.icon)} /></span>
-                      <span class="enlace__txt">{c.label}</span>
+                    <a href={href} class="enlace">
+                      {c && <span class="enlace__icon" aria-hidden="true"><Fragment set:html={navIcon(c.icon)} /></span>}
+                      <span class="enlace__txt">{anchorText(href)}</span>
                     </a>
                   </li>
-                ))}
+                  );
+                })}
                 <li>
                   <a href="/mosquiteros/" class="enlace enlace--all">
-                    Ver todos los tipos
+                    {anchorText('/mosquiteros/')}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </a>
                 </li>
@@ -369,7 +373,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Cuén
           ))}
         </ul>
         <p class="otros-l4__all">
-          <a href="/servicios/">Ver todos los servicios</a> ·
+          <a href="/servicios/">{anchorText('/servicios/')}</a> ·
           Trabajamos en {COVERAGE_STATES.map((z, i) => (
             <>
               {i > 0 && (i === COVERAGE_STATES.length - 1 ? " y " : ", ")}

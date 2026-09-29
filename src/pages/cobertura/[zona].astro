@@ -37,7 +37,8 @@ import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import QuoteForm from "@components/QuoteForm.astro";
-import { COVERAGE_STATES, SERVICES, CONTACT, WA_MESSAGES, waUrl } from "@config/site";
+import { COVERAGE_STATES, SERVICES, CONTACT, WA_MESSAGES, waUrl, servicioHref } from "@config/site";
+import { anchorText } from '@config/anchors';
 
 export const getStaticPaths = (async () => {
   const zonas = (await getCollection("zonas")).sort((a, b) => a.data.order - b.data.order);
@@ -91,7 +92,7 @@ const esOperativo = zona.type === "operativo";
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </span>
                 <span class="servicio__body">
-                  <strong class="servicio__label">{s.label}</strong>
+                  <a class="servicio__label" href={servicioHref(s.id)}>{anchorText(servicioHref(s.id))}</a>
                   <span class="servicio__desc">{s.desc}</span>
                 </span>
               </li>
@@ -125,7 +126,8 @@ const esOperativo = zona.type === "operativo";
           {COVERAGE_STATES.filter((z) => z.slug !== zona.slug).map((z) => (
             <li><a href={`/cobertura/${z.slug}/`} class="otras__link">Mosquiteros en {z.label}</a></li>
           ))}
-          <li><a href="/cobertura/" class="otras__link otras__link--all">Ver toda la cobertura</a></li>
+          <li><a href="/mosquiteros/para-puertas/" class="otras__link">{anchorText('/mosquiteros/para-puertas/')}</a></li>
+          <li><a href="/cobertura/" class="otras__link otras__link--all">{anchorText('/cobertura/')}</a></li>
         </ul>
       </nav>
     </div>

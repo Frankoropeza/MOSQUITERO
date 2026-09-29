@@ -28,6 +28,7 @@
 
 import { getCollection } from 'astro:content';
 import { BLOG_CATEGORIES, PRODUCT_CATEGORIES, WA_MESSAGES, waUrl } from '@config/site';
+import { anchorText, PRIORIDAD_ENLACES } from '@config/anchors';
 import { navIcon } from '@config/nav-icons';
 
 interface Props {
@@ -80,7 +81,9 @@ const tags = [...tagCount.entries()]
   .map(([tag]) => tag);
 
 // Cross-sell: 4 categorías de producto. El puente blog → catálogo.
-const catalogo = PRODUCT_CATEGORIES.slice(0, 4);
+const catalogo = PRIORIDAD_ENLACES.slice(0, 4)
+  .map((href) => PRODUCT_CATEGORIES.find((c) => c.href === href))
+  .filter((c): c is (typeof PRODUCT_CATEGORIES)[number] => c !== undefined);
 
 const waLink = waUrl(waMessage);
 const fmtCorta = (d: Date) => d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
@@ -177,7 +180,7 @@ const fmtCorta = (d: Date) => d.toLocaleDateString('es-MX', { day: 'numeric', mo
         <li>
           <a class="bsb__link-icon" href={c.href}>
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={navIcon(c.icon)} />
-            {c.label}
+            {anchorText(c.href)}
           </a>
         </li>
       ))}

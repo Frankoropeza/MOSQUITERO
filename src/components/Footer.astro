@@ -2,6 +2,7 @@
 // Footer.astro — Footer profesional de 4 columnas con contacto enriquecido, sucursales, banda de certificaciones y bottom bar. ORIGEN: PROYECTORED/src/components/global/Footer.astro (el más completo: BRANCHES, schedule, badges de cobertura, todo desde config).
 // 100% data-driven desde config/site (SITE, CONTACT, BRANCHES?, PRODUCT_CATEGORIES, SERVICES, SECTORS, COVERAGE_STATES, waUrl, WA_MESSAGES). Pasa `certifications` por props (varían por negocio).
 import { SITE, CONTACT, BRANCHES, PRODUCT_CATEGORIES, SERVICES, SECTORS, COVERAGE_STATES, waUrl, WA_MESSAGES, servicioHref } from '@config/site'
+import { anchorText } from '@config/anchors'
 
 interface Cert { label: string; title?: string }
 interface Branch { label: string; address: string; mapsUrl?: string }
@@ -101,9 +102,9 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
       <nav class="footer__col" aria-label="Productos">
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Productos</h3>
         <ul class="footer__nav-list" role="list">
-          <li><a href="/mosquiteros/" class="footer__nav-link footer__nav-link--all">Ver catálogo completo<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+          <li><a href="/mosquiteros/" class="footer__nav-link footer__nav-link--all">{anchorText('/mosquiteros/')}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
           {PRODUCT_CATEGORIES.map((cat) => (
-            <li><a href={cat.href} class="footer__nav-link">{cat.label}{(cat as any).badge && <span class="footer__nav-badge">{(cat as any).badge}</span>}</a></li>
+            <li><a href={cat.href} class="footer__nav-link">{anchorText(cat.href)}{(cat as any).badge && <span class="footer__nav-badge">{(cat as any).badge}</span>}</a></li>
           ))}
         </ul>
       </nav>
@@ -114,7 +115,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
           {/* servicioHref, no `/servicios/${id}/` a mano: esa ruta no existe y
               este footer la enlazaba en las 35 páginas. Ver el interruptor en
               site.ts (productoHref/servicioHref). */}
-          {SERVICES.map((svc) => (<li><a href={servicioHref(svc.id)} class="footer__nav-link">{svc.label}</a></li>))}
+          {SERVICES.map((svc) => (<li><a href={servicioHref(svc.id)} class="footer__nav-link">{anchorText(servicioHref(svc.id))}</a></li>))}
         </ul>
         {/* El encabezado va DENTRO del guard, no fuera. Antes se pintaba siempre
             y `SECTORS` está vacío (site.ts: "TODO: definir si aplica"), así que
@@ -134,7 +135,7 @@ const WA_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCol
         <h3 class="footer__col-heading"><span class="footer__col-heading-accent" aria-hidden="true"></span>Cobertura</h3>
         <ul class="footer__nav-list footer__coverage-list" role="list">
           {COVERAGE_STATES.map((state) => (
-            <li><a href={`/cobertura/${state.slug}/`} class="footer__nav-link">{state.label}
+            <li><a href={`/cobertura/${state.slug}/`} class="footer__nav-link">{anchorText(`/cobertura/${state.slug}/`)}
               {(state as any).type && <span class={`footer__coverage-badge footer__coverage-badge--${(state as any).type}`}>{(state as any).type === 'operativo' ? 'Operativo' : 'Comercial'}</span>}
             </a></li>
           ))}

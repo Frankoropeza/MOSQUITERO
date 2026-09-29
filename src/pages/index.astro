@@ -27,6 +27,7 @@ import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
 import { getCollection } from "astro:content";
 import { NAV, SERVICES, WA_MESSAGES, waUrl } from "@config/site";
+import { anchorText } from '@config/anchors';
 import { MEDICION_CONDICION, PRECIOS_REFERENCIA, formatearPrecio, precioMasBajo } from "@config/precios";
 
 const title = "Mosquiteros para ventanas y puertas a medida | CDMX";
@@ -59,9 +60,9 @@ const menuSub: Record<string, string> = {
   Blog: "Guías y mantenimiento",
 };
 const menuSecciones = NAV.filter((n) => n.label !== "Contacto").map((n) => ({
-  label: n.label,
+  label: anchorText(n.href),
   href: n.href,
-  sub: menuSub[n.label] ?? n.items?.slice(0, 3).map((i) => i.label).join(" · ") ?? "Ver sección",
+  sub: menuSub[n.label] ?? n.items?.slice(0, 3).map((i) => i.label).join(" · ") ?? "Sección",
 }));
 const menuCta = {
   label: "Cotizar por WhatsApp",
@@ -107,7 +108,7 @@ if (guiasRotas.length > 0) {
   );
 }
 
-const menuGuias = GUIAS_MENU.map((g) => ({ label: g.label, href: `/blog/${g.slug}/`, sub: g.sub }));
+const menuGuias = GUIAS_MENU.map((g) => ({ label: anchorText(`/blog/${g.slug}/`), href: `/blog/${g.slug}/`, sub: g.sub }));
 // El botón destacado NO es de WhatsApp, a propósito: el CTA final de WhatsApp se
 // quitó de esta página (ver más abajo) porque la home ya pide la conversión en el
 // formulario y en el WhatsAppFloat. Reponerlo aquí sería devolverlo por la puerta
@@ -115,7 +116,7 @@ const menuGuias = GUIAS_MENU.map((g) => ({ label: g.label, href: `/blog/${g.slug
 // El conteo sale de la colección: si publicas un artículo, el número se corrige
 // solo (por eso `icon: "arrow"`, ver MenuCta en SectionMenu.astro).
 const menuGuiasCta = {
-  label: "Ver todas las guías",
+  label: anchorText('/blog/'),
   href: "/blog/",
   sub: `${articulosPublicados.length} artículos`,
   icon: "arrow" as const,
@@ -262,11 +263,12 @@ const faqs: { question: string; answer: string }[] = [
             badge={cat.badge}
             blurb={cat.blurb}
             subcategories={cat.subcategories}
-            ctaLabel={cat.ctaLabel}
+            ctaLabel={anchorText(cat.href)}
             index={i}
           />
         ))}
       </div>
+      <p class="showcase-links"><a href="/mosquiteros/para-puertas/">{anchorText('/mosquiteros/para-puertas/')}</a> · <a href="/mosquiteros/magneticos/">{anchorText('/mosquiteros/magneticos/', { variante: 0 })}</a></p>
 
       {/* ── CADA TIPO, A FONDO ──────────────────────────────────────────────
           La vitrina de arriba entrega el catálogo de un vistazo, pero cada
@@ -299,7 +301,7 @@ const faqs: { question: string; answer: string }[] = [
             body={cat.body}
             points={cat.points}
             gallery={cat.gallery}
-            cta={{ label: cat.ctaLabel ?? `Ver ${cat.label}`, href: cat.href }}
+            cta={{ label: anchorText(cat.href), href: cat.href }}
           />
         ))}
       </div>

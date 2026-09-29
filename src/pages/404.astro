@@ -2,6 +2,7 @@
 import PageLayout from '@layouts/PageLayout.astro';
 import SectionHeading from '@components/SectionHeading.astro';
 import { PRODUCT_CATEGORIES, SERVICES, WA_MESSAGES, servicioHref, waUrl } from '@config/site';
+import { anchorText } from '@config/anchors';
 
 const title = 'Página no encontrada | Mosquitero.mx';
 const description = 'La dirección que buscas no está disponible. Explora nuestros tipos de mosquitero, servicios de instalación, blog o contacta al equipo por WhatsApp.';
@@ -24,20 +25,20 @@ const description = 'La dirección que buscas no está disponible. Explora nuest
         <section aria-labelledby="not-found-products">
           <h2 id="not-found-products">Tipos de mosquitero</h2>
           <ul>
-            {PRODUCT_CATEGORIES.map((category) => <li><a href={category.href}>{category.label}</a></li>)}
+            {PRODUCT_CATEGORIES.map((category) => <li><a href={category.href}>{anchorText(category.href)}</a></li>)}
           </ul>
         </section>
         <section aria-labelledby="not-found-services">
           <h2 id="not-found-services">Servicios</h2>
           <ul>
-            {SERVICES.map((service) => <li><a href={servicioHref(service.id)}>{service.label}</a></li>)}
+            {SERVICES.map((service) => <li><a href={servicioHref(service.id)}>{anchorText(servicioHref(service.id))}</a></li>)}
           </ul>
         </section>
         <section aria-labelledby="not-found-help">
           <h2 id="not-found-help">También puedes</h2>
           <ul>
-            <li><a href="/blog/">Ver el blog</a></li>
-            <li><a href="/contacto/">Ir a contacto</a></li>
+            <li><a href="/blog/">{anchorText('/blog/')}</a></li>
+            <li><a href="/contacto/">{anchorText('/contacto/')}</a></li>
           </ul>
           <a class="not-found__cta" href={waUrl(WA_MESSAGES.default)} target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
         </section>

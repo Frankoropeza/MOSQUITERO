@@ -41,6 +41,7 @@ import CategoryDetail from "@components/CategoryDetail.astro";
 import MarcadoresGrid from "@components/MarcadoresGrid.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
+import { anchorText } from '@config/anchors';
 import { getCollection } from "astro:content";
 import {
   SERVICES,
@@ -79,10 +80,10 @@ const precioPorServicio: Record<(typeof SERVICES)[number]["id"], string | undefi
 };
 
 const ctaPorServicio: Record<(typeof SERVICES)[number]["id"], string> = {
-  fabricacion: "Ver fabricación",
-  instalacion: "Ver instalación",
-  medicion: "Ver medición",
-  reparacion: "Ver reparación",
+  fabricacion: anchorText(servicioHref('fabricacion')),
+  instalacion: anchorText(servicioHref('instalacion')),
+  medicion: anchorText(servicioHref('medicion')),
+  reparacion: anchorText(servicioHref('reparacion')),
 };
 
 // Guarda: mismo criterio que la ficha [servicio].astro. Si un servicio no tiene
@@ -121,7 +122,7 @@ const menuGuias = [
   { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de contratar a alguien" },
 ];
 const menuGuiasCta = {
-  label: "Ver todas las guías",
+  label: anchorText('/blog/'),
   href: "/blog/",
   sub: "Guías y mantenimiento",
   icon: "arrow" as const,
@@ -295,6 +296,7 @@ const faqs: { question: string; answer: string }[] = [
           );
         })}
       </div>
+      <p><a href="/mosquiteros/para-puertas/">{anchorText('/mosquiteros/para-puertas/')}</a></p>
     </div>
   </section>
 

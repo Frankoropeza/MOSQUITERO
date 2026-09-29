@@ -48,6 +48,7 @@ import CategoryDetail from "@components/CategoryDetail.astro";
 import MarcadoresGrid from "@components/MarcadoresGrid.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
+import { anchorText } from '@config/anchors';
 import { getCollection } from "astro:content";
 import {
   COVERAGE_STATES,
@@ -109,7 +110,7 @@ const menuGuias = [
   { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de dejar entrar a alguien" },
 ];
 const menuGuiasCta = {
-  label: "Ver todas las guías",
+  label: anchorText('/blog/'),
   href: "/blog/",
   sub: "Guías y mantenimiento",
   icon: "arrow" as const,
@@ -259,9 +260,9 @@ const faqs: { question: string; answer: string }[] = [
             href={zonaHref(z.slug)}
             image={afondo.gallery.main.src}
             imageAlt={afondo.gallery.main.alt}
-            badge={z.type === "operativo" ? "Cobertura completa" : "Consulta tu zona"}
+            badge={z.type === "operativo" ? "Cobertura completa" : "Zona por confirmar"}
             blurb={afondo.blurb}
-            ctaLabel={`Ver ${z.label}`}
+            ctaLabel={anchorText(zonaHref(z.slug))}
             index={i}
             precio={z.slug === "cdmx" ? "Las 16 alcaldías · sin confirmar antes" : "Confirma tu municipio antes de agendar"}
           />
@@ -343,7 +344,7 @@ const faqs: { question: string; answer: string }[] = [
             body={afondo.body}
             points={afondo.points}
             gallery={afondo.gallery}
-            cta={{ label: `Ver ${z.label}`, href: zonaHref(z.slug) }}
+            cta={{ label: anchorText(zonaHref(z.slug)), href: zonaHref(z.slug) }}
           />
           );
         })}

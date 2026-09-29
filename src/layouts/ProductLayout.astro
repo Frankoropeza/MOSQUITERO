@@ -20,6 +20,7 @@ import FAQAccordion from "@components/FAQAccordion.astro";
 import CTABanner from "@components/CTABanner.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
 import { waUrl, telUrl } from "@config/site";
+import { anchorText } from '@config/anchors';
 
 export interface Props {
   slug: string;
@@ -120,7 +121,7 @@ const schemaData = {
         <p class="prod-price">{price ?? "Precio bajo cotización"}</p>
         <div class="prod-hero__actions">
           <a class="btn btn--primary" href={waLink}>Cotizar por WhatsApp</a>
-          <a class="btn btn--ghost" href="/contacto/">Más información</a>
+          <a class="btn btn--ghost" href="/contacto/">{anchorText('/contacto/')}</a>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 ---
+import { anchorText } from '@config/anchors';
 // BlogCard.astro — Tarjeta de artículo para los listados del blog (/blog, categoría, tag).
 // ============================================================================
 // ORIGEN: CategoryCard.astro (mismo lenguaje visual: imagen 16:9, borde, lift en
@@ -82,7 +83,7 @@ const fechaCorta = pubDate.toLocaleDateString('es-MX', { day: 'numeric', month: 
       <p class="bcard__desc">{description}</p>
 
       <span class="bcard__cta">
-        Leer artículo
+        {anchorText(href)}
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </span>
     </div>

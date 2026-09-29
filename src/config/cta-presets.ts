@@ -13,6 +13,7 @@
  * Adapta los textos a cada negocio; la forma se mantiene.
  */
 import { waUrl, WA_MESSAGES } from '@config/site'
+import { anchorText } from '@config/anchors'
 
 interface BtnDef {
   label: string
@@ -32,8 +33,8 @@ export interface CTAPreset {
 
 // ── Botones reutilizables (WhatsApp SIEMPRE vía waUrl) ───────────────────────
 const BTN_WA: BtnDef = { label: 'Cotizar por WhatsApp', href: waUrl(WA_MESSAGES.cotizacion ?? WA_MESSAGES.default), icon: 'wa', primary: true, external: true }
-const BTN_CATALOGO: BtnDef = { label: 'Ver catálogo completo', href: '/mosquiteros/', icon: 'catalog' }
-const BTN_CONTACTO: BtnDef = { label: 'Solicitar cotización', href: '/contacto/', icon: 'quote', primary: true }
+const BTN_CATALOGO: BtnDef = { label: anchorText('/mosquiteros/'), href: '/mosquiteros/', icon: 'catalog' }
+const BTN_CONTACTO: BtnDef = { label: anchorText('/contacto/'), href: '/contacto/', icon: 'quote', primary: true }
 
 // ── PRESET — General / Home ──────────────────────────────────────────────────
 export const PRESET_GENERAL: CTAPreset = {

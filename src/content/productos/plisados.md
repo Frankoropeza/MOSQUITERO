@@ -12,7 +12,6 @@ subcategories:
     href: /mosquiteros/plisados/
   - label: Puerta de cristal
     href: /mosquiteros/plisados/
-ctaLabel: Ver plisados
 gallery:
   main:
     src: /images/showcase/plisados-1.webp
