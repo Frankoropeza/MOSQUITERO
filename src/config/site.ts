@@ -358,6 +358,8 @@ export const TAXONOMY = {
     { slug: 'guias', label: 'Guías', desc: 'Cómo medir, cómo elegir y qué preguntar antes de encargar tu mosquitero.' },
     { slug: 'mantenimiento', label: 'Mantenimiento', desc: 'Limpieza, ajustes y reparaciones para que la pieza dure.' },
     { slug: 'tipos-de-malla', label: 'Tipos de malla', desc: 'Qué tela lleva cada caso: mascotas, sol, insecto pequeño o vista despejada.' },
+    { slug: 'instalacion', label: 'Instalación', desc: 'Cómo se coloca, se fija y se arma un mosquitero: lo que puedes hacer tú y cuándo conviene un instalador.' },
+    { slug: 'zancudos', label: 'Zancudos e insectos', desc: 'Qué insectos entran a tu casa, por qué pican y qué los detiene de verdad.' },
     { slug: 'la-marca', label: 'Cómo trabajamos', desc: 'Nuestro criterio de oficio: cómo fabricamos, qué exigirle a un proveedor y de qué depende el precio.' },
     { slug: 'novedades', label: 'Novedades', desc: 'Avisos y cambios en el catálogo y en el servicio.' },
     { slug: 'general', label: 'General', desc: 'Temas del oficio que no caben en las otras categorías.' },

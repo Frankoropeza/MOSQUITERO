@@ -87,6 +87,8 @@ export const ARTICLE_CATEGORIES = [
   'guias',
   'mantenimiento',
   'tipos-de-malla',
+  'instalacion', // cómo se coloca, se fija y se arma (bricolaje incluido) — Tanda K 2026-09-28
+  'zancudos', // qué insectos entran, por qué pican, qué los detiene — Tanda K 2026-09-28
   'la-marca', // cómo trabajamos, criterio de compra, qué exigirle a un proveedor
   'novedades',
   'general',
