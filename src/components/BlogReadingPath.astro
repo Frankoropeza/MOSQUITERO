@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { minutosLectura } from '@lib/lectura';
+import { anchorText } from '@config/anchors';
 
 interface Props {
   posts: CollectionEntry<'articulos'>[];
@@ -43,7 +44,7 @@ const pasos = slugs.map((slug) => {
     ))}
   </ol>
 
-  <a class="brp__footer-link" href="/mosquiteros/">Ver los tipos de mosquitero y sus precios →</a>
+  <a class="brp__footer-link" href="/mosquiteros/">{anchorText('/mosquiteros/')} →</a>
 </section>
 
 <style>

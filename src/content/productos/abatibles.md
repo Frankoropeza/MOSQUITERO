@@ -12,7 +12,6 @@ subcategories:
     href: /mosquiteros/abatibles/
   - label: Ventana abatible
     href: /mosquiteros/abatibles/
-ctaLabel: Ver abatibles
 gallery:
   main:
     src: /images/showcase/abatibles-1.webp

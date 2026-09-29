@@ -2,6 +2,7 @@
 // RelatedLinks.astro — Cross-linking interno data-driven por taxonomía (hub-and-spoke SEO). ORIGEN: PROYECTORED/src/components/sections/CategoriasRelacionadas.astro (excluye la categoría actual, distribuye link equity). Patrón canónico B6 del ecosistema.
 // Por defecto lee PRODUCT_CATEGORIES de config/site y excluye `current`. También acepta `links` manuales (otras taxonomías: servicios, sectores, artículos).
 import { PRODUCT_CATEGORIES } from '@config/site'
+import { anchorText, PRIORIDAD_ENLACES } from '@config/anchors'
 
 interface LinkItem {
   slug?: string
@@ -21,9 +22,10 @@ interface Props {
 }
 const { current = '', limit = 4, title = 'Explora también', desc, links } = Astro.props
 
-const source: LinkItem[] = links ?? PRODUCT_CATEGORIES.map((c) => ({
-  slug: c.slug, label: c.label, href: c.href, desc: (c as any).badge ?? undefined,
-}))
+const source: LinkItem[] = links ?? PRIORIDAD_ENLACES.map((href) => {
+  const c = PRODUCT_CATEGORIES.find((item) => item.href === href)
+  return { slug: c?.slug, label: anchorText(href), href, desc: (c as any)?.badge ?? undefined }
+})
 const items = source.filter((l) => l.slug !== current).slice(0, limit)
 ---
 
@@ -38,7 +40,7 @@ const items = source.filter((l) => l.slug !== current).slice(0, limit)
         {items.map((item) => (
           <li>
             <a href={item.href} class="rel__card">
-              <span class="rel__card-label">{item.label}</span>
+              <span class="rel__card-label">{anchorText(item.href)}</span>
               {item.desc && <span class="rel__card-desc">{item.desc}</span>}
               <span class="rel__card-arrow" aria-hidden="true">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>

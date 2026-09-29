@@ -1,4 +1,5 @@
 ---
+import { anchorText } from '@config/anchors'
 // ProductCard.astro — Tarjeta de producto del catálogo: imagen con overlay + badge de norma + título + descripción + CTA "Ver detalles". ORIGEN: PROYECTORED .ccard (CatalogoProductos/CatalogoServicios) extraído a componente autónomo + RelatedProducts de MESECI.
 // Pensada para grids de catálogo (auto-fit minmax). Imagen estática con width/height (anti-CLS). Para WhatsApp directo usa waUrl en el href que pases.
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
   /** Recurso LCP (primer card del primer grid). */
   priority?: boolean
 }
-const { title, href, image, imageAlt, badge, description, ctaLabel = 'Ver detalles', index = 99, priority = false } = Astro.props
+const { title, href, image, imageAlt, badge, description, ctaLabel = anchorText(href), index = 99, priority = false } = Astro.props
 const eager = priority || index < 4
 ---
 

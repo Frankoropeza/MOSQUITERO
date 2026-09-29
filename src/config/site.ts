@@ -18,6 +18,8 @@
 // direcciones, precios, reseñas ni clientes inventados).
 // ============================================================================
 
+import { anchorText } from './anchors'; // anchors de palabra clave (Ahrefs 2026-09-28) para NAV.
+
 // ── SITE — identidad de marca + SEO + organización + negocio local ───────────
 export const SITE = {
   name: 'Mosquitero.mx', // Nombre comercial corto.
@@ -417,26 +419,26 @@ export const NAV: readonly NavItem[] = [
     label: 'Mosquiteros',
     href: '/mosquiteros/',
     panel: 'mega',
-    allLabel: 'Ver catálogo completo',
+    allLabel: anchorText('/mosquiteros/'),
     intro: 'Elige por tipo de mosquitero. Todos se fabrican a la medida de tu ventana o puerta.',
     items: [
-      ...PRODUCT_CATEGORIES.map((c) => ({ label: c.label, href: c.href, desc: c.desc })),
-      { label: 'Para puertas', href: '/mosquiteros/para-puertas/', desc: 'Opciones para accesos, patios y puertas corredizas.' },
+      ...PRODUCT_CATEGORIES.map((c) => ({ label: anchorText(c.href), href: c.href, desc: c.desc })),
+      { label: anchorText('/mosquiteros/para-puertas/'), href: '/mosquiteros/para-puertas/', desc: 'Opciones para accesos, patios y puertas corredizas.' },
     ],
   },
   {
     label: 'Servicios',
     href: '/servicios/',
     panel: 'dropdown',
-    allLabel: 'Ver todos los servicios',
-    items: SERVICES.map((s) => ({ label: s.label, href: servicioHref(s.id), desc: s.desc })),
+    allLabel: anchorText('/servicios/'),
+    items: SERVICES.map((s) => ({ label: anchorText(servicioHref(s.id)), href: servicioHref(s.id), desc: s.desc })),
   },
   {
     label: 'Cobertura',
     href: '/cobertura/',
     panel: 'dropdown',
-    allLabel: 'Ver toda la cobertura',
-    items: COVERAGE_STATES.map((s) => ({ label: s.label, href: `/cobertura/${s.slug}/` })),
+    allLabel: anchorText('/cobertura/'),
+    items: COVERAGE_STATES.map((s) => ({ label: anchorText(`/cobertura/${s.slug}/`), href: `/cobertura/${s.slug}/` })),
   },
   // Sectores: aparece SOLO si hay datos en TAXONOMY.sectors (hoy vacío → oculto).
   ...(SECTORS.length > 0
@@ -444,7 +446,7 @@ export const NAV: readonly NavItem[] = [
         label: 'Sectores',
         href: '/sectores/',
         panel: 'dropdown' as const,
-        allLabel: 'Ver todos los sectores',
+        allLabel: 'Sectores que atendemos',
         items: SECTORS.map((s) => ({ label: s.label, href: `/sectores/${s.slug}/` })),
       }]
     : []),

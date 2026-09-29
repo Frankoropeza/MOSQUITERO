@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import { BLOG_CATEGORIES, PRODUCT_CATEGORIES, WA_MESSAGES, waUrl } from "@config/site";
 import { navIcon } from "@config/nav-icons";
+import { anchorText, PRIORIDAD_ENLACES } from "@config/anchors";
 import { MEDICION_CONDICION, PRECIOS_REFERENCIA, formatearPrecio, precioMasBajo } from "@config/precios";
 import { minutosLectura } from "@lib/lectura";
 
@@ -27,6 +28,9 @@ const catalogo = PRODUCT_CATEGORIES.flatMap((categoria) => {
   const referencia = precio?.ventana ?? precio?.puerta;
   return referencia === undefined || referencia === null ? [] : [{ ...categoria, precio: referencia }];
 });
+// Orden por volumen de búsqueda (Ahrefs): primero las categorías con más demanda.
+const rango = (href: string) => { const i = (PRIORIDAD_ENLACES as readonly string[]).indexOf(href); return i === -1 ? 99 : i; };
+catalogo.sort((a, b) => rango(a.href) - rango(b.href));
 const waLink = waUrl(waMessage);
 const fmtCorta = (fecha: Date) => fecha.toLocaleDateString("es-MX", { day: "numeric", month: "short", timeZone: "UTC" });
 ---
@@ -60,7 +64,7 @@ const fmtCorta = (fecha: Date) => fecha.toLocaleDateString("es-MX", { day: "nume
   <section class="bsb__w" aria-labelledby="bsb-catalogo">
     <h2 class="bsb__title" id="bsb-catalogo">Tipos de mosquitero</h2>
     <ul class="bsb__list" role="list">
-      {catalogo.map((categoria) => <li><a class="bsb__link-icon" href={categoria.href}><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={navIcon(categoria.icon)} /><span>{categoria.label}</span><span class="bsb__price">desde {formatearPrecio(categoria.precio)}</span></a></li>)}
+      {catalogo.map((categoria) => <li><a class="bsb__link-icon" href={categoria.href}><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={navIcon(categoria.icon)} /><span>{anchorText(categoria.href)}</span><span class="bsb__price">desde {formatearPrecio(categoria.precio)}</span></a></li>)}
     </ul>
   </section>
 

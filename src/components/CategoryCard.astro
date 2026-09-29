@@ -27,13 +27,14 @@
 //   badge          → etiqueta corta sobre la imagen (entrega, certificación…).
 //   blurb          → texto de venta (1–2 frases).
 //   subcategories  → [{ label, href }] enlaces hijos (chips).
-//   ctaLabel       → texto del botón principal (default "Ver más").
+//   ctaLabel       → keyword del destino por default.
 //   index          → posición en el grid; los primeros cargan la imagen `eager`.
 //
 // ESTILO: tokens de src/styles/tokens.css. Alturas iguales en el grid (flex col +
 // CTA al fondo). Mobile-first; hover con elevación. A11y: foco visible, aria.
 // ============================================================================
 import type { CollectionEntry } from "astro:content";
+import { anchorText } from '@config/anchors';
 
 export type Sub = { label: string; href: string };
 export type ProductCategoryCard = CollectionEntry<"productos">["data"];
@@ -58,7 +59,7 @@ const {
   badge,
   blurb,
   subcategories = [],
-  ctaLabel = "Ver más",
+  ctaLabel = anchorText(href),
   index = 99,
   precio,
   variant,

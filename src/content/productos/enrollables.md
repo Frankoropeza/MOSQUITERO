@@ -14,7 +14,6 @@ subcategories:
     href: /mosquiteros/enrollables/
   - label: Para puerta
     href: /mosquiteros/enrollables/
-ctaLabel: Ver enrollables
 gallery:
   main:
     src: /images/showcase/enrollables-1.webp

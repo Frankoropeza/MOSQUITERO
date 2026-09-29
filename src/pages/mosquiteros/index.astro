@@ -46,6 +46,7 @@ import CategoryDetail from "@components/CategoryDetail.astro";
 import MarcadoresGrid from "@components/MarcadoresGrid.astro";
 import FAQAccordion from "@components/FAQAccordion.astro";
 import QuoteForm from "@components/QuoteForm.astro";
+import { anchorText } from '@config/anchors';
 import { getCollection } from "astro:content";
 import {
   PRODUCT_CATEGORIES,
@@ -115,7 +116,7 @@ const menuGuias = [
   { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Cuándo conviene cada uno" },
 ];
 const menuGuiasCta = {
-  label: "Ver todas las guías",
+  label: anchorText('/blog/'),
   href: "/blog/",
   sub: "Guías y mantenimiento",
   icon: "arrow" as const,
@@ -278,13 +279,14 @@ const faqs: { question: string; answer: string }[] = [
             badge={cat.badge}
             blurb={cat.blurb}
             subcategories={cat.subcategories}
-            ctaLabel={cat.ctaLabel}
+            ctaLabel={anchorText(cat.href)}
             index={i}
             precio={precioDeCategoria(cat.category)}
             variant={cat.category === "accesorios" ? "wide" : undefined}
           />
         ))}
       </div>
+      <p class="showcase-links"><a href="/mosquiteros/para-puertas/">{anchorText('/mosquiteros/para-puertas/')}</a> · <a href="/mosquiteros/magneticos/">{anchorText('/mosquiteros/magneticos/', { variante: 0 })}</a></p>
     </div>
   </section>
 
@@ -384,7 +386,7 @@ const faqs: { question: string; answer: string }[] = [
             body={cat.body}
             points={cat.points}
             gallery={cat.gallery}
-            cta={{ label: cat.ctaLabel ?? `Ver ${cat.label}`, href: cat.href }}
+            cta={{ label: anchorText(cat.href), href: cat.href }}
           />
         ))}
       </div>

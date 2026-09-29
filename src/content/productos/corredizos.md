@@ -14,7 +14,6 @@ subcategories:
     href: /mosquiteros/corredizos/
   - label: Puerta corrediza
     href: /mosquiteros/corredizos/
-ctaLabel: Ver corredizos
 gallery:
   main:
     src: /images/showcase/corredizos-1.webp

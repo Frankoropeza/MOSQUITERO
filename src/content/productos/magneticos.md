@@ -14,7 +14,6 @@ subcategories:
     href: /mosquiteros/magneticos/
   - label: Puerta de cocina
     href: /mosquiteros/magneticos/
-ctaLabel: Ver magnéticos
 gallery:
   main:
     src: /images/productos/magneticos-1.webp

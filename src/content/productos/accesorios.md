@@ -11,7 +11,6 @@ subcategories:
     href: /mosquiteros/accesorios/
   - label: Herrajes y perfiles
     href: /mosquiteros/accesorios/
-ctaLabel: Ver accesorios
 gallery:
   main:
     src: /images/productos/accesorios-1.webp

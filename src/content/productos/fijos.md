@@ -14,7 +14,6 @@ subcategories:
     href: /mosquiteros/fijos/
   - label: Cubo de luz
     href: /mosquiteros/fijos/
-ctaLabel: Ver fijos
 gallery:
   main:
     src: /images/productos/fijos-1.webp

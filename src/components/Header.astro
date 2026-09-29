@@ -34,6 +34,7 @@
 // Origen del patrón de interacción: PROYECTORED/src/components/global/Header.astro.
 // ============================================================================
 import { NAV, SITE, CONTACT, waUrl, telUrl, WA_MESSAGES } from '@config/site'
+import { anchorText } from '@config/anchors'
 
 const currentPath = Astro.url.pathname
 
@@ -95,7 +96,7 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
                     </a>
                   ))}
                   <a href={item.href} class="panel-all">
-                    {item.allLabel ?? 'Ver todo'}
+                    {item.allLabel ?? anchorText(item.href)}
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </a>
                 </div>
@@ -145,7 +146,7 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
             {item.intro && <p class="mega-panel__intro">{item.intro}</p>}
           </div>
           <a href={item.href} class="panel-all">
-            {item.allLabel ?? 'Ver todo'}
+            {item.allLabel ?? anchorText(item.href)}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
@@ -203,7 +204,7 @@ const CLOCK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" s
               <a href={sub.href} class="mob-link">{sub.label}</a>
             ))}
             <a href={item.href} class="mob-link mob-link--all">
-              {item.allLabel ?? 'Ver todo'}
+              {item.allLabel ?? anchorText(item.href)}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
