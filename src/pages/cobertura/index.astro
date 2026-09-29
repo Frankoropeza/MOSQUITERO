@@ -89,10 +89,10 @@ if (sinAfondo.length > 0) {
 }
 
 const menuSecciones = [
-  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
-  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
-  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
-  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
+  { label: anchorText("/mosquiteros/"), href: "/mosquiteros/", sub: "Tipos y catálogo" },
+  { label: anchorText("/servicios/"), href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: anchorText("/contacto/"), href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: anchorText("/blog/"), href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 const menuCta = {
   label: "Preguntar por mi zona",
@@ -104,10 +104,10 @@ const menuCta = {
 // Guías de intención de COBERTURA: quien pregunta si llegamos ya va a agendar.
 // Distintas de las de /mosquiteros (elección de tipo) y /servicios (cómo trabajan).
 const menuGuias = [
-  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion/", sub: "Qué pasa cuando vamos" },
-  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Si prefieres adelantarnos las medidas" },
-  { label: "Por qué a medida", href: "/blog/por-que-mosquiteros-a-medida/", sub: "Y no de línea" },
-  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de dejar entrar a alguien" },
+  { label: anchorText("/blog/como-trabajamos-de-la-medida-a-la-instalacion/"), href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion/", sub: "Qué pasa cuando vamos" },
+  { label: anchorText("/blog/como-medir-ventana-mosquitero/"), href: "/blog/como-medir-ventana-mosquitero/", sub: "Si prefieres adelantarnos las medidas" },
+  { label: anchorText("/blog/por-que-mosquiteros-a-medida/"), href: "/blog/por-que-mosquiteros-a-medida/", sub: "Y no de línea" },
+  { label: anchorText("/blog/que-preguntar-antes-de-contratar-mosquiteros/"), href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de dejar entrar a alguien" },
 ];
 const menuGuiasCta = {
   label: anchorText('/blog/'),

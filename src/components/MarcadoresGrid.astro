@@ -2,6 +2,7 @@
 interface Item {
   titulo: string;
   texto: string;
+  href?: string;
 }
 
 interface Props {
@@ -16,7 +17,7 @@ const { items } = Astro.props;
     <article class="servicio">
       <div class="servicio__contenido">
         <span class:list={["servicio__marca", `servicio__marca--${index + 1}`]} aria-hidden="true"></span>
-        <h3 class="servicio__titulo">{item.titulo}</h3>
+        <h3 class="servicio__titulo">{item.href ? <a href={item.href}>{item.titulo}</a> : item.titulo}</h3>
         <p class="servicio__desc">{item.texto}</p>
       </div>
     </article>
@@ -68,6 +69,7 @@ const { items } = Astro.props;
     line-height: var(--leading-tight);
     text-wrap: balance;
   }
+  .servicio__titulo a { color: inherit; }
   .servicio__desc {
     margin: 0;
     color: var(--c-ink-2);

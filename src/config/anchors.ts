@@ -4,7 +4,8 @@
 export const ANCHORS: Record<string, { kw: string; variantes: readonly string[] }> = {
   '/': { kw: 'Mosquitero para ventana', variantes: ['Mosquiteros para ventanas', 'Mosquiteros a medida', 'Mosquiteros de aluminio'] }, // 3,800 (variantes: 2,700; 300)
   '/mosquiteros/': { kw: 'Tipos de mosquiteros', variantes: ['Catálogo de mosquiteros'] }, // 70
-  '/mosquiteros/para-puertas/': { kw: 'Mosquitero para puerta', variantes: ['Mosquiteros para puertas', 'Puerta mosquitero', 'Puerta con mosquitero'] }, // 2,600 (variantes: 1,300; 200; 250)
+  '/mosquiteros/para-puertas/': { kw: 'Mosquitero para puerta', variantes: ['Mosquiteros para puertas', 'Puerta mosquitero', 'Puerta con mosquitero', 'Puerta mosquitero de aluminio', 'Mosquitero de aluminio para puerta'] }, // 2,600 (variantes: 1,300; 200; 250; 200; 150)
+  '/mosquiteros/para-ventanas-de-aluminio/': { kw: 'Mosquiteros para ventanas de aluminio', variantes: ['Mosquitero para ventana de aluminio', 'Mosquitero de aluminio', 'Precio de mosquiteros para ventanas de aluminio'] }, // 400 (variantes: 150; 350; 200)
   '/mosquiteros/magneticos/': { kw: 'Mosquitero magnético', variantes: ['Mosquitero de imán', 'Mosquiteros magnéticos', 'Mosquitero para puerta con imán'] }, // 1,100 (variantes: 150; 150)
   '/mosquiteros/enrollables/': { kw: 'Mosquitero enrollable', variantes: ['Mosquiteros enrollables', 'Mosquitero enrollable para puerta', 'Mosquitero enrollable para ventana'] }, // 400 (variantes: 200; 100; 60)
   '/mosquiteros/corredizos/': { kw: 'Mosquitero corredizo', variantes: ['Mosquiteros corredizos', 'Mosquitero corredizo para ventana'] }, // 300 (variantes: 150; 100)
@@ -53,4 +54,4 @@ export function anchorText(href: string, opts: { variante?: number; minuscula?: 
   return opts.minuscula && text !== 'CDMX' ? text.charAt(0).toLowerCase() + text.slice(1) : text;
 }
 
-export const PRIORIDAD_ENLACES = ['/mosquiteros/para-puertas/', '/mosquiteros/magneticos/', '/mosquiteros/enrollables/', '/mosquiteros/corredizos/', '/mosquiteros/fijos/', '/mosquiteros/abatibles/', '/mosquiteros/plisados/', '/mosquiteros/accesorios/'] as const;
+export const PRIORIDAD_ENLACES = ['/mosquiteros/para-puertas/', '/mosquiteros/para-ventanas-de-aluminio/', '/mosquiteros/magneticos/', '/mosquiteros/enrollables/', '/mosquiteros/corredizos/', '/mosquiteros/fijos/', '/mosquiteros/abatibles/', '/mosquiteros/plisados/', '/mosquiteros/accesorios/'] as const;

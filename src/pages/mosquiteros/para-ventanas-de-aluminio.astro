@@ -1,0 +1,193 @@
+---
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Hero from "@components/Hero.astro";
+import SectionMenu from "@components/SectionMenu.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import CategoryCard from "@components/CategoryCard.astro";
+import FAQAccordion from "@components/FAQAccordion.astro";
+import QuoteForm from "@components/QuoteForm.astro";
+import TablaPreciosReferencia from "@components/TablaPreciosReferencia.astro";
+import MarcadoresGrid from "@components/MarcadoresGrid.astro";
+import { WA_MESSAGES, waUrl } from "@config/site";
+import {
+  GARANTIA_TEXTO,
+  MEDICION_CONDICION,
+  PRECIOS_REFERENCIA,
+  formatearPrecio,
+  precioDesde,
+  precioMasBajo,
+} from "@config/precios";
+import { anchorText } from "@config/anchors";
+
+const windowSlugs = ["corredizos", "fijos", "abatibles", "enrollables", "plisados"];
+const productOrder = new Map(windowSlugs.map((slug, index) => [slug, index]));
+const productos = (await getCollection("productos"))
+  .filter((entry) => windowSlugs.includes(entry.data.category))
+  .sort((a, b) => productOrder.get(a.data.category)! - productOrder.get(b.data.category)!);
+
+const windowCopy: Record<string, string> = {
+  corredizos: "Tu ventana corre de lado, sobre un riel",
+  fijos: "No la abres casi nunca",
+  abatibles: "Se abre hacia afuera con bisagras",
+  enrollables: "Quieres que la malla desaparezca",
+  plisados: "Es un vano amplio o de cristal",
+};
+
+const title = "Mosquiteros para ventanas de aluminio a medida | CDMX";
+const description = `Mosquiteros para ventanas de aluminio a la medida de tu vano: fabricación e instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(precioMasBajo("ventana"))} con IVA.`;
+
+const menuSecciones = [
+  { label: anchorText("/mosquiteros/"), href: "/mosquiteros/", sub: "Catálogo completo" },
+  { label: anchorText("/servicios/"), href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: anchorText("/cobertura/"), href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: anchorText("/contacto/"), href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+];
+const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(WA_MESSAGES.cotizar), sub: "Cuéntanos sobre tu ventana", external: true };
+const menuGuias = [
+  { label: anchorText("/blog/como-medir-ventana-mosquitero/"), href: "/blog/como-medir-ventana-mosquitero/", sub: "Toma las medidas del vano" },
+  { label: anchorText("/blog/tipos-de-malla-mosquitero/"), href: "/blog/tipos-de-malla-mosquitero/", sub: "Elige según el uso" },
+  { label: anchorText("/blog/tipos-de-mosquitero-cual-elegir/"), href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Compara tus opciones" },
+  { label: anchorText("/blog/de-que-depende-el-precio-de-un-mosquitero/"), href: "/blog/de-que-depende-el-precio-de-un-mosquitero/", sub: "Qué mueve la cotización" },
+];
+const menuGuiasCta = { label: anchorText("/blog/"), href: "/blog/", sub: "Guías y mantenimiento", icon: "arrow" as const };
+
+const incluidos = [
+  { titulo: anchorText("/servicios/medicion/"), href: "/servicios/medicion/", texto: `${MEDICION_CONDICION}. O nos mandas tus medidas y te cotizamos con ellas.` },
+  { titulo: anchorText("/servicios/fabricacion/"), href: "/servicios/fabricacion/", texto: "Marco de aluminio cortado a la medida de tu vano, con la malla tensada." },
+  { titulo: anchorText("/servicios/instalacion/"), href: "/servicios/instalacion/", texto: "En la CDMX y el Estado de México; la dejamos funcionando." },
+  { titulo: "Garantía", texto: `${GARANTIA_TEXTO}.` },
+];
+
+const faqs = [
+  { question: "¿Cuánto cuesta un mosquitero para ventana de aluminio?", answer: `Desde <strong>${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)}</strong> un fijo y <strong>${formatearPrecio(PRECIOS_REFERENCIA.corredizos.ventana)}</strong> un corredizo, para una ventana de medida estándar (hasta 1.00 × 1.20 m), con fabricación a medida, instalación e IVA incluidos. La cotización final depende de la medida, la malla y el acceso.` },
+  { question: "¿Qué mosquitero va en una ventana corrediza de aluminio?", answer: "El corredizo: corre sobre su propio riel junto a tu ventana y repite el movimiento que ya conoces. Si prefieres que la malla desaparezca cuando no la usas, el enrollable también es opción." },
+  { question: "¿Tienen que ir a medir mi ventana?", answer: `No necesariamente. Si nos mandas las medidas por WhatsApp, te cotizamos con ellas. Si prefieres que vayamos, la medición es ${MEDICION_CONDICION.toLowerCase()}.` },
+  { question: "¿Qué malla lleva?", answer: `La malla es una decisión aparte: depende de si hay mascotas, sol directo o golpes. Te explicamos cada opción en <a href="/blog/tipos-de-malla-mosquitero/">${anchorText("/blog/tipos-de-malla-mosquitero/", { minuscula: true })}</a>.` },
+];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  pageType="directory"
+  breadcrumbs={[
+    { label: "Inicio", href: "/" },
+    { label: "Mosquiteros", href: "/mosquiteros/" },
+    { label: "Para ventanas de aluminio" },
+  ]}
+  schemaData={{
+    list: {
+      name: "Mosquiteros para ventanas de aluminio — Mosquitero.mx",
+      description,
+      path: "/mosquiteros/para-ventanas-de-aluminio/",
+      items: productos.map((entry) => ({
+        name: entry.data.label,
+        path: entry.data.href,
+        image: entry.data.image,
+        description: entry.data.blurb,
+      })),
+    },
+    faqs,
+  }}
+>
+  <Hero
+    badge="Hechos a la medida de tu vano"
+    title="Mosquiteros para ventanas de aluminio"
+    accent="a la medida de tu vano"
+    subtitle={`Tu ventana de aluminio ya decide la mitad: si corre, si abre hacia afuera o si no se abre. Fabricamos el mosquitero con marco de aluminio a la medida de ese vano y lo instalamos en la CDMX y el Estado de México. Desde ${formatearPrecio(precioMasBajo("ventana"))} por ventana, instalado y con IVA.`}
+    descRight={[
+      "El mecanismo que ya tiene tu ventana descarta opciones desde el principio. Si corre, abre hacia afuera o permanece fija, hay una forma distinta de proteger el vano sin estorbar su uso.",
+      "Fabricamos la pieza a la medida del vano. Cuéntanos cómo abre tu ventana o mándanos una foto y te ayudamos a elegir antes de cotizar.",
+    ]}
+    ctas={[{ text: "Cotizar por WhatsApp", href: waUrl(WA_MESSAGES.cotizar), whatsapp: true }]}
+  />
+
+  <SectionMenu items={menuSecciones} cta={menuCta} ariaLabel="Secciones del sitio" />
+
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Elige por mecanismo"
+        title="Según cómo abre tu ventana"
+        body={[
+          "La forma en que abre la ventana decide qué mosquitero puede acompañarla. Un riel, unas bisagras o un vano que no se abre piden mecanismos distintos.",
+          "Parte de cómo usas la ventana y elige la tarjeta que coincide. La pieza se fabrica a la medida del vano para ese mecanismo.",
+        ]}
+      />
+      <div class="showcase">
+        {productos.map((entry, index) => (
+          <CategoryCard
+            label={entry.data.label}
+            href={entry.data.href}
+            image={entry.data.image}
+            imageAlt={entry.data.imageAlt}
+            badge={windowCopy[entry.data.category]}
+            blurb={entry.data.blurb}
+            subcategories={entry.data.subcategories}
+            ctaLabel={anchorText(entry.data.href)}
+            index={index}
+            precio={precioDesde(PRECIOS_REFERENCIA[entry.data.category as keyof typeof PRECIOS_REFERENCIA].ventana) ?? undefined}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container lectura">
+      <SectionHeading
+        eyebrow="Precios"
+        title="Precio de mosquiteros para ventanas de aluminio"
+        body={[
+          "Los precios de referencia cambian según el tipo de mosquitero y la medida del vano. La columna de ventana orienta el punto de partida de cada mecanismo.",
+          "La cotización final considera la medida, la malla y el acceso. Por eso esta tabla sirve para comparar antes de enviar tus medidas.",
+        ]}
+      />
+      <TablaPreciosReferencia />
+      <p>Qué mueve la cifra final lo explicamos en <a href="/blog/de-que-depende-el-precio-de-un-mosquitero/">{anchorText("/blog/de-que-depende-el-precio-de-un-mosquitero/", { minuscula: true })}</a>.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Incluido"
+        title="Qué incluye cada mosquitero"
+        body={[
+          "El trabajo empieza con las medidas del vano y termina con la pieza instalada. Cada parte responde a que el mosquitero ajuste y funcione en tu ventana.",
+          "Puedes mandar tus medidas para cotizar o pedir que revisemos el vano. La fabricación, instalación y garantía siguen las condiciones indicadas aquí.",
+        ]}
+      />
+      <MarcadoresGrid items={incluidos} />
+    </div>
+  </section>
+
+  <section class="section section--faq">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Dudas sobre ventanas de aluminio"
+        title="Resuelve lo importante antes de cotizar"
+        body={[
+          "El precio, el recorrido de la ventana, la medición y la malla son los detalles que más cambian la elección del mosquitero.",
+          "Estas respuestas parten de la forma de tu vano. Si tu ventana tiene otra condición, compártela al pedir la cotización.",
+        ]}
+      />
+      <div class="faq-bloque">
+        <FAQAccordion items={faqs} title="" flush>
+          <QuoteForm slot="aside" />
+        </FAQAccordion>
+      </div>
+    </div>
+  </section>
+
+  <SectionMenu items={menuGuias} cta={menuGuiasCta} ariaLabel="Guías para ventanas de aluminio" />
+</PageLayout>
+
+<style>
+  .showcase { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); }
+  .lectura > p { max-width: 72ch; color: var(--c-ink-2); font-size: var(--text-base); line-height: var(--leading-relaxed); }
+  .lectura :global(a) { color: var(--c-primary); font-weight: var(--weight-semibold); }
+  @media (min-width: 640px) { .showcase { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .showcase { grid-template-columns: repeat(3, 1fr); } }
+</style>

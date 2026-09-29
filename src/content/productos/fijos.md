@@ -32,7 +32,7 @@ points:
   - Bastidor de aluminio a la medida del vano
   - No conviene si necesitas asomarte o limpiar el cristal seguido
 comoFunciona:
-  - "El fijo es lo más simple que hay: un bastidor de aluminio con la malla tensada, montado al vano de forma permanente. No corre, no se enrolla, no se abate. Se pone y se queda."
+  - "El fijo es el [mosquitero de aluminio](/mosquiteros/para-ventanas-de-aluminio/) más simple que hay: un bastidor con la malla tensada, montado al vano de forma permanente. No corre, no se enrolla, no se abate. Se pone y se queda."
   - "Precisamente por eso es el más económico y el que menos se estropea: no hay mecanismo, rodamiento ni muelle que falle. Lo único que puede pasarle es que se rompa la malla, y eso se cambia."
   - "Cubre la ventana de forma continua, así que resuelve donde no hace falta abrir: cubos de luz, baños, ventanas altas, cocinas con ventana de ventilación."
 encajaEn:

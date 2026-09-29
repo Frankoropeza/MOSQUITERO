@@ -21,6 +21,7 @@
 // NO se emite aquí a mano (anti-patrón B3: doble entidad). Los breadcrumbs los
 // arma PageLayout con el prop `breadcrumbs`.
 // ============================================================================
+import { anchorText } from '@config/anchors';
 import PageLayout from "@layouts/PageLayout.astro";
 import SectionHeading from "@components/SectionHeading.astro";
 import QuoteForm from "@components/QuoteForm.astro";
@@ -69,10 +70,10 @@ const menuCta = {
   external: true,
 };
 const menuSecciones = [
-  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
-  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
-  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
-  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
+  { label: anchorText("/mosquiteros/"), href: "/mosquiteros/", sub: "Tipos y catálogo" },
+  { label: anchorText("/servicios/"), href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: anchorText("/cobertura/"), href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: anchorText("/blog/"), href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 ---
 
