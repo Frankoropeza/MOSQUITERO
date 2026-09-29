@@ -24,6 +24,9 @@ guias:
   - como-medir-ventana-mosquitero
   - tipos-de-mosquitero-cual-elegir
   - como-trabajamos-de-la-medida-a-la-instalacion
+  - donde-comprar-mosquiteros-en-cdmx
+  - ventanas-de-aluminio-con-mosquitero
+  - como-eliminar-zancudos-del-cuarto
 comoFunciona:
   - "Vamos a tu domicilio y medimos el vano por dentro del marco: el ancho en tres alturas y el alto en tres puntos. De cada terna nos quedamos con la <strong>menor</strong>, porque los vanos no son cuadrados —ninguno lo es— y una pieza hecha sobre la medida mayor simplemente no entra."
   - "Pero la visita no es solo el flexómetro. Vemos el marco que ya tienes, que es lo que de verdad define qué tipo de mosquitero corresponde: si hay riel, si hay fondo arriba para un cajón, si la puerta tiene espacio para abatir. Eso no se ve en una foto y decide la pieza entera."

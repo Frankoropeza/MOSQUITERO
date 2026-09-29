@@ -61,6 +61,9 @@ guias:
   - tipos-de-mosquitero-cual-elegir
   - reparar-o-reponer-un-mosquitero
   - mantenimiento-limpieza-mosquiteros
+  - como-colocar-mosquitero-en-ventana-corrediza
+  - puerta-corrediza-de-aluminio-con-mosquitero
+  - ventanas-de-aluminio-con-mosquitero
 servicios:
   - fabricacion
   - instalacion

@@ -62,6 +62,9 @@ guias:
   - como-medir-ventana-mosquitero
   - tipos-de-mosquitero-cual-elegir
   - mantenimiento-limpieza-mosquiteros
+  - mosquitero-que-no-se-vea
+  - la-malla-mosquitera-quita-aire-y-luz
+  - puertas-con-mosquitero-modernas
 servicios:
   - medicion
   - fabricacion

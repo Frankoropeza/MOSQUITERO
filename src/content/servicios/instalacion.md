@@ -23,6 +23,9 @@ guias:
   - como-trabajamos-de-la-medida-a-la-instalacion
   - que-preguntar-antes-de-contratar-mosquiteros
   - mantenimiento-limpieza-mosquiteros
+  - como-poner-mosquitero-en-ventana-de-aluminio
+  - como-colocar-mosquitero-en-ventana-corrediza
+  - mosquitero-para-ventana-de-herreria
 comoFunciona:
   - "Llegamos con la pieza ya hecha a la medida de tu vano. Lo primero no es montarla: es presentarla y comprobar que el marco está como lo medimos. Un vano se mueve —la casa se asienta, alguien pintó encima, la reja se movió— y eso se ve antes de atornillar, no después."
   - "Después va el anclaje, que cambia según el tipo: el corredizo entra al riel, el abatible atornilla bisagras al marco, el enrollable fija su cajón arriba del vano. Cada uno pide lo suyo y ninguno se resuelve a martillazos."

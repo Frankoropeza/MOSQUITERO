@@ -24,6 +24,9 @@ guias:
   - como-medir-ventana-mosquitero
   - por-que-mosquiteros-a-medida
   - tipos-de-mosquitero-cual-elegir
+  - mosquitero-de-aluminio-pvc-o-madera
+  - perfiles-de-aluminio-para-mosquitero
+  - mosquitero-ajustable-o-a-medida
 comoFunciona:
   - "Todo arranca con dos datos: qué tipo de ventana o puerta es, y las medidas del vano. Con eso definimos el tipo de mosquitero que corresponde y la malla que aguanta tu caso, porque una ventana con mascotas no pide la misma tela que una que da al poniente."
   - "Cortamos el perfil a esas dimensiones exactas, armamos el bastidor y tensamos la malla contra él con el cordón. La tensión es la parte que no se ve y la que decide todo: floja hace bolsa, apretada de más deforma el marco."

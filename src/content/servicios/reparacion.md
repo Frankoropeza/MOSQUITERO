@@ -24,6 +24,9 @@ guias:
   - reparar-o-reponer-un-mosquitero
   - tipos-de-malla-mosquitero
   - mantenimiento-limpieza-mosquiteros
+  - como-cambiar-la-malla-de-un-mosquitero
+  - malla-mosquitera-metalica-o-fibra-de-vidrio
+  - temporada-de-zancudos-en-cdmx
 comoFunciona:
   - Empieza con una foto. Casi siempre basta verla para saber si lo tuyo es la tela, los rodamientos, los herrajes o el bastidor, y de eso depende que haya reparación o no. Mandarla te ahorra una visita entera para escuchar que no tenía arreglo.
   - Si el bastidor y los herrajes aguantan, se cambia solo la [tela para mosquitero](/blog/tipos-de-malla-mosquitero/). Se retira el cordón, sale la tela vieja, se tensa la nueva y se vuelve a rematar. Queda como nuevo por una fracción de lo que cuesta la pieza. Y si lo que falla son rodamientos o felpa, se sustituyen sin tocar el marco.

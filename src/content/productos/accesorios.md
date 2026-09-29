@@ -56,6 +56,9 @@ guias:
   - reparar-o-reponer-un-mosquitero
   - tipos-de-malla-mosquitero
   - mantenimiento-limpieza-mosquiteros
+  - como-cambiar-la-malla-de-un-mosquitero
+  - perfiles-de-aluminio-para-mosquitero
+  - como-quitar-un-mosquitero-de-la-ventana
 servicios:
   - reparacion
 faqs:

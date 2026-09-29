@@ -59,6 +59,9 @@ guias:
   - tipos-de-malla-mosquitero
   - como-medir-ventana-mosquitero
   - que-preguntar-antes-de-contratar-mosquiteros
+  - mosquitero-magnetico-o-abatible-para-puerta
+  - como-hacer-un-mosquitero-para-puerta
+  - malla-para-gatos-y-perros
 servicios:
   - medicion
   - fabricacion

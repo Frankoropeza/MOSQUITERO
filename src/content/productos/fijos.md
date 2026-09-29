@@ -61,6 +61,9 @@ guias:
   - de-que-depende-el-precio-de-un-mosquitero
   - por-que-mosquiteros-a-medida
   - tipos-de-mosquitero-cual-elegir
+  - como-hacer-un-mosquitero-para-ventana
+  - mosquitero-para-ventana-de-herreria
+  - mosquiteros-para-departamento-rentado
 servicios:
   - fabricacion
   - instalacion

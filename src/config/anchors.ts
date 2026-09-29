@@ -26,13 +26,46 @@ export const ANCHORS: Record<string, { kw: string; variantes: readonly string[] 
   '/aviso-de-privacidad/': { kw: 'Aviso de privacidad', variantes: [] },
   '/blog/como-medir-ventana-mosquitero/': { kw: 'Cómo medir una ventana para mosquitero', variantes: ['Cómo medir tu ventana'] },
   '/blog/tipos-de-mosquitero-cual-elegir/': { kw: 'Qué tipo de mosquitero elegir', variantes: ['Cuál mosquitero elegir'] },
-  '/blog/tipos-de-malla-mosquitero/': { kw: 'Malla para mosquitero', variantes: ['Tipos de malla para mosquitero', 'Malla mosquitero metálica', 'Tela para mosquitero'] }, // 600 (variantes: 400; 300)
+  '/blog/tipos-de-malla-mosquitero/': { kw: 'Malla para mosquitero', variantes: ['Tipos de malla para mosquitero'] }, // 600 — «metálica» y «tela» pasan a sus artículos propios (Tanda K)
   '/blog/de-que-depende-el-precio-de-un-mosquitero/': { kw: 'Precio de un mosquitero', variantes: ['Cuánto cuesta un mosquitero', 'Precio de mosquiteros'] },
   '/blog/mantenimiento-limpieza-mosquiteros/': { kw: 'Limpieza de mosquiteros', variantes: ['Mantenimiento de mosquiteros'] },
   '/blog/reparar-o-reponer-un-mosquitero/': { kw: 'Reparar o reponer un mosquitero', variantes: [] },
   '/blog/por-que-mosquiteros-a-medida/': { kw: 'Por qué un mosquitero a medida', variantes: [] },
   '/blog/que-preguntar-antes-de-contratar-mosquiteros/': { kw: 'Qué preguntar antes de contratar mosquiteros', variantes: [] },
   '/blog/como-trabajamos-de-la-medida-a-la-instalacion/': { kw: 'Cómo fabricamos e instalamos mosquiteros', variantes: [] },
+  // ── Tanda K (2026-09-28): 32 artículos. kw = keyword objetivo del brief (Ahrefs MX). ──
+  '/blog/zancudos-grandes-son-peligrosos/': { kw: 'Zancudos grandes', variantes: ['¿Los zancudos grandes pican?'] }, // 1,400 (variantes: 200)
+  '/blog/tipos-de-zancudos-en-mexico/': { kw: 'Tipos de zancudos', variantes: ['Zancudos en México'] }, // 300
+  '/blog/como-eliminar-zancudos-del-cuarto/': { kw: 'Cómo eliminar zancudos del cuarto', variantes: ['Cómo ahuyentar zancudos'] }, // 350 (variantes: 300)
+  '/blog/por-que-me-pican-mas-los-zancudos/': { kw: 'Por qué me pican mucho los zancudos', variantes: ['Picaduras de zancudos'] }, // 250 (variantes: 250)
+  '/blog/mosquitos-pequenos-en-casa/': { kw: 'Mosquitos pequeños en casa', variantes: [] }, // 300
+  '/blog/remedios-caseros-para-zancudos/': { kw: 'Remedios caseros para zancudos', variantes: ['Plantas contra zancudos'] }, // 200 (variantes: 200)
+  '/blog/temporada-de-zancudos-en-cdmx/': { kw: 'Temporada de zancudos en la CDMX', variantes: [] },
+  '/blog/zancudos-y-mascotas/': { kw: 'Zancudos y mascotas', variantes: ['¿Los zancudos pican a los perros?'] }, // 200
+  '/blog/malla-mosquitera-metalica-o-fibra-de-vidrio/': { kw: 'Malla mosquitera metálica', variantes: ['Malla mosquitero metálica', 'Tela mosquitera metálica'] }, // 700 (variantes: 400; 500)
+  '/blog/malla-mosquitera-galvanizada-o-acero-inoxidable/': { kw: 'Malla mosquitera galvanizada', variantes: ['Malla mosquitera de acero inoxidable'] }, // 600 (variantes: 200)
+  '/blog/tela-mosquitera-de-plastico/': { kw: 'Tela mosquitera de plástico', variantes: ['Tela para mosquitero', 'Malla mosquitera plástica'] }, // 200 (variantes: 300; 150)
+  '/blog/malla-para-gatos-y-perros/': { kw: 'Malla para gatos', variantes: ['Malla mosquitera para mascotas'] }, // 250
+  '/blog/mosquitero-que-no-se-vea/': { kw: 'Mosquitero que casi no se ve', variantes: [] }, // 40
+  '/blog/la-malla-mosquitera-quita-aire-y-luz/': { kw: 'Malla mosquitera, aire y luz', variantes: [] },
+  '/blog/como-cambiar-la-malla-de-un-mosquitero/': { kw: 'Cómo cambiar la malla de un mosquitero', variantes: ['Cómo reparar un mosquitero roto'] }, // (variantes: 30)
+  '/blog/como-quitar-un-mosquitero-de-la-ventana/': { kw: 'Cómo quitar un mosquitero de la ventana', variantes: [] }, // 30
+  '/blog/como-hacer-un-mosquitero-para-ventana/': { kw: 'Cómo hacer un mosquitero para ventana', variantes: ['Cómo hacer un mosquitero'] }, // 250 (variantes: 150)
+  '/blog/como-poner-tela-mosquitera-en-ventana-sin-marco/': { kw: 'Tela mosquitera en ventanas sin marco', variantes: [] }, // 150
+  '/blog/como-colocar-mosquitero-en-ventana-corrediza/': { kw: 'Cómo colocar mosquitero en ventana corrediza', variantes: [] }, // 100
+  '/blog/como-poner-mosquitero-en-ventana-de-aluminio/': { kw: 'Cómo poner mosquiteros en ventanas', variantes: ['Cómo poner un mosquitero en ventana de aluminio'] }, // 100 (variantes: 40)
+  '/blog/perfiles-de-aluminio-para-mosquitero/': { kw: 'Perfil de aluminio para mosquitero', variantes: ['Tipos de perfiles para mosquitero', 'Perfil para mosquitero'] }, // 350 (variantes: 250; 300)
+  '/blog/mosquitero-para-ventana-de-herreria/': { kw: 'Mosquitero para ventana de herrería', variantes: ['Cómo pegar mosquitero en metal'] }, // (variantes: 80)
+  '/blog/como-hacer-un-mosquitero-para-puerta/': { kw: 'Cómo hacer un mosquitero para puerta', variantes: [] }, // 130
+  '/blog/mosquitero-de-aluminio-pvc-o-madera/': { kw: 'Mosquitero de aluminio, PVC o madera', variantes: ['Materiales para mosquitero'] }, // comparativa; «mosquitero de aluminio» es de /mosquiteros/para-ventanas-de-aluminio/
+  '/blog/mosquitero-magnetico-o-abatible-para-puerta/': { kw: 'Mosquitero magnético o abatible', variantes: [] },
+  '/blog/mosquitero-ajustable-o-a-medida/': { kw: 'Mosquitero ajustable o a medida', variantes: [] },
+  '/blog/puertas-con-mosquitero-modernas/': { kw: 'Puertas con mosquitero modernas', variantes: ['Puertas con malla mosquitera'] }, // 250 (variantes: 200)
+  '/blog/puerta-corrediza-de-aluminio-con-mosquitero/': { kw: 'Puerta corrediza de aluminio con mosquitero', variantes: [] }, // 300
+  '/blog/mosquitero-para-cama-o-para-ventana/': { kw: 'Mosquitero para cama', variantes: ['Mosquitero para bebé'] }, // 1,200 (variantes: 300)
+  '/blog/ventanas-de-aluminio-con-mosquitero/': { kw: 'Ventanas de aluminio con mosquitero', variantes: ['Ventanas con mosquitero'] }, // 200 (variantes: 200)
+  '/blog/mosquiteros-para-departamento-rentado/': { kw: 'Mosquiteros para departamento rentado', variantes: [] },
+  '/blog/donde-comprar-mosquiteros-en-cdmx/': { kw: 'Dónde comprar mosquiteros', variantes: ['Dónde comprar malla mosquitera'] }, // 80 (variantes: 20)
 };
 
 const normalize = (href: string) => {

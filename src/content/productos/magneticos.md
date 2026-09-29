@@ -61,6 +61,9 @@ guias:
   - tipos-de-malla-mosquitero
   - como-trabajamos-de-la-medida-a-la-instalacion
   - tipos-de-mosquitero-cual-elegir
+  - mosquitero-magnetico-o-abatible-para-puerta
+  - zancudos-y-mascotas
+  - mosquiteros-para-departamento-rentado
 servicios:
   - fabricacion
   - instalacion

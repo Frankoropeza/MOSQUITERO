@@ -59,6 +59,9 @@ guias:
   - de-que-depende-el-precio-de-un-mosquitero
   - como-medir-ventana-mosquitero
   - por-que-mosquiteros-a-medida
+  - puertas-con-mosquitero-modernas
+  - puerta-corrediza-de-aluminio-con-mosquitero
+  - mosquitero-que-no-se-vea
 servicios:
   - medicion
   - fabricacion
