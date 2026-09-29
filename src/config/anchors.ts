@@ -44,7 +44,7 @@ export function anchorText(href: string, opts: { variante?: number; minuscula?: 
   const path = normalize(href);
   if (path.startsWith('/blog/categoria/')) {
     const slug = path.slice('/blog/categoria/'.length, -1);
-    const labels: Record<string, string> = { guias: 'Guías', mantenimiento: 'Mantenimiento', 'tipos-de-malla': 'Tipos de malla', 'la-marca': 'Cómo trabajamos', novedades: 'Novedades', general: 'General' };
+    const labels: Record<string, string> = { guias: 'Guías', mantenimiento: 'Mantenimiento', 'tipos-de-malla': 'Tipos de malla', 'la-marca': 'Cómo trabajamos', novedades: 'Novedades', general: 'General', instalacion: 'Instalación', zancudos: 'Zancudos e insectos' } // espejo de TAXONOMY.articleCategories (site.ts importa este módulo: no se puede importar de vuelta sin ciclo);
     return labels[slug] ?? slug.replace(/-/g, ' ');
   }
   if (path.startsWith('/blog/tag/')) return path.slice('/blog/tag/'.length, -1).replace(/-/g, ' ');
