@@ -30,17 +30,17 @@ const title = "Mosquitero para puerta a medida | precios CDMX y Edomex";
 const description = `Mosquitero para puerta a medida y puerta mosquitera de aluminio, con fabricación e instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(PRECIOS_REFERENCIA.magneticos.puerta)}.`;
 
 const menuSecciones = [
-  { label: "Todos los tipos", href: "/mosquiteros/", sub: "Catálogo completo" },
-  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
-  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: anchorText("/mosquiteros/"), href: "/mosquiteros/", sub: "Catálogo completo" },
+  { label: anchorText("/servicios/"), href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: anchorText("/cobertura/"), href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: anchorText("/contacto/"), href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
 ];
 const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(WA_MESSAGES.cotizar), sub: "Cuéntanos sobre tu puerta", external: true };
 const menuGuias = [
-  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Toma las medidas del vano" },
-  { label: "Tipos de malla", href: "/blog/tipos-de-malla-mosquitero/", sub: "Elige según el uso" },
-  { label: "Qué tipo elegir", href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Compara tus opciones" },
-  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Decide qué conviene" },
+  { label: anchorText("/blog/como-medir-ventana-mosquitero/"), href: "/blog/como-medir-ventana-mosquitero/", sub: "Toma las medidas del vano" },
+  { label: anchorText("/blog/tipos-de-malla-mosquitero/"), href: "/blog/tipos-de-malla-mosquitero/", sub: "Elige según el uso" },
+  { label: anchorText("/blog/tipos-de-mosquitero-cual-elegir/"), href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Compara tus opciones" },
+  { label: anchorText("/blog/reparar-o-reponer-un-mosquitero/"), href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Decide qué conviene" },
 ];
 const menuGuiasCta = { label: anchorText('/blog/'), href: "/blog/", sub: "Guías y mantenimiento", icon: "arrow" as const };
 

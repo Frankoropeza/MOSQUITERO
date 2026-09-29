@@ -424,6 +424,7 @@ export const NAV: readonly NavItem[] = [
     items: [
       ...PRODUCT_CATEGORIES.map((c) => ({ label: anchorText(c.href), href: c.href, desc: c.desc })),
       { label: anchorText('/mosquiteros/para-puertas/'), href: '/mosquiteros/para-puertas/', desc: 'Opciones para accesos, patios y puertas corredizas.' },
+      { label: anchorText('/mosquiteros/para-ventanas-de-aluminio/'), href: '/mosquiteros/para-ventanas-de-aluminio/', desc: 'Para ventanas corredizas, abatibles y fijas de aluminio.' },
     ],
   },
   {

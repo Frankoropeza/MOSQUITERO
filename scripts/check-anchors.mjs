@@ -1,6 +1,6 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-const PRIORIDAD_ENLACES = ['/mosquiteros/para-puertas/', '/mosquiteros/magneticos/', '/mosquiteros/enrollables/', '/mosquiteros/corredizos/', '/mosquiteros/fijos/', '/mosquiteros/abatibles/', '/mosquiteros/plisados/', '/mosquiteros/accesorios/'];
+const PRIORIDAD_ENLACES = ['/mosquiteros/para-puertas/', '/mosquiteros/para-ventanas-de-aluminio/', '/mosquiteros/magneticos/', '/mosquiteros/enrollables/', '/mosquiteros/corredizos/', '/mosquiteros/fijos/', '/mosquiteros/abatibles/', '/mosquiteros/plisados/', '/mosquiteros/accesorios/'];
 
 const forbiddenStart = /^(ver|ir|leer|más|mas|conoce|conocer|explora|explorar|descubre|saber|consulta|visita|entra|clic|click)(?![\p{L}])/iu;
 const forbiddenHere = /(^|[^\p{L}])aqu[ií]([^\p{L}]|$)/iu;

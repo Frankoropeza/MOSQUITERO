@@ -157,10 +157,10 @@ const indice = [
   { id: "faq", label: "Preguntas frecuentes" },
 ];
 const menuSecciones = [
-  { label: "Todos los tipos", href: "/mosquiteros/", sub: "Catálogo completo" },
-  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
-  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: anchorText("/mosquiteros/"), href: "/mosquiteros/", sub: "Catálogo completo" },
+  { label: anchorText("/servicios/"), href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: anchorText("/cobertura/"), href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: anchorText("/contacto/"), href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
 ];
 const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mándanos tus medidas", external: true };
 ---
@@ -425,6 +425,11 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
                   <li>
                     <a href="/mosquiteros/para-puertas/" class="enlace">
                       <span class="enlace__txt">Compara opciones para puertas</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/mosquiteros/para-ventanas-de-aluminio/" class="enlace">
+                      <span class="enlace__txt">{anchorText('/mosquiteros/para-ventanas-de-aluminio/')}</span>
                     </a>
                   </li>
                 </ul>

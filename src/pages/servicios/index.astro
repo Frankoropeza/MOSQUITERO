@@ -100,10 +100,10 @@ if (sinAfondo.length > 0) {
 }
 
 const menuSecciones = [
-  { label: "Mosquiteros", href: "/mosquiteros/", sub: "Tipos y catálogo" },
-  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
-  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
+  { label: anchorText("/mosquiteros/"), href: "/mosquiteros/", sub: "Tipos y catálogo" },
+  { label: anchorText("/cobertura/"), href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: anchorText("/contacto/"), href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: anchorText("/blog/"), href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 const menuCta = {
   label: "Cotizar por WhatsApp",
@@ -116,10 +116,10 @@ const menuCta = {
 // elección de tipo). Un menú idéntico en las dos páginas no aporta enlazado
 // nuevo, solo repite.
 const menuGuias = [
-  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Si prefieres medir tú" },
-  { label: "Cómo trabajamos", href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion/", sub: "De la medida a la pieza instalada" },
-  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Cómo lo decidimos" },
-  { label: "Qué preguntar antes", href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de contratar a alguien" },
+  { label: anchorText("/blog/como-medir-ventana-mosquitero/"), href: "/blog/como-medir-ventana-mosquitero/", sub: "Si prefieres medir tú" },
+  { label: anchorText("/blog/como-trabajamos-de-la-medida-a-la-instalacion/"), href: "/blog/como-trabajamos-de-la-medida-a-la-instalacion/", sub: "De la medida a la pieza instalada" },
+  { label: anchorText("/blog/reparar-o-reponer-un-mosquitero/"), href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Cómo lo decidimos" },
+  { label: anchorText("/blog/que-preguntar-antes-de-contratar-mosquiteros/"), href: "/blog/que-preguntar-antes-de-contratar-mosquiteros/", sub: "Antes de contratar a alguien" },
 ];
 const menuGuiasCta = {
   label: anchorText('/blog/'),
@@ -296,7 +296,7 @@ const faqs: { question: string; answer: string }[] = [
           );
         })}
       </div>
-      <p><a href="/mosquiteros/para-puertas/">{anchorText('/mosquiteros/para-puertas/')}</a></p>
+      <p><a href="/mosquiteros/para-puertas/">{anchorText('/mosquiteros/para-puertas/')}</a> · <a href="/mosquiteros/para-ventanas-de-aluminio/">{anchorText('/mosquiteros/para-ventanas-de-aluminio/')}</a></p>
     </div>
   </section>
 

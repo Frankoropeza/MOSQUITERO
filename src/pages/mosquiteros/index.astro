@@ -93,10 +93,10 @@ const incluidos = [
 // propia entrada sobra. Se enlazan las hermanas. Mismo criterio que la home
 // («el hero presenta, la franja convierte»): el último botón es el CTA.
 const menuSecciones = [
-  { label: "Servicios", href: "/servicios/", sub: "Fabricación, instalación y reparación" },
-  { label: "Cobertura", href: "/cobertura/", sub: "Zonas que atendemos" },
-  { label: "Contacto", href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
-  { label: "Blog", href: "/blog/", sub: "Guías y mantenimiento" },
+  { label: anchorText("/servicios/"), href: "/servicios/", sub: "Fabricación, instalación y reparación" },
+  { label: anchorText("/cobertura/"), href: "/cobertura/", sub: "Zonas que atendemos" },
+  { label: anchorText("/contacto/"), href: "/contacto/", sub: "Teléfono, WhatsApp y correo" },
+  { label: anchorText("/blog/"), href: "/blog/", sub: "Guías y mantenimiento" },
 ];
 const menuCta = {
   label: "Cotizar por WhatsApp",
@@ -110,10 +110,10 @@ const menuCta = {
 // los de intención de catálogo, no los mismos 4 de la home — un menú idéntico en
 // las dos páginas no aporta enlazado nuevo, solo repite.
 const menuGuias = [
-  { label: "Qué tipo elegir", href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Cuál va con tu ventana" },
-  { label: "Tipos de malla", href: "/blog/tipos-de-malla-mosquitero/", sub: "Cuál aguanta tu caso" },
-  { label: "Cómo medir", href: "/blog/como-medir-ventana-mosquitero/", sub: "Toma bien las medidas del vano" },
-  { label: "Reparar o reponer", href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Cuándo conviene cada uno" },
+  { label: anchorText("/blog/tipos-de-mosquitero-cual-elegir/"), href: "/blog/tipos-de-mosquitero-cual-elegir/", sub: "Cuál va con tu ventana" },
+  { label: anchorText("/blog/tipos-de-malla-mosquitero/"), href: "/blog/tipos-de-malla-mosquitero/", sub: "Cuál aguanta tu caso" },
+  { label: anchorText("/blog/como-medir-ventana-mosquitero/"), href: "/blog/como-medir-ventana-mosquitero/", sub: "Toma bien las medidas del vano" },
+  { label: anchorText("/blog/reparar-o-reponer-un-mosquitero/"), href: "/blog/reparar-o-reponer-un-mosquitero/", sub: "Cuándo conviene cada uno" },
 ];
 const menuGuiasCta = {
   label: anchorText('/blog/'),
@@ -286,7 +286,7 @@ const faqs: { question: string; answer: string }[] = [
           />
         ))}
       </div>
-      <p class="showcase-links"><a href="/mosquiteros/para-puertas/">{anchorText('/mosquiteros/para-puertas/')}</a> · <a href="/mosquiteros/magneticos/">{anchorText('/mosquiteros/magneticos/', { variante: 0 })}</a></p>
+      <p class="showcase-links"><a href="/mosquiteros/para-puertas/">{anchorText('/mosquiteros/para-puertas/')}</a> · <a href="/mosquiteros/para-ventanas-de-aluminio/">{anchorText('/mosquiteros/para-ventanas-de-aluminio/')}</a> · <a href="/mosquiteros/magneticos/">{anchorText('/mosquiteros/magneticos/', { variante: 0 })}</a></p>
     </div>
   </section>
 
