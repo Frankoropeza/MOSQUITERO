@@ -574,7 +574,11 @@ export function serviceSchema(s: ServiceData) {
     availableChannel: {
       '@type': 'ServiceChannel',
       serviceUrl: url,
-      servicePhone: CONTACT.phoneRaw ?? CONTACT.phone,
+      servicePhone: {
+        '@type': 'ContactPoint',
+        telephone: CONTACT.phoneRaw ?? CONTACT.phone,
+        contactType: 'sales',
+      },
     },
     ...(s.priceRange
       ? {
