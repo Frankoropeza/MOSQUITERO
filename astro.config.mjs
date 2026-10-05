@@ -94,7 +94,7 @@ export default defineConfig({
 
   vite: {
     // cacheDir local: evita colisiones de permisos entre sesiones/worktrees.
-    cacheDir: 'node_modules/.vite',
+    cacheDir: '.astro/vite',
     resolve: {
       // Espejo EXACTO de tsconfig.json compilerOptions.paths (sin el /*).
       alias: {
