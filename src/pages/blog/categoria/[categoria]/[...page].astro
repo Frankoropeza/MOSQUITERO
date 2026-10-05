@@ -54,12 +54,14 @@ const esPrimera = page.currentPage === 1;
 // ── Metas ──
 // El title abre con la keyword de la categoría, sin marca (regla de metas).
 const title = esPrimera ? `${cat.label} de mosquiteros | blog de Mosquitero.mx` : `${cat.label} de mosquiteros — página ${page.currentPage} | blog de Mosquitero.mx`;
-const description = esPrimera ? `${cat.desc} ${page.total === 1 ? "1 artículo" : `${page.total} artículos`} sobre mosquiteros a medida, fabricación e instalación.` : `Página ${page.currentPage} de ${page.lastPage}: ${cat.desc}`;
+const description = esPrimera
+  ? `${cat.desc} Conoce opciones para elegir y cuidar tus mosquiteros.`
+  : `Página ${page.currentPage} de ${page.lastPage} de ${cat.label}: ${cat.desc} Encuentra consejos claros para elegir o instalar mosquiteros según tu ventana.`;
 
 const schemaData = {
   list: {
     name: `${cat.label} — blog de Mosquitero.mx`,
-    description: cat.desc,
+    description,
     path: page.url.current,
     items: posts.map((post) => ({
       name: post.data.title,

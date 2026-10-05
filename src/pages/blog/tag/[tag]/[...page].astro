@@ -54,7 +54,9 @@ const posts = page.data;
 const esPrimera = page.currentPage === 1;
 
 const title = esPrimera ? `Artículos sobre ${tag} | blog de mosquiteros` : `Artículos sobre ${tag} — página ${page.currentPage} | blog de mosquiteros`;
-const description = esPrimera ? `${page.total === 1 ? "Artículo" : "Artículos"} del blog de Mosquitero.mx etiquetados con "${tag}": guías, tipos de malla y mantenimiento de mosquiteros a medida.` : `Página ${page.currentPage} de ${page.lastPage} de los artículos del blog etiquetados con "${tag}".`;
+const description = esPrimera
+  ? `${page.total === 1 ? "Artículo" : "Artículos"} del blog de Mosquitero.mx sobre ${tag}: guías para elegir, medir, instalar y mantener mosquiteros a medida.`
+  : `Página ${page.currentPage} de ${page.lastPage} de artículos sobre ${tag}: consulta guías prácticas para elegir, medir, instalar y mantener mosquiteros a medida.`;
 
 const schemaData = {
   list: {
