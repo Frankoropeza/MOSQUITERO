@@ -30,8 +30,8 @@ import { NAV, SERVICES, WA_MESSAGES, waUrl } from "@config/site";
 import { anchorText } from '@config/anchors';
 import { MEDICION_CONDICION, PRECIOS_REFERENCIA, formatearPrecio, precioMasBajo } from "@config/precios";
 
-const title = "Mosquiteros para ventanas y puertas a medida | CDMX";
-const description = `Mosquitero para ventana y puerta a medida, en aluminio y con instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)} por pieza. Cotiza por WhatsApp.`;
+const title = "Mosquitero para ventana y puerta a medida | CDMX y Edomex";
+const description = `Mosquiteros para ventanas y puertas a medida, de aluminio y con instalación en CDMX y Edomex. Desde ${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)} por pieza. Protege tu casa de insectos.`;
 
 const showcaseHome = (await getCollection("productos"))
   .sort((a, b) => a.data.order - b.data.order)
@@ -148,8 +148,8 @@ const proceso: { paso: string; titulo: string; detalle: string; img: string; alt
   { paso: "4", titulo: "Malla", detalle: "Elegimos la malla con el mismo criterio: si hay mascotas, si pega el sol, si necesitas ver hacia afuera o frenar insectos más chicos.", img: "/images/proceso/paso-4.webp", alt: "Muestras de distintos tipos de malla para mosquitero" },
   { paso: "5", titulo: "Cotización", detalle: "Recibes el precio por pieza, ya con el tipo y la malla que quedamos.", img: "/images/proceso/paso-5.webp", alt: "Cotización por pieza con el tipo de mosquitero y la malla acordados" },
   { paso: "6", titulo: "Fabricación", detalle: "Armamos cada mosquitero a la medida de tu vano.", img: "/images/servicios/fabricacion-1.webp", alt: "Armado del marco de aluminio del mosquitero en el taller" },
-  { paso: "7", titulo: "Instalación", detalle: "Lo colocamos en tu ventana o puerta, ajustado al vano.", img: "/images/servicios/instalacion-1.webp", alt: "Instalación del mosquitero en la ventana" },
-  { paso: "8", titulo: "Revisión y cuidado", detalle: "Verificamos que cierre y corra bien antes de irnos, y te decimos cómo limpiarlo para que dure.", img: "/images/proceso/paso-8.webp", alt: "Prueba de que la corredera del mosquitero cierre y corra bien" },
+  { paso: "7", titulo: "Instalación", detalle: "Lo colocamos en tu ventana o puerta, ajustado al vano: sobre su riel, con el cajón arriba o fijo al marco, según el tipo.", img: "/images/servicios/instalacion-1.webp", alt: "Instalación del mosquitero en la ventana" },
+  { paso: "8", titulo: "Revisión y cuidado", detalle: "Verificamos que cierre y corra bien antes de irnos, y te decimos cómo limpiarlo —agua con jabón neutro y un cepillo suave— para que dure.", img: "/images/proceso/paso-8.webp", alt: "Prueba de que la corredera del mosquitero cierre y corra bien" },
 ];
 
 // ── FAQ — preguntas reales de compra ─────────────────────────────────────────
@@ -179,9 +179,9 @@ const faqs: { question: string; answer: string }[] = [
       "Con un flexómetro metálico, mide por dentro del marco: el <strong>ancho</strong> en tres alturas (arriba, en medio y abajo) y el <strong>alto</strong> en tres puntos (izquierda, centro y derecha). De cada terna, quédate con la <strong>medida menor</strong>. Los vanos casi nunca son perfectamente rectangulares, y una pieza fabricada sobre la medida mayor simplemente no entra. Anota los números en centímetros y mándanoslos con una foto de la ventana completa: con eso confirmamos el tipo y te decimos si el vano necesita algún ajuste antes de fabricar.",
   },
   {
-    question: "¿Qué tipo de mosquitero me conviene?",
+    question: "¿Qué tipos de mosquiteros hay para ventanas y cuál me conviene?",
     answer:
-      "Lo define el marco que ya tienes y el uso que le das, no el gusto. Los <strong>corredizos</strong> van con ventanas corredizas; los <strong>abatibles</strong>, con puertas de acceso diario; los <strong>enrollables</strong>, cuando quieres que la malla desaparezca al no usarla; los <strong>plisados</strong>, en vanos amplios y puertas de cristal; los <strong>fijos</strong>, en ventanas que no se abren. Si tu caso no encaja claro en ninguno, mándanos una foto de la ventana abierta: con verla sabemos cuál corresponde y te evitamos pagar la pieza equivocada.",
+      "Hay seis tipos, y lo que define cuál te conviene es el marco que ya tienes y el uso que le das, no el gusto. Los <strong>corredizos</strong> van con ventanas corredizas; los <strong>abatibles</strong>, con puertas de acceso diario; los <strong>enrollables</strong>, cuando quieres que la malla desaparezca al no usarla; los <strong>plisados</strong>, en vanos amplios y puertas de cristal; los <strong>fijos</strong>, en ventanas que no se abren, y los <strong>magnéticos</strong>, en puertas de paso. Si tu caso no encaja claro en ninguno, mándanos una foto de la ventana abierta: con verla sabemos cuál corresponde y te evitamos pagar la pieza equivocada.",
   },
   {
     question: "¿Hacen mosquiteros a medida o venden medidas estándar?",
@@ -204,7 +204,7 @@ const faqs: { question: string; answer: string }[] = [
     // disponibilidad) antes de publicar. La respuesta describe criterios de
     // selección, no productos concretos, justo para no comprometer stock.
     answer:
-      "Depende de lo que tengas que resolver, no del precio por metro. Hay tela estándar para insecto común, tejidos <strong>reforzados</strong> donde hay perros o gatos que se recargan, y tramas más cerradas para insecto pequeño. Cuéntanos si hay mascotas, si la ventana da a jardín o a la calle y qué tanto te importa conservar la vista: con eso te decimos qué tela pedir y por qué.",
+      "Depende de lo que tengas que resolver, no del precio por metro. Hay malla mosquitera estándar de fibra de vidrio para insecto común, tejidos <strong>reforzados</strong> y más resistentes donde hay perros o gatos que se recargan, y tramas más cerradas para insecto pequeño. Cuéntanos si hay mascotas, si la ventana da a jardín o a la calle y qué tanto te importa conservar la vista: con eso te decimos qué tela pedir y por qué.",
   },
   {
     question: "¿Hacen medición a domicilio?",
@@ -230,11 +230,11 @@ const faqs: { question: string; answer: string }[] = [
 <PageLayout title={title} description={description} pageType="home" schemaData={{ faqs }}>
   {/* ═══ 1) HERO — H1 único con la propuesta + kw1. TODO: validar copy con el cliente. ═══ */}
   <Hero
-    title="Mosquiteros a medida para tus ventanas y"
-    accent="puertas"
+    title="Mosquiteros para ventanas y puertas"
+    accent="a medida"
     subtitle="Fabricamos tu mosquitero para ventana o puerta a la medida exacta del vano, con marco de aluminio en los tipos que lo llevan. Mándanos tus medidas por WhatsApp y te cotizamos por pieza."
     descRight={[
-      "Cada ventana es distinta. Por eso no vendemos medidas de línea: tomamos el ancho y el alto de tu vano y armamos el mosquitero para que cierre completo, sin huecos por donde se cuele un mosquito. Trabajamos enrollables, corredizos, abatibles, plisados, magnéticos y fijos — te decimos cuál corresponde a tu tipo de ventana y para qué uso.",
+      "Cada ventana es distinta. Por eso no vendemos medidas de línea: tomamos el ancho y el alto de tu vano y armamos el mosquitero para que cierre completo, sin huecos por donde se cuele un mosquito. Tu casa queda libre de insectos sin perder la ventilación natural. Trabajamos enrollables, corredizos, abatibles, plisados y fijos, además del mosquitero magnético para puerta — te decimos cuál corresponde a tu tipo de ventana y para qué uso.",
       "Si ya tienes mosquiteros y solo se rompió la malla, también los reparamos: cambio de tela, marcos y herrajes. Escríbenos con una foto y las medidas, y te decimos qué conviene más en tu caso.",
     ]}
   />
@@ -247,9 +247,9 @@ const faqs: { question: string; answer: string }[] = [
     <div class="container">
       <SectionHeading
         eyebrow="Catálogo"
-        title="Tipos de mosquitero"
+        title="Tipos de mosquitero para puertas y ventanas"
         body={[
-          "No todos los mosquiteros sirven para todas las ventanas. El tipo correcto lo define el marco que ya tienes y el uso que le das: no es lo mismo una ventana que abres dos veces al día que la puerta por la que entra y sale toda la familia.",
+          "No todos los mosquiteros sirven para todas las ventanas. El tipo correcto lo define el marco que ya tienes y el uso que le das: no es lo mismo una ventana que abres dos veces al día que la puerta por la que entra y sale toda la familia, y por eso los mosquiteros para puertas se resuelven con otros tipos.",
           "Abajo está cada tipo con el caso que resuelve. Si tu ventana no encaja claro en ninguno, mándanos una foto por WhatsApp: con verla sabemos cuál corresponde y te evitamos comprar la pieza equivocada.",
         ]}
       />
@@ -315,7 +315,7 @@ const faqs: { question: string; answer: string }[] = [
         eyebrow="Servicios"
         title="Qué hacemos"
         body={[
-          "Cubrimos el mosquitero completo, de la medida a la instalación: lo fabricamos a las dimensiones exactas de tu vano, lo colocamos y verificamos que cierre y corra bien antes de irnos.",
+          "Cubrimos el mosquitero completo, de la medida a la instalación: lo fabricamos a las dimensiones exactas de tu vano, lo adaptamos al marco que ya tienes, lo colocamos y verificamos que cierre y corra bien antes de irnos.",
           "Si ya tienes mosquiteros, no siempre hay que reponerlos. Cuando el marco aguanta, se cambia solo la malla; cuando no, te decimos con franqueza qué conviene más — reparar o reponer la pieza.",
         ]}
       />
@@ -328,7 +328,7 @@ const faqs: { question: string; answer: string }[] = [
     <div class="container">
       <SectionHeading
         eyebrow="Proceso"
-        title="Cómo pedir tu mosquitero"
+        title="Cómo pedir tu mosquitero, paso a paso"
         body={[
           "Pedir un mosquitero a medida es más simple de lo que parece: empieza con un mensaje y unas medidas. No necesitas saber qué tipo es el tuyo ni cómo se llama la malla — para eso estamos.",
           "Estos son los ocho pasos, del primer mensaje a la pieza instalada, para que sepas qué sigue en cada momento y qué necesitamos de ti en cada uno.",
