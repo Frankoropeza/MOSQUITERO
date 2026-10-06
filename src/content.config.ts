@@ -153,6 +153,11 @@ const servicios = defineCollection({
       datos: z.array(dataItemSchema),
       faqs: z.array(faqItemSchema).min(8),
       guias: z.array(reference('articulos')),
+      seoTitle: z.string().max(60).optional(),
+      seoDescription: z.string().max(160).optional(),
+      h1: z.string().optional(),
+      h2ComoFunciona: z.string().optional(),
+      h2Faq: z.string().optional(),
     })
     .strict(),
 });

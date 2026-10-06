@@ -26,13 +26,18 @@ guias:
   - como-poner-mosquitero-en-ventana-de-aluminio
   - como-colocar-mosquitero-en-ventana-corrediza
   - mosquitero-para-ventana-de-herreria
+seoTitle: "Instalación de mosquiteros en ventanas y puertas | CDMX"
+seoDescription: "Instalación de mosquiteros en ventanas y puertas de CDMX y Edomex: corredizo, enrollable o fijo, ajustado al vano y probado antes de irnos."
+h1: "Instalación de mosquiteros"
+h2ComoFunciona: "Cómo instalamos un mosquitero"
+h2Faq: "Preguntas sobre la instalación de mosquiteros"
 comoFunciona:
   - "Llegamos con la pieza ya hecha a la medida de tu vano. Lo primero no es montarla: es presentarla y comprobar que el marco está como lo medimos. Un vano se mueve —la casa se asienta, alguien pintó encima, la reja se movió— y eso se ve antes de atornillar, no después."
-  - "Después va el anclaje, que cambia según el tipo: el corredizo entra al riel, el abatible atornilla bisagras al marco, el enrollable fija su cajón arriba del vano. Cada uno pide lo suyo y ninguno se resuelve a martillazos."
-  - "Y lo que de verdad separa una instalación de un montaje: antes de irnos lo abrimos y lo cerramos. Que corra sin trabarse, que cierre completo, que no roce. Lo que falle se ajusta ahí, no cuando ya nos fuimos."
+  - "Después va el anclaje, que cambia según el tipo: el corredizo entra al riel, el abatible atornilla bisagras al marco, el enrollable fija su cajón arriba del vano con tornillos y el fijo se ancla al marco con herrajes de fijación. Cada uno pide lo suyo y ninguno se resuelve a martillazos."
+  - "Y lo que de verdad separa una instalación de un montaje: antes de irnos lo abrimos y lo cerramos. Que corra sin trabarse, que cierre completo, que no roce y que deje la casa protegida de insectos sin quitarle ventilación natural. Lo que falle se ajusta ahí, no cuando ya nos fuimos."
 encajaEn:
   - "Va incluida en la pieza que fabricamos: no es un extra"
-  - Ventanas, puertas y domos
+  - Ventanas y puertas de aluminio, herrería o PVC, y domos
   - Cuando quieres que alguien verifique que quedó bien
   - "Varias piezas a la vez: se resuelven en la misma visita"
 noConviene:
@@ -66,5 +71,9 @@ faqs:
   - question: Si después se afloja o empieza a rozar, ¿qué hago?
     answer: "Escríbenos y lo vemos. Un ajuste no es lo mismo que una reparación: muchas veces es cuestión de reapretar o recalibrar, y es normal que una pieza se acomode las primeras semanas. Mándanos un video corto del movimiento. Se diagnostica mucho mejor que con una foto."
   - question: ¿Puedo instalarlo yo si me lo fabrican?
-    answer: "Sí, la instalación es un servicio aparte y no una obligación. Te diríamos que adelante sin reservas con el <a href=\"/mosquiteros/magneticos/\">magnético</a>. Con un enrollable o un abatible, píensalo: el anclaje sostiene una pieza que se usa a diario y un tornillo mal puesto se ve en un mes."
+    answer: "Sí: la instalación va incluida en el precio, pero no es obligatoria. Te diríamos que adelante sin reservas con el <a href=\"/mosquiteros/magneticos/\">magnético</a>. Con un enrollable o un abatible, piénsalo: el anclaje sostiene una pieza que se usa a diario y un tornillo mal puesto se ve en un mes."
+  - question: ¿Cuánto se cobra por instalar un mosquitero?
+    answer: "Nada aparte: la instalación va incluida en el precio por pieza del mosquitero que fabricamos, junto con la fabricación a medida. Lo que cambia el precio es el tipo, la medida del vano y la malla; lo explicamos en <a href=\"/blog/de-que-depende-el-precio-de-un-mosquitero/\">precio de un mosquitero</a>."
+  - question: ¿El mosquitero se instala por dentro o por fuera?
+    answer: "Casi siempre por dentro del vano y por fuera del cristal, donde queda protegido del sol y la lluvia y no se ve desde la calle. El corredizo va en el riel de tu ventana; el enrollable y el fijo se montan por dentro salvo que el vano no tenga fondo, y entonces van por fuera. Lo definimos al ver tu ventana o puerta, antes de instalar."
 ---

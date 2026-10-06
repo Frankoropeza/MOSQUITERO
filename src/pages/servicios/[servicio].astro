@@ -67,17 +67,17 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { svc, afondo } = Astro.props;
-const title = svc.label + " de mosquiteros | CDMX y Edomex";
-const description = afondo.blurb.slice(0, 155).trim();
+const title = afondo.seoTitle ?? (svc.label + " de mosquiteros | CDMX y Edomex");
+const description = afondo.seoDescription ?? afondo.blurb.slice(0, 155).trim();
 const waMsg = (WA_MESSAGES as Record<string, string | undefined>)[svc.id] ?? WA_MESSAGES.servicios ?? WA_MESSAGES.cotizar;
 const articulos = await getCollection("articulos", ({ data }) => data.draft !== true);
 const guias = afondo.guias
   .map((reference) => articulos.find((article) => article.id === reference.id))
   .filter((article): article is NonNullable<typeof article> => Boolean(article));
 const otros = SERVICES.filter((service) => service.id !== svc.id);
-const palabras = svc.label.split(" ");
+const palabras = (afondo.h1 ?? svc.label).split(" ");
 const esUnaPalabra = palabras.length === 1;
-const heroTitle = esUnaPalabra ? svc.label + " de" : palabras.slice(0, -1).join(" ");
+const heroTitle = esUnaPalabra ? (afondo.h1 ?? svc.label) + " de" : palabras.slice(0, -1).join(" ");
 const heroAccent = esUnaPalabra ? "mosquiteros" : palabras[palabras.length - 1];
 const indice = [
   { id: "como-funciona", label: "Cómo trabajamos" }, { id: "cuando", label: "Cuándo pedirlo" }, { id: "datos", label: "Datos rápidos" }, { id: "pedir", label: "Cómo se pide" }, { id: "faq", label: "Preguntas frecuentes" },
@@ -148,7 +148,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Cuén
           <section class="bloque" id="como-funciona">
             <h2 class="bloque__h2">
               <span class="bloque__icon" aria-hidden="true"><Fragment set:html={navIcon(svc.id)} /></span>
-              Cómo trabajamos
+              {afondo.h2ComoFunciona ?? "Cómo trabajamos"}
             </h2>
             {afondo.comoFunciona.map((p) => <p class="bloque__p">{p}</p>)}
           </section>
@@ -396,7 +396,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Cuén
       <SectionHeading
         id="faq-heading"
         eyebrow="Dudas"
-        title={`Sobre ${svc.label.toLowerCase()}`}
+        title={afondo.h2Faq ?? `Sobre ${svc.label.toLowerCase()}`}
         body={[
           "Lo que más nos preguntan de este servicio en concreto — no de los mosquiteros en general. Si tu duda es qué tipo te toca o qué malla aguanta tu caso, eso está en el catálogo.",
           "Si la tuya no está aquí, mándanos tu caso en el formulario: llena lo que sepas, aunque no tengas las medidas todavía. Preferimos resolverla antes de agendar que con el instalador en la puerta.",

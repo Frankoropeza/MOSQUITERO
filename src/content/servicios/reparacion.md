@@ -27,9 +27,14 @@ guias:
   - como-cambiar-la-malla-de-un-mosquitero
   - malla-mosquitera-metalica-o-fibra-de-vidrio
   - temporada-de-zancudos-en-cdmx
+seoTitle: "Reparación de mosquiteros y cambio de malla | CDMX"
+seoDescription: "Reparación de mosquiteros en CDMX y Edomex: cambio de malla, rodamientos y herrajes en ventanas y puertas. Te decimos si conviene reparar o reponer."
+h1: "Reparación de mosquiteros y cambio de malla"
+h2ComoFunciona: "Cómo hacemos la reparación de mosquiteros"
+h2Faq: "Preguntas sobre la reparación de mosquiteros"
 comoFunciona:
   - Empieza con una foto. Casi siempre basta verla para saber si lo tuyo es la tela, los rodamientos, los herrajes o el bastidor, y de eso depende que haya reparación o no. Mandarla te ahorra una visita entera para escuchar que no tenía arreglo.
-  - Si el bastidor y los herrajes aguantan, se cambia solo la tela para mosquitero. Se retira el cordón, sale la tela vieja, se tensa la nueva y se vuelve a rematar. Queda como nuevo por una fracción de lo que cuesta la pieza. Y si lo que falla son rodamientos o felpa, se sustituyen sin tocar el marco.
+  - "Si el bastidor y los herrajes aguantan, se cambia solo la tela para mosquitero, en ventanas y puertas. Se retira el cordón, sale la tela vieja, se tensa la nueva y se vuelve a rematar. Queda como nuevo por una fracción de lo que cuesta la pieza. Y si lo que falla son rodamientos o felpa, se sustituyen sin tocar el marco: es el mantenimiento que devuelve la pieza a correr y a cerrar el paso al mosquito."
   - Y cuando el marco está vencido, deformado o le falta un tramo, la respuesta es no. Reparar sale casi lo mismo que reponer y encima dura menos. Preferimos perder la reparación a cobrarte algo que se rompe otra vez en tres meses.
 encajaEn:
   - Se rompió la malla y el bastidor está entero
@@ -68,4 +73,8 @@ faqs:
     answer: "Te lo decimos y paramos ahí. Nunca vamos a cambiarte una malla sobre un marco que sabemos que va a fallar: te cobraríamos un trabajo con fecha de caducidad y volverías enfadado, con razón. Preferimos decirte que te conviene una pieza nueva."
   - question: ¿Cambian solo la malla o también los herrajes?
     answer: "Lo que haga falta, y no siempre es lo que crees. Mucha gente pide malla nueva cuando lo que falla es el <strong>rodamiento</strong> —la tela está bien y el mosquitero se traba igual—. Por eso miramos la foto antes: cambiar lo que no era es tirar el dinero dos veces."
+  - question: ¿Cuánto se cobra por cambiar la malla de un mosquitero?
+    answer: "Se cobra por hoja, no por metro, y depende de la medida y de la malla que elijas: la estándar de fibra de vidrio o una reforzada, más resistente, si hay mascotas. Mándanos una foto y las medidas y te pasamos el precio antes de tocar la pieza; en <a href=\"/blog/de-que-depende-el-precio-de-un-mosquitero/\">precio de un mosquitero</a> explicamos qué lo mueve."
+  - question: ¿Cómo se repara un agujero en la malla del mosquitero?
+    answer: "Si el agujero es chico, se puede tapar con un parche de la misma malla fijado con pegamento transparente; aguanta, pero se nota. Si el agujero es grande, la malla está reseca o tiene varios rotos, conviene cambiar la tela completa: el resultado es más limpio y dura más. Te lo explicamos paso a paso en <a href=\"/blog/como-cambiar-la-malla-de-un-mosquitero/\">cómo cambiar la malla de un mosquitero</a>."
 ---
