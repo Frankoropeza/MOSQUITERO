@@ -151,7 +151,7 @@ const waMsg = WA_MESSAGES.productos ?? WA_MESSAGES.cotizar;
 const singular = cat.label.toLowerCase().replace(/s$/, "");
 const indice = [
   { id: "como-funciona", label: "Cómo funciona" },
-  { id: "encaja", label: esAccesorios ? "Para qué sirve" : "En qué ventana encaja" },
+  { id: "encaja", label: esAccesorios ? "Para qué sirve" : "Dónde encaja" },
   { id: "datos", label: "Datos rápidos" },
   { id: "pedir", label: "Cómo se pide" },
   { id: "faq", label: "Preguntas frecuentes" },
@@ -232,7 +232,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
           <section class="bloque" id="como-funciona">
             <h2 class="bloque__h2">
               <span class="bloque__icon" aria-hidden="true"><Fragment set:html={navIcon(cat.icon)} /></span>
-              Cómo funciona
+              {esAccesorios ? "Cómo funciona" : `Cómo funciona el mosquitero ${singular}`}
             </h2>
             {ficha.comoFunciona.map((p) => <p class="bloque__p">{p}</p>)}
           </section>
@@ -244,7 +244,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
               y evita que el cliente pida la pieza equivocada, que en un producto
               a medida no tiene devolución posible. */}
           <section class="bloque" id="encaja">
-            <h2 class="bloque__h2">{esAccesorios ? "Para qué sirve" : "En qué ventana encaja"}</h2>
+            <h2 class="bloque__h2">{esAccesorios ? "Para qué sirve" : `Dónde encaja el mosquitero ${singular}`}</h2>
             <div class="duo">
               <div class="duo__col duo__col--si">
                 <h3 class="duo__h3">
@@ -296,7 +296,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
 
           {precio && (
             <section class="bloque">
-              <TablaPreciosReferencia slugs={[cat.slug as Exclude<keyof typeof PRECIOS_REFERENCIA, "cambioDeMalla">]} titulo="Precio de referencia" />
+              <TablaPreciosReferencia slugs={[cat.slug as Exclude<keyof typeof PRECIOS_REFERENCIA, "cambioDeMalla">]} titulo={`Precio del mosquitero ${singular}`} />
             </section>
           )}
 
@@ -548,7 +548,7 @@ const menuCta = { label: "Cotizar por WhatsApp", href: waUrl(waMsg), sub: "Mánd
       <SectionHeading
         id="faq-heading"
         eyebrow="Dudas"
-        title={`Sobre los ${esAccesorios ? "accesorios" : cat.label.toLowerCase()}`}
+        title={esAccesorios ? "Sobre los accesorios" : `Preguntas sobre el mosquitero ${singular}`}
         body={[
           esAccesorios
             ? "Lo que más nos preguntan quienes reparan por su cuenta: cómo saber qué refacción es, si vendemos malla por metro y cuándo conviene más el servicio que la pieza suelta."

@@ -29,7 +29,7 @@ guias:
   - temporada-de-zancudos-en-cdmx
 comoFunciona:
   - Empieza con una foto. Casi siempre basta verla para saber si lo tuyo es la tela, los rodamientos, los herrajes o el bastidor, y de eso depende que haya reparación o no. Mandarla te ahorra una visita entera para escuchar que no tenía arreglo.
-  - Si el bastidor y los herrajes aguantan, se cambia solo la [tela para mosquitero](/blog/tipos-de-malla-mosquitero/). Se retira el cordón, sale la tela vieja, se tensa la nueva y se vuelve a rematar. Queda como nuevo por una fracción de lo que cuesta la pieza. Y si lo que falla son rodamientos o felpa, se sustituyen sin tocar el marco.
+  - Si el bastidor y los herrajes aguantan, se cambia solo la tela para mosquitero. Se retira el cordón, sale la tela vieja, se tensa la nueva y se vuelve a rematar. Queda como nuevo por una fracción de lo que cuesta la pieza. Y si lo que falla son rodamientos o felpa, se sustituyen sin tocar el marco.
   - Y cuando el marco está vencido, deformado o le falta un tramo, la respuesta es no. Reparar sale casi lo mismo que reponer y encima dura menos. Preferimos perder la reparación a cobrarte algo que se rompe otra vez en tres meses.
 encajaEn:
   - Se rompió la malla y el bastidor está entero

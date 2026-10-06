@@ -3,8 +3,8 @@ order: 4
 category: magneticos
 label: Mosquiteros Magnéticos
 href: /mosquiteros/magneticos/
-seoTitle: "Mosquitero magnético para puerta a medida | CDMX"
-seoDescription: "Mosquitero magnético con imán para puerta a medida, para paso frecuente. Fabricación e instalación en CDMX y Edomex desde {precio} por puerta, según medida."
+seoTitle: "Mosquitero magnético: cortina de malla para puerta | CDMX"
+seoDescription: "Mosquitero magnético con imán: cortina de malla para puerta que se cierra sola y deja tu hogar libre de insectos. A medida en CDMX y Edomex desde {precio}."
 h1: "Mosquitero magnético para puerta"
 image: /images/productos/magneticos-1.webp
 imageAlt: Mosquitero magnético instalado en el marco de una puerta
@@ -32,13 +32,13 @@ points:
   - Se monta sobre el marco existente, sin obra
   - "No conviene en ventanas: está pensado para pasar a través"
 comoFunciona:
-  - El magnético es una cortina de malla partida al centro, con una banda de imanes cosida a lo largo de la unión. Empujas con el cuerpo, las dos hojas se separan para dejarte pasar y, detrás de ti, los imanes se buscan y vuelven a cerrar la abertura.
-  - "No lleva bastidor rígido: se fija al marco existente con cinta o tachuelas, sin obra y sin perforar nada estructural. Es el tipo que menos intervención pide."
-  - "Su lógica es distinta a la de los demás: no está pensado para taparse y destaparse, sino para atravesarlo. Por eso vive en puertas, no en ventanas."
+  - "El mosquitero magnético es una cortina mosquitera de malla partida al centro, con una banda de imanes cosida a lo largo de la unión. Empujas con el cuerpo, las dos hojas se separan para dejarte pasar y, detrás de ti, los imanes se buscan y vuelven a cerrar la abertura: el aire fresco sigue entrando y las moscas y los mosquitos se quedan afuera."
+  - "No lleva bastidor rígido: se fija al marco existente con cinta o tachuelas, sin obra, sin taladro y sin perforar nada estructural. Es el tipo que menos intervención pide y el más sencillo de montar y de quitar."
+  - "Su lógica es distinta a la de los demás: no está pensado para taparse y destaparse, sino para atravesarlo. Por eso vive en puertas, no en ventanas. Como cortina para puerta, es la forma más práctica de prevenir la entrada de insectos sin renunciar al paso."
 encajaEn:
   - Puertas por las que pasas con las manos ocupadas
-  - Salida a la cocina, al patio o al tendedero
-  - Cuando no quieres obra ni perforar el marco
+  - Salida a la cocina, al patio, al balcón o al tendedero
+  - Cuando buscas algo fácil de instalar, sin obra ni perforar el marco
   - Casas con mascotas que entran y salen solas
 noConviene:
   - "En ventanas: está pensado para pasar a través, no para abrirse"
@@ -77,11 +77,13 @@ faqs:
   - question: ¿El mosquitero magnético se puede lavar?
     answer: "Sí, y es de los más fáciles: se desmonta del marco y se lava a mano con agua y jabón suave. Lo que no conviene es lavadora ni secadora. El calor y el tambor maltratan la banda de imanes y deforman la caída de la tela, que es justo lo que hace que cierre bien."
   - question: ¿Se puede cortar a la medida de mi puerta?
-    answer: "No hace falta cortarlo: lo <strong>fabricamos</strong> a la medida de tu vano, igual que los demás tipos. Recortar una cortina genérica deja el borde sin rematar y por ahí se deshilacha. Mándanos el ancho y el alto y sale a tu medida desde el principio."
+    answer: "No hace falta cortarlo: lo <strong>fabricamos</strong> a la medida de tu vano, igual que los demás tipos. Recortar una cortina genérica deja el borde sin rematar y por ahí se deshilacha. Mándanos el ancho y el alto en centímetros y sale a tu medida desde el principio."
   - question: ¿Deja pasar el aire igual que un mosquitero con bastidor?
     answer: "Sí: es la misma malla, así que el paso de aire es el mismo. La diferencia no está en la ventilación, está en la rigidez. El magnético es cortina y se mueve; el bastidor no. Por eso el magnético va en puertas y no en ventanas."
   - question: ¿Se nota mucho desde la calle?
     answer: "Se ve, sí: es una cortina de malla cubriendo tu puerta, no desaparece. Es el tipo con la instalación más discreta —no lleva perfil de aluminio a la vista— pero la tela está ahí. Si buscas que no se note nada cuando no lo usas, ninguno de los tipos de puerta te va a dar eso."
   - question: ¿Puedo instalarlo yo mismo?
     answer: "Es el único tipo del que te diríamos que sí sin reservas: se fija al marco, sin obra ni herramienta especial. Donde la gente falla es en la preparación de la superficie. Si la fijas sobre polvo o pintura descascarada, se despega en semanas. Si prefieres no arriesgarte, lo instalamos nosotros."
+  - question: ¿Hay mosquitero magnético para ventana?
+    answer: "Existen cortinas con imán para ventana, pero no son la mejor opción: el magnético está pensado para atravesarlo, y en una ventana la malla se mueve con el aire y deja huecos. Para ventana conviene un <a href=\"/mosquiteros/fijos/\">mosquitero fijo de aluminio</a> o un <a href=\"/mosquiteros/enrollables/\">mosquitero enrollable</a>, que sellan el vano completo. En una puerta de paso, en cambio, el magnético es de los más prácticos y fáciles de instalar."
 ---

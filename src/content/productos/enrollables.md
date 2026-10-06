@@ -3,8 +3,8 @@ order: 0
 category: enrollables
 label: Mosquiteros Enrollables
 href: /mosquiteros/enrollables/
-seoDescription: "Mosquitero enrollable a medida para ventana o puerta: la malla se recoge en un cajón cuando no la usas. Instalación en CDMX y Edomex desde {precio}."
-seoTitle: "Mosquitero enrollable a medida | CDMX y Edomex"
+seoDescription: "Mosquitero enrollable a medida para ventana o puerta: la malla se recoge en un cajón discreto y protege tu hogar de insectos. CDMX y Edomex desde {precio}."
+seoTitle: "Mosquitero enrollable para ventana y puerta | CDMX"
 h1: "Mosquitero enrollable a medida"
 image: /images/showcase/enrollables-1.webp
 imageAlt: Mosquitero enrollable instalado en ventana
@@ -32,8 +32,8 @@ points:
   - Requiere espacio libre arriba del vano para alojar el cajón
   - Hay versión para ventana y versión para puerta
 comoFunciona:
-  - "El enrollable trabaja como una persiana: la malla vive enrollada dentro de un cajón que se fija en la parte superior del vano, y baja cuando tiras de ella. Un muelle interno mantiene la tensión, así que la tela queda estirada a cualquier altura y no se descuelga."
-  - "Al soltarla, el mecanismo la recoge sola y la malla desaparece dentro del cajón. La ventana vuelve a quedar despejada: sin bastidor a la vista, sin marco que recorte el cristal y sin nada que desmontar para limpiar."
+  - "El mosquitero enrollable trabaja como las persianas: la malla vive enrollada dentro de un cajón que se fija en la parte superior del vano, con perfiles guía a los lados, y baja cuando tiras de ella. Un muelle interno mantiene la tensión, así que la tela queda estirada a cualquier altura y no se descuelga."
+  - "Al soltarla, el mecanismo la recoge sola y la malla desaparece dentro del cajón. La ventana vuelve a quedar despejada: sin bastidor a la vista, sin marco que recorte el vidrio y sin nada que desmontar para limpiar. Es el tipo más discreto y el que menos cambia la estética de tu ventana, sin quitarle ventilación."
   - "Esa es su gracia y también su condición. El cajón ocupa espacio físico arriba del vano, y ahí es donde el tipo se decide: si no hay unos centímetros libres, el enrollable no entra por bonito que sea."
 encajaEn:
   - Ventanas de uso diario que abres y cierras varias veces
@@ -43,7 +43,7 @@ encajaEn:
 noConviene:
   - Si no hay espacio libre arriba del vano para el cajón
   - Si el marco llega justo al techo o hay una cortina montada ahí
-  - "Si buscas la opción más económica: el mecanismo cuesta más que un bastidor fijo"
+  - "Si buscas la opción más económica: el mecanismo y sus herrajes cuestan más que un bastidor fijo"
   - "En una ventana que casi nunca abres: pagarías por un mecanismo que no usas"
 datos:
   - label: Cómo abre
@@ -86,4 +86,6 @@ faqs:
     answer: Un enrollable en buen estado sube con un siseo suave, no de golpe. Si el tuyo hace un chasquido seco o vibra, suele ser exceso de tensión o suciedad en la guía, y se ajusta. El ruido no es normal y no es algo que tengas que aguantar.
   - question: ¿El sol acaba dañando la malla del enrollable?
     answer: "A la malla le afecta como a cualquier tela expuesta, pero el enrollable tiene una ventaja aquí: <strong>cuando no lo usas, la malla vive dentro del cajón</strong>, a la sombra. En una ventana que da al poniente eso alarga bastante su vida frente a un bastidor fijo que está expuesto las 24 horas. Si tu caso es de sol duro, dilo al cotizar y lo tomamos en cuenta al elegir malla."
+  - question: ¿Qué es mejor, un mosquitero fijo o uno enrollable?
+    answer: "Depende de cuánto usas esa ventana. El <a href=\"/mosquiteros/fijos/\">mosquitero fijo de aluminio</a> cuesta menos y no tiene mecanismo que falle, pero queda siempre puesto: va en ventanas que casi no abres. El enrollable cuesta más, pero la malla desaparece cuando no la usas y la ventana queda libre para asomarte o limpiar el vidrio: va en ventanas de uso diario, siempre que haya espacio arriba para el cajón."
 ---

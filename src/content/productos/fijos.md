@@ -4,8 +4,8 @@ category: fijos
 label: Mosquiteros Fijos
 href: /mosquiteros/fijos/
 seoDescription: "Mosquitero fijo de aluminio a medida para ventanas que no necesitas abrir: sin mecanismo que falle. Fabricación e instalación en CDMX y Edomex desde {precio}."
-seoTitle: "Mosquitero fijo de aluminio | CDMX y Edomex"
-h1: "Mosquitero fijo de aluminio"
+seoTitle: "Mosquitero fijo de aluminio para ventana | CDMX y Edomex"
+h1: "Mosquitero fijo de aluminio para ventana"
 image: /images/productos/fijos-1.webp
 imageAlt: Mosquitero fijo montado en el marco de una ventana
 blurb: "Bastidor con la malla tensada que se monta y se queda. Sin mecanismo que falle: la opción más económica para ventanas de poco uso."
@@ -32,11 +32,11 @@ points:
   - Bastidor de aluminio a la medida del vano
   - No conviene si necesitas asomarte o limpiar el cristal seguido
 comoFunciona:
-  - "El fijo es el [mosquitero de aluminio](/mosquiteros/para-ventanas-de-aluminio/) más simple que hay: un bastidor con la malla tensada, montado al vano de forma permanente. No corre, no se enrolla, no se abate. Se pone y se queda."
-  - "Precisamente por eso es el más económico y el que menos se estropea: no hay mecanismo, rodamiento ni muelle que falle. Lo único que puede pasarle es que se rompa la malla, y eso se cambia."
-  - "Cubre la ventana de forma continua, así que resuelve donde no hace falta abrir: cubos de luz, baños, ventanas altas, cocinas con ventana de ventilación."
+  - "El fijo es el mosquitero de aluminio más simple que hay: un bastidor de perfil de aluminio con la malla tensada, montado al vano de forma permanente. No corre, no se enrolla, no se abate. Se pone y se queda."
+  - "Precisamente por eso es el más económico y el que menos se estropea: no hay mecanismo, rodamiento ni muelle que falle. Lo único que puede pasarle es que se rompa la malla, y eso se cambia reponiendo la tela del bastidor. Por eso es el de mayor durabilidad con menos cuidado."
+  - "Cubre la ventana de forma continua y no deja hueco por donde entre un insecto, así que resuelve donde no hace falta abrir: cubos de luz, baños, ventanas altas, cocinas con ventana de ventilación."
 encajaEn:
-  - Ventanas que casi nunca abres
+  - Ventanas de aluminio o de herrería que casi nunca abres
   - Cubos de luz, baños y ventanas altas
   - Ventilaciones de cocina o lavadero
   - Cuando buscas lo más económico y sin mantenimiento

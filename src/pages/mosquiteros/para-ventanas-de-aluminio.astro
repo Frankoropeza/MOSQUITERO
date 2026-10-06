@@ -35,7 +35,7 @@ const windowCopy: Record<string, string> = {
 };
 
 const title = "Mosquiteros para ventanas de aluminio a medida | CDMX";
-const description = `Mosquiteros para ventanas de aluminio a la medida de tu vano: fabricación e instalación en CDMX y Edomex. Precios de referencia desde ${formatearPrecio(precioMasBajo("ventana"))} con IVA.`;
+const description = `Mosquiteros para ventanas de aluminio: fabricamos el mosquitero fijo, corredizo o enrollable a las medidas de tu vano. CDMX y Edomex desde ${formatearPrecio(precioMasBajo("ventana"))}.`;
 
 const menuSecciones = [
   { label: anchorText("/mosquiteros/"), href: "/mosquiteros/", sub: "Catálogo completo" },
@@ -54,7 +54,7 @@ const menuGuiasCta = { label: anchorText("/blog/"), href: "/blog/", sub: "Guías
 
 const incluidos = [
   { titulo: anchorText("/servicios/medicion/"), href: "/servicios/medicion/", texto: `${MEDICION_CONDICION}. O nos mandas tus medidas y te cotizamos con ellas.` },
-  { titulo: anchorText("/servicios/fabricacion/"), href: "/servicios/fabricacion/", texto: "Marco de aluminio cortado a la medida de tu vano, con la malla tensada." },
+  { titulo: anchorText("/servicios/fabricacion/"), href: "/servicios/fabricacion/", texto: "Marco de perfil de aluminio cortado a las medidas de tu vano, con la tela mosquitera tensada." },
   { titulo: anchorText("/servicios/instalacion/"), href: "/servicios/instalacion/", texto: "En la CDMX y el Estado de México; la dejamos funcionando." },
   { titulo: "Garantía", texto: `${GARANTIA_TEXTO}.` },
 ];
@@ -63,7 +63,8 @@ const faqs = [
   { question: "¿Cuánto cuesta un mosquitero para ventana de aluminio?", answer: `Desde <strong>${formatearPrecio(PRECIOS_REFERENCIA.fijos.ventana)}</strong> un fijo y <strong>${formatearPrecio(PRECIOS_REFERENCIA.corredizos.ventana)}</strong> un corredizo, para una ventana de medida estándar (hasta 1.00 × 1.20 m), con fabricación a medida, instalación e IVA incluidos. La cotización final depende de la medida, la malla y el acceso.` },
   { question: "¿Qué mosquitero va en una ventana corrediza de aluminio?", answer: "El corredizo: corre sobre su propio riel junto a tu ventana y repite el movimiento que ya conoces. Si prefieres que la malla desaparezca cuando no la usas, el enrollable también es opción." },
   { question: "¿Tienen que ir a medir mi ventana?", answer: `No necesariamente. Si nos mandas las medidas por WhatsApp, te cotizamos con ellas. Si prefieres que vayamos, la medición es ${MEDICION_CONDICION.toLowerCase()}.` },
-  { question: "¿Qué malla lleva?", answer: `La malla es una decisión aparte: depende de si hay mascotas, sol directo o golpes. Te explicamos cada opción en <a href="/blog/tipos-de-malla-mosquitero/">${anchorText("/blog/tipos-de-malla-mosquitero/", { minuscula: true })}</a>.` },
+  { question: "¿Qué malla lleva?", answer: `La malla es una decisión aparte: la estándar es de fibra de vidrio, y cambia si hay mascotas, sol directo o golpes. Te explicamos cada opción en <a href="/blog/tipos-de-malla-mosquitero/">${anchorText("/blog/tipos-de-malla-mosquitero/", { minuscula: true })}</a>.` },
+  { question: "¿Cómo se llama el aluminio para mosquitero?", answer: `Se le llama perfil de aluminio para mosquitero: es la moldura con un canal donde se mete la malla y el vinil que la sujeta; en tlapalerías también lo encontrarás como marco o solera de mosquitero. Nosotros fabricamos el bastidor completo a la medida, así que no necesitas comprarlo por separado. Si quieres conocer los tipos, revisa la guía de <a href="/blog/perfiles-de-aluminio-para-mosquitero/">${anchorText("/blog/perfiles-de-aluminio-para-mosquitero/", { minuscula: true })}</a>.` },
 ];
 ---
 
@@ -109,9 +110,9 @@ const faqs = [
     <div class="container">
       <SectionHeading
         eyebrow="Elige por mecanismo"
-        title="Según cómo abre tu ventana"
+        title="Tipos de mosquitero según cómo abre tu ventana de aluminio"
         body={[
-          "La forma en que abre la ventana decide qué mosquitero puede acompañarla. Un riel, unas bisagras o un vano que no se abre piden mecanismos distintos.",
+          "La forma en que abre la ventana decide qué mosquitero puede acompañarla. Un riel, unas bisagras o un vano que no se abre piden mecanismos distintos, aunque todos se arman con perfiles de aluminio y malla mosquitera a la medida del vano.",
           "Parte de cómo usas la ventana y elige la tarjeta que coincide. La pieza se fabrica a la medida del vano para ese mecanismo.",
         ]}
       />

@@ -3,8 +3,8 @@ order: 1
 category: corredizos
 label: Mosquiteros Corredizos
 href: /mosquiteros/corredizos/
-seoDescription: "Mosquitero corredizo de aluminio a medida para ventanas y puertas corredizas. Fabricación e instalación en CDMX y Edomex desde {precio} por ventana."
-seoTitle: "Mosquitero corredizo de aluminio | CDMX y Edomex"
+seoDescription: "Mosquitero corredizo de aluminio a medida para ventanas y puertas corredizas de aluminio o PVC. Fabricación e instalación en CDMX y Edomex desde {precio}."
+seoTitle: "Mosquitero corredizo de aluminio para ventana | CDMX"
 h1: "Mosquitero corredizo de aluminio"
 image: /images/showcase/corredizos-1.webp
 imageAlt: Mosquitero corredizo de aluminio en ventana corrediza
@@ -32,8 +32,8 @@ points:
   - Bastidor de aluminio armado a la medida del vano
   - Malla reemplazable sin cambiar el bastidor
 comoFunciona:
-  - El corredizo es un bastidor de aluminio con la malla tensada que corre sobre un riel, igual que la hoja de tu ventana. Se desplaza a un lado cuando quieres abrir el cristal y vuelve a su sitio cuando lo cierras.
-  - "Aprovecha la infraestructura que ya tienes: si tu ventana corre, hay riel; y si hay riel, hay dónde montarlo. Por eso suele ser la opción directa en la mayoría de las ventanas mexicanas, que son corredizas de fábrica."
+  - El corredizo es un bastidor de aluminio con la malla tensada que corre sobre un riel, igual que la hoja de tu ventana. Se desplaza a un lado cuando quieres abrir el vidrio y dejar pasar el aire, y vuelve a su sitio cuando lo cierras.
+  - "Aprovecha la infraestructura que ya tienes: si tu ventana corre, hay riel; y si hay riel, hay dónde montarlo. Por eso suele ser la opción directa en la mayoría de las ventanas mexicanas, que son corredizas de fábrica, sean de aluminio o de PVC."
   - Al llevar bastidor rígido, la pieza es sólida y la malla se cambia sin tocar nada más. A cambio, el marco queda a la vista sobre el cristal. No desaparece como el enrollable.
 encajaEn:
   - Ventanas y puertas que ya corren sobre riel
