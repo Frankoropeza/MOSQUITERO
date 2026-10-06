@@ -1,6 +1,8 @@
 // Anchors SEO — Ahrefs Keywords Explorer, México, 2026-09-28.
 // Regla: una keyword principal por URL, sin canibalizar. Los volúmenes son MX/mes.
 
+import { tagLabel } from "@config/tags";
+
 export const ANCHORS: Record<string, { kw: string; variantes: readonly string[] }> = {
   '/': { kw: 'Mosquitero para ventana', variantes: ['Mosquiteros para ventanas', 'Mosquiteros a medida', 'Mosquiteros de aluminio'] }, // 3,800 (variantes: 2,700; 300)
   '/mosquiteros/': { kw: 'Tipos de mosquiteros', variantes: ['Catálogo de mosquiteros'] }, // 70
@@ -80,7 +82,7 @@ export function anchorText(href: string, opts: { variante?: number; minuscula?: 
     const labels: Record<string, string> = { guias: 'Guías', mantenimiento: 'Mantenimiento', 'tipos-de-malla': 'Tipos de malla', 'la-marca': 'Cómo trabajamos', novedades: 'Novedades', general: 'General', instalacion: 'Instalación', zancudos: 'Zancudos e insectos' } // espejo de TAXONOMY.articleCategories (site.ts importa este módulo: no se puede importar de vuelta sin ciclo);
     return labels[slug] ?? slug.replace(/-/g, ' ');
   }
-  if (path.startsWith('/blog/tag/')) return path.slice('/blog/tag/'.length, -1).replace(/-/g, ' ');
+  if (path.startsWith('/blog/tag/')) return tagLabel(path.slice('/blog/tag/'.length, -1));
   const anchor = ANCHORS[path];
   if (!anchor) throw new Error(`[anchors] Ruta interna sin anchor: ${path}`);
   const text = opts.variante !== undefined ? (anchor.variantes[opts.variante] ?? anchor.kw) : anchor.kw;

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import { BLOG_CATEGORIES, PRODUCT_CATEGORIES, WA_MESSAGES, waUrl } from "@config/site";
+import { tagLabel } from "@config/tags";
 import { navIcon } from "@config/nav-icons";
 import { anchorText, PRIORIDAD_ENLACES } from "@config/anchors";
 import { MEDICION_CONDICION, PRECIOS_REFERENCIA, formatearPrecio, precioMasBajo } from "@config/precios";
@@ -71,7 +72,7 @@ const fmtCorta = (fecha: Date) => fecha.toLocaleDateString("es-MX", { day: "nume
   {tags.length > 0 && <section class="bsb__w" aria-labelledby="bsb-tags">
     <h2 class="bsb__title" id="bsb-tags">Temas</h2>
     <ul class="bsb__tags" role="list">
-      {tags.map((tag) => <li><a class:list={["bsb__tag", { "is-active": currentTags.includes(tag) }]} href={`/blog/tag/${tag}/`}>#{tag}</a></li>)}
+      {tags.map((tag) => <li><a class:list={["bsb__tag", { "is-active": currentTags.includes(tag) }]} href={`/blog/tag/${tag}/`}>{tagLabel(tag)}</a></li>)}
     </ul>
   </section>}
 </aside>

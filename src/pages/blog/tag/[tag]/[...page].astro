@@ -26,6 +26,7 @@ import BlogCategoryNav from "@components/BlogCategoryNav.astro";
 import BlogPager from "@components/BlogPager.astro";
 import CTABanner from "@components/CTABanner.astro";
 import { WA_MESSAGES, blogCategoryLabel, waUrl } from "@config/site";
+import { tagLabel } from "@config/tags";
 import { minutosLectura } from "@lib/lectura";
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -52,15 +53,17 @@ interface Props { tag: string; page: Page<CollectionEntry<"articulos">>; }
 const { tag, page } = Astro.props;
 const posts = page.data;
 const esPrimera = page.currentPage === 1;
+const label = tagLabel(tag);
+const labelMin = label === "CDMX" ? label : label.toLowerCase();
 
-const title = esPrimera ? `Artículos sobre ${tag} | blog de mosquiteros` : `Artículos sobre ${tag} — página ${page.currentPage} | blog de mosquiteros`;
+const title = esPrimera ? `${label} | blog de Mosquitero.mx` : `${label} — página ${page.currentPage} | blog de Mosquitero.mx`;
 const description = esPrimera
-  ? `${page.total === 1 ? "Artículo" : "Artículos"} del blog de Mosquitero.mx sobre ${tag}: guías para elegir, medir, instalar y mantener mosquiteros a medida.`
-  : `Página ${page.currentPage} de ${page.lastPage} de artículos sobre ${tag}: consulta guías prácticas para elegir, medir, instalar y mantener mosquiteros a medida.`;
+  ? `${page.total === 1 ? "Artículo" : "Artículos"} del blog de Mosquitero.mx sobre ${labelMin}: guías para elegir, medir, instalar y mantener mosquiteros a medida.`
+  : `Página ${page.currentPage} de ${page.lastPage} de artículos sobre ${labelMin}: consulta guías prácticas para elegir, medir, instalar y mantener mosquiteros a medida.`;
 
 const schemaData = {
   list: {
-    name: `#${tag} — blog de Mosquitero.mx`,
+    name: `${label} — blog de Mosquitero.mx`,
     description,
     path: page.url.current,
     items: posts.map((post) => ({
@@ -72,7 +75,7 @@ const schemaData = {
   },
 };
 
-const breadcrumbs = esPrimera ? [{ label: "Blog", href: "/blog/" }, { label: `#${tag}` }] : [{ label: "Blog", href: "/blog/" }, { label: `#${tag}`, href: `/blog/tag/${tag}/` }, { label: `Página ${page.currentPage}` }];
+const breadcrumbs = esPrimera ? [{ label: "Blog", href: "/blog/" }, { label }] : [{ label: "Blog", href: "/blog/" }, { label, href: `/blog/tag/${tag}/` }, { label: `Página ${page.currentPage}` }];
 ---
 
 <PageLayout
@@ -89,9 +92,9 @@ const breadcrumbs = esPrimera ? [{ label: "Blog", href: "/blog/" }, { label: `#$
       <SectionHeading
         as="h1"
         eyebrow="Tema"
-        title={`#${tag}`}
+        title={label}
         body={[
-          `Todo lo que hemos escrito sobre ${tag}. Los temas cruzan las categorías del blog: un mismo artículo puede resolver una duda de medición y otra de mantenimiento.`,
+          `Todo lo que hemos escrito sobre ${labelMin}. Los temas cruzan las categorías del blog: un mismo artículo puede resolver una duda de medición y otra de mantenimiento.`,
           "Si buscas algo más concreto, el índice del blog está ordenado por categoría — o escríbenos y te decimos directamente qué aplica a tu ventana.",
         ]}
       />

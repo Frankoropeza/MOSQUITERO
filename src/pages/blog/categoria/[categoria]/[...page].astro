@@ -50,10 +50,18 @@ interface Props { cat: (typeof BLOG_CATEGORIES)[number]; page: Page<CollectionEn
 const { cat, page } = Astro.props;
 const posts = page.data;
 const esPrimera = page.currentPage === 1;
+const CATEGORY_TITLES: Record<string, string> = {
+  "la-marca": "Cómo trabajamos",
+  zancudos: "Zancudos e insectos en casa",
+  "tipos-de-malla": "Tipos de malla para mosquitero",
+};
+const categoryTitle = CATEGORY_TITLES[cat.slug];
 
 // ── Metas ──
 // El title abre con la keyword de la categoría, sin marca (regla de metas).
-const title = esPrimera ? `${cat.label} de mosquiteros | blog de Mosquitero.mx` : `${cat.label} de mosquiteros — página ${page.currentPage} | blog de Mosquitero.mx`;
+const title = categoryTitle
+  ? (esPrimera ? `${categoryTitle} | blog de Mosquitero.mx` : `${categoryTitle} — página ${page.currentPage} | blog de Mosquitero.mx`)
+  : (esPrimera ? `${cat.label} de mosquiteros | blog de Mosquitero.mx` : `${cat.label} de mosquiteros — página ${page.currentPage} | blog de Mosquitero.mx`);
 const description = esPrimera
   ? `${cat.desc} Conoce opciones para elegir y cuidar tus mosquiteros.`
   : `Página ${page.currentPage} de ${page.lastPage} de ${cat.label}: ${cat.desc} Encuentra consejos claros para elegir o instalar mosquiteros según tu ventana.`;

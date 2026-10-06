@@ -31,6 +31,7 @@ import FAQAccordion from "@components/FAQAccordion.astro";
 import CTABanner from "@components/CTABanner.astro";
 import TablaPreciosReferencia from "@components/TablaPreciosReferencia.astro";
 import { SITE, blogCategoryLabel, waUrl } from "@config/site";
+import { tagLabel } from "@config/tags";
 
 // Hoja tipográfica del cuerpo largo (.prose). Import global a propósito: el HTML
 // del .mdx no lleva clases y hay que alcanzarlo por descendencia desde .prose.
@@ -38,6 +39,7 @@ import "../styles/typography.css";
 
 export interface Props {
   title: string;
+  seoTitle?: string;
   description: string;
   /** Slug de categoría (enum de content.config.ts). El label lo resuelve el layout. */
   category?: string;
@@ -64,6 +66,7 @@ export interface Props {
 
 const {
   title,
+  seoTitle,
   description,
   category,
   slug,
@@ -124,7 +127,7 @@ const waLink = waUrl(waMessage);
 ---
 
 <PageLayout
-  title={title}
+  title={seoTitle ?? title}
   description={description}
   image={image}
   canonical={canonical}
@@ -206,7 +209,7 @@ const waLink = waUrl(waMessage);
         <nav class="post__tags" aria-label="Temas del artículo">
           <span class="post__tags-label">Temas:</span>
           <ul role="list">
-            {tags.map((t) => <li><a href={`/blog/tag/${t}/`}>#{t}</a></li>)}
+            {tags.map((t) => <li><a href={`/blog/tag/${t}/`}>{tagLabel(t)}</a></li>)}
           </ul>
         </nav>
       </div>
