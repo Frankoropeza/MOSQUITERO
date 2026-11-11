@@ -1,7 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════
 # robots.txt — indexación abierta para buscadores, redes sociales y motores IA.
 # Se permite el rastreo de recursos necesarios para renderizar las páginas y se
-# bloquean sólo scrapers SEO no contratados. AhrefsBot queda permitido.
 # ═══════════════════════════════════════════════════════════════════════════
 
 # ─── Reglas globales ───
@@ -130,7 +129,6 @@ User-agent: Google-CloudVertexBot
 Allow: /
 
 # ─── Bots/scrapers bloqueados ───
-# AhrefsBot / AhrefsSiteAudit NO se bloquean: Ahrefs es herramienta contratada
 #   del portafolio; caen en las reglas globales (User-agent: *).
 User-agent: SemrushBot
 Disallow: /
